@@ -1,0 +1,30 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "pry1-reque",
+          "appId": "1:643453062395:android:5c72185e0539927cabf45e",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "pry1-reque",
+          "configurations": {
+            "android": "1:643453062395:android:5c72185e0539927cabf45e",
+            "web": "1:643453062395:web:229dfcbb21f98046abf45e"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "No",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

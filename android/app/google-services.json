@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "643453062395",
+    "project_id": "pry1-reque",
+    "storage_bucket": "pry1-reque.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:643453062395:android:5c72185e0539927cabf45e",
+        "android_client_info": {
+          "package_name": "com.reque.pry2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdKC3bA5wwlg2nW0IJA20MEY9qKiWzTHc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
