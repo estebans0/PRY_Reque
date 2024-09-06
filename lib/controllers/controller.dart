@@ -24,7 +24,11 @@ class Controller {
   }
 
   Future<void> logout() async {
-    await _authModel.logout();
+    try {
+      await _authModel.logout();
+    } catch (e) {
+      throw e.toString();
+    }
   }
 
   // Database methods

@@ -24,21 +24,53 @@ class _SignupScreenState extends State<SignupScreen> {
     final email = _emailController.text;
     final password = _passwordController.text;
 
+    // Validacion de dominio email
+    if (!_isValidDomain(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('El correo debe ser del dominio estudiantec.cr o itcr.ac.cr'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
+    // Validar longitud de contraseña
+    if (password.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('La contraseña debe tener al menos 6 caracteres'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
     try {
       await _controller.signUp(email, password);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Successfully signed up!')),
+        const SnackBar(content: Text('Registro exitoso'), backgroundColor: Colors.green),
       );
       Navigator.pushReplacementNamed(context, '/home');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
+        SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
       );
     } finally {
       setState(() {
         _isLoading = false;
       });
     }
+  }
+
+  bool _isValidDomain(String email) {
+    return email.endsWith('@estudiantec.cr') || email.endsWith('@itcr.ac.cr');
   }
 
   @override

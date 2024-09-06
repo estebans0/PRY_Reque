@@ -1,6 +1,4 @@
 // lib/views/home_screen.dart
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import '../controllers/controller.dart';
 
@@ -8,6 +6,26 @@ class HomeScreen extends StatelessWidget {
   final Controller _controller = Controller();
 
   HomeScreen({super.key});
+
+  Future<void> _logout(BuildContext context) async {
+    try {
+      await _controller.logout();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Sesión cerrada exitosamente'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.pushReplacementNamed(context, '/');
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error al cerrar sesión: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,16 +35,13 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
-            onPressed: () async {
-              await _controller.logout();
-              Navigator.pushReplacementNamed(context, '/');
-            },
+            onPressed: () => _logout(context),
           ),
         ],
       ),
       body: const Center(
         child: Text(
-          'Welcome to the Home Screen!',
+          'Bienvenido a la pantalla principal',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),

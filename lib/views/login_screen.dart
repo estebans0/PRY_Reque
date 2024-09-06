@@ -27,12 +27,12 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await _controller.login(email, password);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Successfully logged in!')),
+        const SnackBar(content: Text('Inicio de sesión exitoso'), backgroundColor: Colors.green),
       );
       Navigator.pushReplacementNamed(context, '/home');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
+        SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
       );
     } finally {
       setState(() {
