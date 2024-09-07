@@ -1,6 +1,7 @@
 // lib/views/signup_screen.dart
 import 'package:flutter/material.dart';
 import '../controllers/controller.dart';
+import '../models/notifications_model.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -13,6 +14,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final Controller _controller = Controller();
+  final NotificationsModel _notificationModel = NotificationsModel();
 
   bool _isLoading = false;
 
@@ -57,6 +59,8 @@ class _SignupScreenState extends State<SignupScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Registro exitoso'), backgroundColor: Colors.green),
       );
+      // una vez hecho el registro exitoso se manda el correo de notificacion
+      _notificationModel.sendRegisterEmail(email);
       Navigator.pushReplacementNamed(context, '/home');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
