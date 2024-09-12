@@ -37,4 +37,16 @@ class UserMethods {
   Future<DocumentSnapshot> getUserData() async {
     return _firestore.collection('Users').doc(getCurrentUserId()).get();
   }
+
+  // obtener todos los usuarios registrados.
+  Future<List> getUsers() async{
+    List users = [];
+    CollectionReference usersReference = _firestore.collection('Users');
+    // trae todos los documento de la coleccion aka todos los usuarios
+    QuerySnapshot queryUsers = await usersReference.get();
+    queryUsers.docs.forEach((document){
+      users.add(document.data());
+    });
+    return users;
+  }
 }
