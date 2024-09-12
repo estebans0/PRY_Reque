@@ -27,13 +27,27 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await _controller.login(email, password);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Inicio de sesión exitoso'), backgroundColor: Colors.green),
+        const SnackBar(content: Text('Login exitoso'), backgroundColor: Colors.green),
       );
       Navigator.pushReplacementNamed(context, '/home');
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
-      );
+      if (e.toString().contains('invalid-credential')) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Email o contraseña incorrecta'), backgroundColor: Colors.red),
+        );
+      } else if (e.toString().contains('invalid-email')) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Email incorrecto'), backgroundColor: Colors.red),
+        );
+      } else if (e.toString().contains('missing-password')) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Debe ingresar una contraseña'), backgroundColor: Colors.red),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+        );
+      }
     } finally {
       setState(() {
         _isLoading = false;

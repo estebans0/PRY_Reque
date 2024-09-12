@@ -39,10 +39,27 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: const Center(
-        child: Text(
-          'Bienvenido a la pantalla principal',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Bienvenido a la pantalla principal',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/create-project'),
+              child: const Text('Crear Proyecto'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/edit-project'),
+              child: const Text('Editar Proyectos'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/edit-profile'),
+              child: const Text('Editar perfil'),
+            ),
+          ],
         ),
       ),
     );

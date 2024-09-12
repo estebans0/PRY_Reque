@@ -1,11 +1,13 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'models/firebase_options.dart';
 import 'views/landing_page.dart';
 import 'views/login_screen.dart';
 import 'views/signup_screen.dart';
 import 'views/home_screen.dart';
-import 'models/firebase_options.dart';
+import 'views/edit_user_screen.dart';
+import 'views/project_form_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +33,8 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignupScreen(),
         '/home': (context) => HomeScreen(),
+        '/create-project': (context) => const ProjectFormScreen(),
+        '/edit-profile': (context) => const EditUserScreen(),
       },
     );
   }

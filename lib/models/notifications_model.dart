@@ -36,11 +36,12 @@ class NotificationsModel{
     }
 
     Future sendEmail(String email, String messageContent) async{
-        final serviceId = 'service_c7w9dqe';
-        final templateId = 'template_3it95fn';
-        final userId = 'QoBLFrMwBnZfTazhm';
+        const serviceId = 'service_c7w9dqe';
+        const templateId = 'template_3it95fn';
+        const userId = 'QoBLFrMwBnZfTazhm';
 
         final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+        // ignore: unused_local_variable
         final response = await http.post(
             url,
             headers: {

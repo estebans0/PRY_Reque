@@ -1,44 +1,53 @@
 // lib/models/auth_model.dart
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthModel {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Sign up with email and password
-  Future<User?> signUpWithEmail(String email, String password) async {
+  // Registro de usuario con Firebase Authentication y Firestore
+  Future<void> signUp(String email, String password) async {
     try {
-      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+      // Crear el usuario en Firebase Authentication
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return userCredential.user;
+
+      // Obtener el UID del usuario creado
+      String uid = userCredential.user!.uid;
+
+      // Crear el perfil de usuario en Firestore usando el UID
+      await _firestore.collection('Users').doc(uid).set({
+        'email': email,
+        'username': null,
+        'name': null,
+        'phone_num': null,
+        'profile_pic': null,
+        'total_donated': 0,
+        'supported_projects': 0,
+      });
     } catch (e) {
-      throw e.toString(); // Handle error and pass it back to the controller
+      throw e.toString();
     }
   }
 
-  // Log in with email and password
-  Future<User?> loginWithEmail(String email, String password) async {
+  // Login de usuario
+  Future<void> login(String email, String password) async {
     try {
-      final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return userCredential.user;
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
     } catch (e) {
-      throw e.toString(); // Handle error and pass it back to the controller
+      throw e.toString();
     }
   }
 
-  // Logout
+  // Logout de usuario
   Future<void> logout() async {
     try {
-      await _firebaseAuth.signOut();
+      await _auth.signOut();
     } catch (e) {
-      throw e.toString(); // Handle error and pass it back to the controller
+      throw e.toString();
     }
   }
-
-  // Get current user
-  User? get currentUser => _firebaseAuth.currentUser;
 }
