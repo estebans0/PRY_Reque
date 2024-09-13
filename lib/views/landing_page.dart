@@ -54,15 +54,15 @@ class LandingPage extends StatelessWidget {
             ),
           */
           // Para probar pagina principal admin mientras se implementa identificacion usuario tipo admin
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomeScreenAdmin()),
-                );
-              },
-              child: const Text('Principal admin'),
-            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => const HomeScreenAdmin()),
+            //     );
+            //   },
+            //   child: const Text('Principal admin'),
+            // ),
 
           ],
         ),
