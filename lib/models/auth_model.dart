@@ -10,7 +10,8 @@ class AuthModel {
   Future<void> signUp(String email, String password) async {
     try {
       // Crear el usuario en Firebase Authentication
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -27,6 +28,7 @@ class AuthModel {
         'profile_pic': null,
         'total_donated': 0,
         'supported_projects': 0,
+        'digital_currency': 0,
       });
     } catch (e) {
       throw e.toString();
