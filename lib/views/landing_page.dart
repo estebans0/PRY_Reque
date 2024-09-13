@@ -39,7 +39,7 @@ class LandingPage extends StatelessWidget {
             ),
             
             const SizedBox(height: 20),
-            /*
+            
             // solo para ir probando lo de gestion de usuarios
             // luego se agrega a la pantalla principal del admin
             ElevatedButton(
@@ -51,7 +51,7 @@ class LandingPage extends StatelessWidget {
               },
               child: const Text('Gestion de usuarios'),
             ),
-          */
+          
           ],
         ),
       ),
