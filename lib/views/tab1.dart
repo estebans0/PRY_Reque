@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+// Este archivo será eliminado eventualmente, su unico proposito es asistir para hacer pruebas
+
 class Tab1 extends StatelessWidget{
   const Tab1({super.key});
 

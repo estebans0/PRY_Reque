@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:app/views/manage_user_screen.dart';
+import 'package:app/views/signup_screen.dart';
 import 'package:app/views/tab1.dart';
 import 'package:app/views/tab2.dart';
 import 'package:flutter/material.dart'; 
@@ -70,18 +71,23 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> with SingleTickerProv
         children: [
           Tab1(),
           Tab2(),
-          Tab1(),
+          ManageUsersScreen(),
           Tab2(),
         ]
       ), 
-      floatingActionButton: Container(  
-        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-        alignment: Alignment.bottomLeft,
-        child: FloatingActionButton(
-          onPressed: () {},
-          child: Icon(Icons.arrow_back), 
-        ) 
-      ),
+      // floatingActionButton: Container(  
+      //   padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+      //   alignment: Alignment.bottomLeft,
+      //   child: FloatingActionButton(
+      //     onPressed: () {
+      //       Navigator.push(
+      //             context,
+      //             MaterialPageRoute(builder: (context) => const SignupScreen()),
+      //       );
+      //     },
+      //     child: Icon(Icons.arrow_back), 
+      //   ) 
+      // ),
       
     );
   }
