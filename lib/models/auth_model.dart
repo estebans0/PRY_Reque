@@ -8,18 +8,17 @@ class AuthModel {
 
   
   //Solucion temporal creacion de administradores
-  Future<void> createAdmin(String email, String password) async{
-    try{
-      // Crear un admin en Firebase Authentication
-      UserCredential adminCredential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    }catch(e){
-      print(e.toString());
-    }
-  }
-
+  // Future<void> createAdmin(String email, String password) async{
+  //   try{
+  //     // Crear un admin en Firebase Authentication
+  //     UserCredential adminCredential = await _auth.createUserWithEmailAndPassword(
+  //       email: email,
+  //       password: password,
+  //     );
+  //   }catch(e){
+  //     print(e.toString());
+  //   }
+  // }
 
   // Registro de usuario con Firebase Authentication y Firestore
   Future<void> signUp(String email, String password) async {
@@ -96,6 +95,8 @@ class AuthModel {
 
     return admins;
   }
+
+  
 
 
 }

@@ -1,25 +1,11 @@
 import 'dart:math';
 
+import 'package:app/views/manage_projects_screen.dart';
 import 'package:app/views/manage_user_screen.dart';
 import 'package:app/views/signup_screen.dart';
 import 'package:app/views/tab1.dart';
 import 'package:app/views/tab2.dart';
 import 'package:flutter/material.dart'; 
-
-// void main() {
-//   runApp(MyApp());
-// }
-
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Crowdfunding Dashboard',
-//       theme: ThemeData.dark(),
-//       home: HomeScreenAdmin(),
-//     );
-//   }
-// }
 
 class HomeScreenAdmin extends StatefulWidget {
   const HomeScreenAdmin({super.key});
@@ -70,7 +56,8 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> with SingleTickerProv
         controller: controller,
         children: [
           Tab1(),
-          Tab2(),
+          // Tab2(),
+          ProjectManagementPage(),
           ManageUsersScreen(),
           Tab2(),
         ]
