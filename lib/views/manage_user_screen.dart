@@ -14,8 +14,6 @@ class _ManageUsersScreen extends State<ManageUsersScreen> {
     String searchText = '';
     UserMethods userModel = UserMethods();
 
-    // funcion para desactivar usuarios
-
     @override
     Widget build(BuildContext context) {
         return Scaffold(
@@ -85,8 +83,31 @@ class _ManageUsersScreen extends State<ManageUsersScreen> {
                                     return ListTile(                                
                                     title: Text(snapshot.data?[index]['name']),
                                     trailing: ElevatedButton(
-                                        // se tiene que crear la funcion de desactivar
-                                        onPressed: null,
+                                        onPressed: () async{
+                                            // pop up para confirmar la eliminacion de un usuario
+                                            showDialog(
+                                                context: context,
+                                                builder: (context){
+                                                    return AlertDialog(
+                                                        title: Text("¿Está seguro de eliminar a " + name + "?"),
+                                                        actions: [
+                                                            TextButton(
+                                                                child: Text("No"),
+                                                                onPressed: () => Navigator.of(context).pop(),
+                                                            ),
+                                                            TextButton(
+                                                                child: Text("Sí, estoy seguro"),
+                                                                onPressed: ()async{
+                                                                    await userModel.deleteUser(snapshot.data?[index]["docId"]);
+                                                                    Navigator.of(context).pop();
+                                                                    setState(() {});
+                                                                },
+                                                            ),
+                                                        ]
+                                                    );
+                                                }
+                                            );
+                                        },
                                         child: Text('Desactivar')
                                     )
                                     );

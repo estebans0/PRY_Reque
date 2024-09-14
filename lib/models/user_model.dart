@@ -45,8 +45,22 @@ class UserMethods {
     // trae todos los documento de la coleccion aka todos los usuarios
     QuerySnapshot queryUsers = await usersReference.get();
     queryUsers.docs.forEach((document){
-      users.add(document.data());
+      final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+      final user = {
+        "name": data['name'],
+        "docId": document.id,            // Para poder acceder a cada id del usuario
+      };
+      users.add(user);
     });
     return users;
   }
+
+  // Elimina a un usuario 
+  Future<void> deleteUser(String userId) async{
+    _firestore.collection('Users').doc(userId).delete();
+  }
+
+
+  
+
 }
