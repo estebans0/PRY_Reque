@@ -29,7 +29,13 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Login exitoso'), backgroundColor: Colors.green),
       );
-      Navigator.pushReplacementNamed(context, '/home');
+      if (await _controller.isAdmin(email)) {
+        Navigator.pushReplacementNamed(context, '/home-admin');
+      } else {
+        Navigator.pushReplacementNamed(context, '/home');
+      }
+        
+
     } catch (e) {
       if (e.toString().contains('invalid-credential')) {
         ScaffoldMessenger.of(context).showSnackBar(

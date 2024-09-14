@@ -38,7 +38,7 @@ class UserMethods {
     return _firestore.collection('Users').doc(getCurrentUserId()).get();
   }
 
-  // obtener todos los usuarios registrados.
+  // Obtener todos los usuarios registrados.
   Future<List> getUsers() async{
     List users = [];
     CollectionReference usersReference = _firestore.collection('Users');
@@ -59,8 +59,30 @@ class UserMethods {
   Future<void> deleteUser(String userId) async{
     _firestore.collection('Users').doc(userId).delete();
   }
-
+  
+  // Retorna la cantidad de usuarios.
+  Future<int> getNumbertUsers() async{
+    List users = [];
+    CollectionReference usersReference = _firestore.collection('Users');
+    // trae todos los documento de la coleccion aka todos los usuarios
+    QuerySnapshot queryUsers = await usersReference.get();
+    queryUsers.docs.forEach((document){
+      users.add(document.data());
+    });
+    return users.length;
+  }
 
   
+  // Retorna la cantidad de donaciones.
+  Future<int> getNumbertDonations() async{
+    List donations = [];
+    CollectionReference donationsReference = _firestore.collection('Donations'); 
+
+    QuerySnapshot queryDonations = await donationsReference.get();
+    queryDonations.docs.forEach((donation){
+      donations.add(donation.data());
+    });
+    return donations.length;
+  }
 
 }

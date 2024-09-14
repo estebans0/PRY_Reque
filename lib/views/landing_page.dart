@@ -1,4 +1,5 @@
 // landing_page.dart
+import 'package:app/views/home_screen_admin.dart';
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'signup_screen.dart';
@@ -40,6 +41,7 @@ class LandingPage extends StatelessWidget {
             
             const SizedBox(height: 20),
             
+          /*
             // solo para ir probando lo de gestion de usuarios
             // luego se agrega a la pantalla principal del admin
             ElevatedButton(
@@ -52,6 +54,18 @@ class LandingPage extends StatelessWidget {
               child: const Text('Gestion de usuarios'),
             ),
           
+          */
+          // Para probar pagina principal admin mientras se implementa identificacion usuario tipo admin
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => const HomeScreenAdmin()),
+            //     );
+            //   },
+            //   child: const Text('Principal admin'),
+            // ),
+
           ],
         ),
       ),
