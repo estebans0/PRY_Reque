@@ -62,9 +62,8 @@ class _WalletScreenState extends State<WalletScreen> {
               children: [
                 IconButton(
                   icon: const Icon(Icons.shopping_cart),
-                  onPressed: () {
-                    //Lógica para comprar moneda digital (en el futuro)
-                  },
+                  onPressed: () =>
+                      Navigator.pushNamed(context, '/buy-digital-currency'),
                 ),
                 const SizedBox(width: 20),
                 IconButton(

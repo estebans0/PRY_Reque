@@ -20,4 +20,18 @@ class WalletMethods {
 
     return balance; // Retornar el balance de moneda digital
   }
+
+  // Función para actualizar el balance de digital_currency del usuario
+  Future<void> updateDigitalCurrency(double amount) async {
+    String userId =
+        _auth.currentUser!.uid; // Obtener el UID del usuario autenticado
+
+    // Obtener el balance actual
+    double currentBalance = await getDigitalCurrency();
+
+    // Actualizar el balance en Firestore sumando la nueva cantidad
+    await _firestore.collection('Users').doc(userId).update({
+      'digital_currency': currentBalance + amount,
+    });
+  }
 }
