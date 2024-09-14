@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:app/views/manage_projects_screen.dart';
-import 'package:app/views/manage_user_screen.dart';
-import 'package:app/views/signup_screen.dart';
-import 'package:app/views/tab1.dart';
+import 'package:app/views/manage_user_screen.dart'; 
+import 'package:app/views/statistics_screen.dart'; 
 import 'package:app/views/tab2.dart';
 import 'package:flutter/material.dart'; 
 
@@ -55,7 +52,8 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> with SingleTickerProv
       body: TabBarView(
         controller: controller,
         children: [
-          Tab1(),
+          // Tab1(),
+          statisticsScreen(),
           // Tab2(),
           ProjectManagementPage(),
           ManageUsersScreen(),

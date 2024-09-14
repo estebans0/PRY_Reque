@@ -49,4 +49,30 @@ class UserMethods {
     });
     return users;
   }
+
+  // Retorna la cantidad de usuarios.
+  Future<int> getNumbertUsers() async{
+    List users = [];
+    CollectionReference usersReference = _firestore.collection('Users');
+    // trae todos los documento de la coleccion aka todos los usuarios
+    QuerySnapshot queryUsers = await usersReference.get();
+    queryUsers.docs.forEach((document){
+      users.add(document.data());
+    });
+    return users.length;
+  }
+
+  
+  // Retorna la cantidad de donaciones.
+  Future<int> getNumbertDonations() async{
+    List donations = [];
+    CollectionReference donationsReference = _firestore.collection('Donations'); 
+
+    QuerySnapshot queryDonations = await donationsReference.get();
+    queryDonations.docs.forEach((donation){
+      donations.add(donation.data());
+    });
+    return donations.length;
+  }
+
 }
