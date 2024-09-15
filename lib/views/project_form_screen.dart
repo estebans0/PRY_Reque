@@ -140,7 +140,7 @@ class _ProjectFormScreenState extends State<ProjectFormScreen> {
     final categories = await _controller.getCategories(); // Obtener categorías desde Firestore
     showDialog(
       context: context,
-      builder: (context) {
+      builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
@@ -164,17 +164,19 @@ class _ProjectFormScreenState extends State<ProjectFormScreen> {
                   }).toList(),
                 ),
               ),
-              actions: [
+              actions: <Widget>[
                 TextButton(
-                  onPressed: () => Navigator.pop(context),
                   child: const Text('Cancelar'),
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
                 TextButton(
-                  onPressed: () {
-                    Navigator.pop(context); // Cerrar el pop-up
-                    setState(() {}); // Refrescar la pantalla
-                  },
                   child: const Text('Ok'),
+                  onPressed: () {
+                    setState(() {
+                      _selectedCategories;
+                    });
+                    Navigator.of(context).pop();
+                  },
                 ),
               ],
             );
@@ -297,12 +299,15 @@ class _ProjectFormScreenState extends State<ProjectFormScreen> {
                   ),
                   const SizedBox(height: 10),
                   // Mostrar categorías seleccionadas
-                  Text(
-                    _selectedCategories.isNotEmpty
-                        ? 'Categorías actuales: ${_selectedCategories.join(', ')}'
-                        : 'No hay categorías seleccionadas',
-                    style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
-                    textAlign: TextAlign.start,
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      _selectedCategories.isNotEmpty
+                          ? 'Categorías actuales: ${_selectedCategories.join(', ')}'
+                          : 'No hay categorías seleccionadas',
+                      style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
+                      textAlign: TextAlign.left,
+                    ),
                   ),
                   const SizedBox(height: 20),
                   Wrap(
