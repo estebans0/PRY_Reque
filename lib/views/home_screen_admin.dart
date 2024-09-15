@@ -1,7 +1,7 @@
+import 'package:app/views/donations_screen.dart';
 import 'package:app/views/manage_projects_screen.dart';
 import 'package:app/views/manage_user_screen.dart'; 
-import 'package:app/views/statistics_screen.dart'; 
-import 'package:app/views/tab2.dart';
+import 'package:app/views/statistics_screen.dart';  
 import 'package:flutter/material.dart'; 
 
 class HomeScreenAdmin extends StatefulWidget {
@@ -57,7 +57,7 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> with SingleTickerProv
           // Tab2(),
           ProjectManagementPage(),
           ManageUsersScreen(),
-          Tab2(),
+          donationsPage(),
         ]
       ), 
       // floatingActionButton: Container(  

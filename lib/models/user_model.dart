@@ -61,8 +61,7 @@ class UserMethods {
     });
     return users.length;
   }
-
-  
+ 
   // Retorna la cantidad de donaciones.
   Future<int> getNumbertDonations() async{
     List donations = [];
@@ -74,5 +73,56 @@ class UserMethods {
     });
     return donations.length;
   }
+
+  // Función auxiliar para asegurarse de que los valores tengan dos dígitos
+  String _twoDigits(int n) {
+    return n.toString().padLeft(2, '0');
+  }
+
+  // Función para convertir Timestamp a String
+  String formatTimestamp(Timestamp timestamp) {
+    // Convertir Timestamp a DateTime
+    DateTime dateTime = timestamp.toDate();
+
+    // Formatear DateTime a una cadena similar al formato de Firestore 
+    String formattedDate = "${dateTime.year}-${_twoDigits(dateTime.month)}-${_twoDigits(dateTime.day)} "
+        "${_twoDigits(dateTime.hour)}:${_twoDigits(dateTime.minute)}:${_twoDigits(dateTime.second)}";
+
+    return formattedDate;
+  }
+
+  
+  // Retorna todas las donaciones.
+  Future<List> getDonations() async {
+
+    List donations = [];
+    // Obtener todas las donaciones
+    QuerySnapshot donaciones = await _firestore.collection('Donations').get();
+
+    // Recorrer las donaciones obtenidas
+    for (QueryDocumentSnapshot donacionDoc in donaciones.docs) { 
+ 
+      DocumentReference useRef = donacionDoc.get('user_id');
+      DocumentSnapshot userSnap = await useRef.get();
+      DocumentReference projectRef = donacionDoc.get('project_id');
+      DocumentSnapshot projectSnap = await projectRef.get();
+
+      if (userSnap.exists && projectSnap.exists) {  
+
+        donations.add(
+          {
+            'nameUser': userSnap['name'],
+            'nameProject': projectSnap['name'],
+            'amount': donacionDoc['amount'],
+            'date': formatTimestamp(donacionDoc['donation_date'])
+          } 
+        );
+        
+      } else {
+        print('El documento de usuario no existe para la orden.');
+      }  
+    }
+    return donations;
+}
 
 }
