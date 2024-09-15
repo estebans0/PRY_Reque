@@ -27,4 +27,28 @@ class Controller {
       throw e.toString();
     }
   }
+
+
+  Future<bool> isAdmin (String email) async {
+    List admins = await _authModel.getAdmins();
+    bool result = false;
+
+    for (int i = 0; i < admins.length; i++) { 
+      if (admins[i]['email'] == email) { 
+        result = true;
+      }
+    }
+    return result;
+  }
+
+  //Funcion usada para crear las crendenciales de los siguientes admins
+  // Future<void> creatCredencialAdmins () async {
+  //   String email = 'adminJ@estudiantec.cr';
+  //   String password= 'adminJ';
+  //   String email2 = 'Golden@estudiantec.cr';
+  //   String password2 = 'Golden1';
+  //   await _authModel.createAdmin(email, password);
+  //   await _authModel.createAdmin(email2, password2);
+  // }
+
 }
