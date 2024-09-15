@@ -1,5 +1,26 @@
-import 'package:app/models/project_model.dart'; 
+import 'package:app/models/firebase_options.dart';
+import 'package:app/models/project_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart'; 
 import 'package:flutter/material.dart';
+
+
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//   );
+//   runApp(MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: ProjectManagementPage(),
+//     );
+//   }
+// }
 
 
 class ProjectManagementPage extends StatefulWidget {
@@ -12,105 +33,193 @@ class ProjectManagementPage extends StatefulWidget {
 
 class _ProjectManagementPage extends State<ProjectManagementPage> {
   ProjectMethods project_model = ProjectMethods();
+  
+  List _items = []; 
+  List _filteredItems = [];
+  TextEditingController _searchController = TextEditingController();
+
+
+  // Lista de opciones para el dropdown (filtrar por nombre o categoría)
+  List<String> _filterOptions = ['nombre', 'categoría', 'Otra'];
+  String _selectedFilter = 'nombre';
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+    _searchController.addListener(_filterItems);
+  }
+  
+  // Método para obtener los documentos de Firestore
+  Future<void> _fetchData() async {
+    try { 
+      List tempList = await project_model.getProjects();
+
+      // Actualizar el estado con los datos obtenidos
+      setState(() {
+        _items = tempList;
+        _filteredItems = _items;
+        List<String> lex= ['Extra', 'Extra2', 'Extra3'];
+        _filterOptions.addAll(lex);
+      });
+    } catch (e) {
+      print('Error al obtener los datos: $e');
+    }
+  }
+
+  // Método para filtrar los elementos según el texto de búsqueda
+  void _filterItems() {
+    String query = _searchController.text.toLowerCase(); // Convertir la entrada a minúsculas
+    // print(query);
+
+    setState(() {
+      _filteredItems = _items.where((item) {
+        if (item is Map<String, dynamic>) { 
+          var data = item as Map<String, dynamic>;
+          // Filtrar por coincidencia en algún campo (ejemplo: 'campo1')
+            // return data['name']?.toLowerCase().contains(query) ?? false;
+          // Filtrar por el campo seleccionado (nombre o categoría)
+          if (_selectedFilter == 'nombre') {
+            print('Busqueda con nombre');
+            return data['name']?.toLowerCase().contains(query) ?? false;
+          } else if (_selectedFilter == 'categoría') {
+            print('Busqueda con categoria');
+            return data['name']?.toLowerCase().contains(query) ?? false;
+          }
+        }
+        return false;
+      }).toList();
+    });
+  }
+
+  void _applyAdvancedFilter() {
+    setState(() {
+      _filteredItems = _items.where((item) {
+        if (item is Map<String, dynamic>) {
+          var data = item as Map<String, dynamic>;
+          // Aquí puedes aplicar un filtro personalizado
+          // Ejemplo: Filtrar donde 'campo2' contenga alguna condición
+          return data['name']?.toLowerCase().contains('p') ?? false;
+        }
+        return false;
+      }).toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      
-      body: Padding( 
-
-        padding: const EdgeInsets.all(30), 
+    return Scaffold( 
+        // title: Text("Firebase Firestore Example"), 
+      body: Padding(
+        // padding: const EdgeInsets.all(60), 
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 60),
+        
         child: Column( 
           children: [
             Title(
               color: Colors.black, 
               child: Text(
                 'Gestión de proyectos',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,),
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold,),
               ),
             ),
+            SizedBox(height: 20),
             // Fila de buscar y filtro
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    // style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: 'Buscar...',
-                      // hintStyle: TextStyle(color: Colors.grey),
-                      filled: true,
-                      // fillColor: Colors.grey[800],
-                      focusColor: Color(0xFFE0E0D6),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                        borderSide: BorderSide.none,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child:Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        labelText: 'Buscar',
+                        hintText: 'Buscar...',
+                        focusColor: Color(0xFFE0E0D6),
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.search),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(width: 8),
-                IconButton(
-                  // icon: Icon(Icons.filter_list, color: Colors.white),
-                  icon: Icon(Icons.filter_list),
-                  onPressed: () {
-                    // Add your filter logic here
-                  },
-                ),
-                IconButton(
-                  // icon: Icon(Icons.search, color: Colors.white),
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    // Add your search logic here
-                  },
-                ),
-              ],
-            ),
-            SizedBox(height: 20, width: 90),
-            
-            // Lista de proyectos
-            Expanded( 
-              child: FutureBuilder(
-                future: project_model.getProjects(),
-                builder: (context, snapshot) {
+                  SizedBox(width: 10), 
                   
-                  // Mientras se espera que los datos sean obtenidos, mostramos un indicador de carga
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-
-                  } else if (snapshot.hasError) { 
-                    return Center( child: Text('Error al cargar proyectos'));
-
-                  } else if (snapshot.hasData && snapshot.data!.isNotEmpty) { 
-                    return ListView.builder(
-                      itemCount: snapshot.data?.length ?? 0, 
-                      itemBuilder: (context, index) {
-                        var project = snapshot.data?[index];  // Accedemos al proyecto en la lista
-                        return ProjectTile(
-                          titulo: project['name'] ?? 'Sin título',
-                          meta: project['funding_goal'] ?? 0,  
-                          recaudado: project['total_donated'] ?? 0,
-
+                   // DropdownButton para seleccionar el tipo de filtro
+                  SizedBox(
+                    width: 120, 
+                    child: DropdownButtonFormField<String>(
+                      value: _selectedFilter, // Valor seleccionado por defecto
+                      decoration: InputDecoration(
+                        labelText: 'Filtro',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                      ),
+                      items: _filterOptions.map((String option) {
+                        return DropdownMenuItem<String>(
+                          value: option,
+                          child: Text(option.capitalize()), // Capitalizar texto
                         );
-
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedFilter = newValue ?? 'nombre'; // Actualizar el filtro seleccionado
+                          _filterItems(); // Aplicar el filtro después de cambiar la opción
+                        });
                       },
-                    );
-                  } else { 
-                    return Center(
-                      child: Text('No hay proyectos disponibles'),
-                    );
-                  }
-                },
-              )
+                    ),
+                  ),
+
+
+                ], 
+              ), 
+            ),
+ 
+            SizedBox(height: 20),
+              
+            // Expanded para permitir que el ListView ocupe el espacio disponible
+            Expanded(
+              
+              child: _filteredItems.isEmpty
+                  ? Center(child: CircularProgressIndicator()) // Mostrar spinner mientras se cargan los datos
+                  : ListView.builder(
+                      itemCount: _filteredItems.length,
+                      itemBuilder: (context, index) {
+                        // Verificar que el tipo de dato sea un Map antes de acceder a campos
+                        if (_filteredItems[index] is Map<String, dynamic>) {
+                          var data = _filteredItems[index] as Map<String, dynamic>;
+                          return ProjectTile( 
+                            titulo:     data['name'] ?? 'Sin título',
+                            meta:       data['funding_goal'] ?? 0,  
+                            recaudado:  data['total_donated'] ?? 0,
+                          );
+                        } else {
+                          return ListTile(
+                            title: Text('Elemento no reconocido'),
+                          );
+                        }
+                      },
+                    ),
             ),
           ],
         ),
-      ),
+      )
     );
   }
 }
 
-
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
+  }
+}
 
 class ProjectTile extends StatelessWidget {
   final String titulo;
