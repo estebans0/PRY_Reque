@@ -1,9 +1,9 @@
-// lib/views/project_form.dart
+// project_form_screen.dart
 import 'package:flutter/material.dart';
 import '../models/project_model.dart';
 
 class ProjectFormScreen extends StatefulWidget {
-  final String? projectId; // Si es nulo, es para crear un nuevo proyecto
+  final String? projectId;
 
   const ProjectFormScreen({this.projectId, super.key});
 
@@ -58,13 +58,11 @@ class _ProjectFormScreenState extends State<ProjectFormScreen> {
     List imgs = _imagesController;
 
     if (widget.projectId == null) {
-      // Crear nuevo proyecto
       await _projectMethods.createProject(name, description, fundingGoal, deadline, imgs);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Proyecto creado'), backgroundColor: Colors.green),
       );
     } else {
-      // Editar proyecto existente
       await _projectMethods.editProject(widget.projectId!, name, description, fundingGoal, deadline, imgs);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Proyecto actualizado'), backgroundColor: Colors.green),
@@ -75,6 +73,32 @@ class _ProjectFormScreenState extends State<ProjectFormScreen> {
     setState(() {
       _isLoading = false;
     });
+  }
+
+  Future<void> _addImage() async {
+    if (_imagesController.length < 5) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Agregar imagen"),
+            content: TextField(
+              decoration: const InputDecoration(hintText: "Ingrese URL de la imagen"),
+              onSubmitted: (url) {
+                setState(() {
+                  _imagesController.add(url);
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          );
+        },
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No puedes agregar más de 5 imágenes'))
+      );
+    }
   }
 
   @override
@@ -106,7 +130,20 @@ class _ProjectFormScreenState extends State<ProjectFormScreen> {
                     controller: _deadlineController,
                     decoration: const InputDecoration(labelText: 'Fecha Límite'),
                   ),
-                  // Falta: Implementar la carga de imágenes
+                  const SizedBox(height: 20),
+                  Wrap(
+                    children: _imagesController.map((url) {
+                      return Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Image.network(url, width: 100, height: 100),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _addImage,
+                    child: const Text('Agregar imagen'),
+                  ),
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: _saveProject,

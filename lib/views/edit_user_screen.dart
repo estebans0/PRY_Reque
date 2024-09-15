@@ -1,6 +1,7 @@
-// lib/views/edit_profile_screen.dart
+// edit_user_screen.dart
 import 'package:flutter/material.dart';
 import '../models/user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EditUserScreen extends StatefulWidget {
   const EditUserScreen({super.key});
@@ -19,6 +20,8 @@ class _EditUserScreenState extends State<EditUserScreen> {
   final TextEditingController _profilePicController = TextEditingController();
 
   bool _isLoading = false;
+  bool _isPasswordVisible = false;  // Toggle de visibilidad de la contraseña
+  String currentPasswordLength = '';
 
   @override
   void initState() {
@@ -31,19 +34,28 @@ class _EditUserScreenState extends State<EditUserScreen> {
       _isLoading = true;
     });
 
-    // Obtener los datos del usuario desde Firestore
     var userData = await _userMethods.getUserData();
     _emailController.text = userData['email'] ?? '';
-    // Setear la contraseña a puntos del largo de la contraseña actual
-    _passwordController.text = '•' * (userData['password']?.length ?? 0);
     _usernameController.text = userData['username'] ?? '';
     _nameController.text = userData['name'] ?? '';
     _phoneNumController.text = userData['phone_num'] != null ? userData['phone_num'].toString() : '';
     _profilePicController.text = userData['profile_pic'] ?? '';
 
+    // Contraseña no puede ser recuperada, así que establecemos el número de bullet points
+    _setPasswordLengthIndicator();
+
     setState(() {
       _isLoading = false;
     });
+  }
+
+  // Establece los bullet points de la contraseña según la longitud
+  void _setPasswordLengthIndicator() {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      currentPasswordLength = '•' * (user.email?.length ?? 0);  // Simulamos la longitud con bullets
+      _passwordController.text = currentPasswordLength;
+    }
   }
 
   Future<void> _saveProfile() async {
@@ -52,9 +64,19 @@ class _EditUserScreenState extends State<EditUserScreen> {
     });
 
     String uid = _userMethods.getCurrentUserId();
-    await _userMethods.updateUserProfile(uid, _emailController.text, _usernameController.text, _nameController.text,
-      _profilePicController.text, num.parse(_phoneNumController.text)
+    await _userMethods.updateUserProfile(
+      uid,
+      _emailController.text,
+      _usernameController.text,
+      _nameController.text,
+      _profilePicController.text,
+      num.parse(_phoneNumController.text)
     );
+
+    // Si la contraseña fue cambiada (no es igual a los bullet points), actualizamos la contraseña
+    if (_passwordController.text != currentPasswordLength) {
+      await _updatePassword(_passwordController.text);
+    }
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Perfil actualizado exitosamente!'), backgroundColor: Colors.green),
@@ -65,7 +87,58 @@ class _EditUserScreenState extends State<EditUserScreen> {
     });
   }
 
-  // UI
+  Future<void> _updatePassword(String newPassword) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await user.updatePassword(newPassword);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Contraseña actualizada exitosamente!'), backgroundColor: Colors.green),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al actualizar contraseña: $e'), backgroundColor: Colors.red),
+      );
+    }
+  }
+
+  Future<void> _changeProfilePicture() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Cambiar Foto de Perfil"),
+          content: TextField(
+            controller: _profilePicController,
+            decoration: const InputDecoration(hintText: "Ingrese URL de la imagen"),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("Cancelar"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text("Ok"),
+              onPressed: () {
+                setState(() {});
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _deleteProfilePicture() {
+    setState(() {
+      _profilePicController.clear();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,32 +149,25 @@ class _EditUserScreenState extends State<EditUserScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  // Agregar un campo para la imagen de perfil del usuario. Canvas circular en el centro de la pantalla con dos botones debajo de la imagen: Cambiar foto y Eliminar foto.
-                  // Código:
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: NetworkImage(_profilePicController.text),
+                    backgroundImage: _profilePicController.text.isNotEmpty
+                        ? NetworkImage(_profilePicController.text)
+                        : null,
+                    child: _profilePicController.text.isEmpty ? const Icon(Icons.person, size: 50) : null,
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      // Implementar la lógica para cambiar la foto de perfil
-                    },
-                    child: const Text('Cambiar foto'),
+                    onPressed: _changeProfilePicture,
+                    child: const Text('Cambiar Foto'),
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      // Implementar la lógica para eliminar la foto de perfil
-                    },
-                    child: const Text('Eliminar foto'),
+                    onPressed: _deleteProfilePicture,
+                    child: const Text('Eliminar Foto'),
                   ),
                   const SizedBox(height: 20),
                   TextField(
                     controller: _emailController,
                     decoration: const InputDecoration(labelText: 'Correo electrónico'),
-                  ),
-                  TextField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(labelText: 'Contraseña'),
                   ),
                   TextField(
                     controller: _usernameController,
@@ -117,9 +183,31 @@ class _EditUserScreenState extends State<EditUserScreen> {
                     keyboardType: TextInputType.number,
                   ),
                   const SizedBox(height: 20),
+                  TextField(
+                    controller: _passwordController,
+                    decoration: const InputDecoration(labelText: 'Contraseña'),
+                    obscureText: !_isPasswordVisible, // Toggle de visibilidad
+                  ),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: _isPasswordVisible,
+                        onChanged: (value) {
+                          setState(() {
+                            _isPasswordVisible = value!;
+                          });
+                        },
+                      ),
+                      const Text("Mostrar Contraseña"),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: _saveProfile,
                     child: const Text('Guardar Cambios'),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 50), // Botón centrado
+                    ),
                   ),
                 ],
               ),
