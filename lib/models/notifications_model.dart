@@ -40,8 +40,9 @@ class NotificationsModel{
         const templateId = 'template_3it95fn';
         const userId = 'QoBLFrMwBnZfTazhm';
 
+        var name = email.replaceAll('@estudiantec.cr', '').replaceAll('@itcr.ac.cr', '');
+
         final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
-        // ignore: unused_local_variable
         final response = await http.post(
             url,
             headers: {
@@ -52,7 +53,7 @@ class NotificationsModel{
                 'template_id': templateId,
                 'user_id': userId,
                 'template_params': {
-                    'user_name': 'usuario', //luego se cambia
+                    'user_name': name, 
                     'user_email': email,
                     'message': messageContent,
                 },
