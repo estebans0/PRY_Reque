@@ -59,6 +59,14 @@ class HomeScreen extends StatelessWidget {
               onPressed: () => Navigator.pushNamed(context, '/edit-profile'),
               child: const Text('Editar perfil'),
             ),
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/edit-profile'),
+              child: const Text('Editar perfil'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/wallet'),
+              child: const Text('Cartera Digital'),
+            )
           ],
         ),
       ),

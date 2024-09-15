@@ -9,6 +9,8 @@ import 'views/signup_screen.dart';
 import 'views/home_screen.dart';
 import 'views/edit_user_screen.dart';
 import 'views/project_form_screen.dart';
+import 'views/wallet_screen.dart';
+import 'views/buy_digital_currency_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +39,8 @@ class MyApp extends StatelessWidget {
         '/create-project': (context) => const ProjectFormScreen(),
         '/edit-profile': (context) => const EditUserScreen(),
         '/home-admin': (context) => const HomeScreenAdmin(),
+        '/wallet': (context) => const WalletScreen(),
+        '/buy-digital-currency': (context) => const BuyDigitalCurrencyScreen(),
       },
     );
   }
