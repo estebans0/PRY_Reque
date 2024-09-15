@@ -55,10 +55,26 @@ class UserMethods {
     return users;
   }
 
-  // Elimina a un usuario 
-  Future<void> deleteUser(String userId) async{
-    _firestore.collection('Users').doc(userId).delete();
+  // Desactiva un usuario 
+  Future<void> deactivateUser(String userId) async{
+    await _firestore.collection('Users').doc(userId).update({
+      'is_deleted': true,
+    });
   }
+
+  // Activa un usuario 
+  Future<void> activateUser(String userId) async{
+    await _firestore.collection('Users').doc(userId).update({
+      'is_deleted': false,
+    });
+  }
+
+  // Averigua si un usuario esta activado o desactivado  
+  Future<bool> isActivate(String userId) async{
+    var userData = _firestore.collection('Users').doc(userId).get();
+    return await userData.then((value) => value['is_deleted']);
+  }
+
   
   // Retorna la cantidad de usuarios.
   Future<int> getNumbertUsers() async{

@@ -40,18 +40,6 @@ class _ManageUsersScreen extends State<ManageUsersScreen> {
                                     'Gestionar Usuarios',
                                     style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold,),
                                 ),
-                                // barra de busqueda
-                                const SizedBox(height: 10),
-                                TextField(
-                                    onChanged: (value){
-                                        // hace que se reconstruya el widget cada vez que se cambie el textfield
-                                        setState((){
-                                            searchText = value;
-                                        });
-                                    },
-                                    decoration: InputDecoration(hintText: 'Buscar usuario'),
-                                ),
-                                const SizedBox(height: 20),
                                 Text('Nombre Completo'),
                                 const SizedBox(height: 20),
                                 _buildUserList(),
@@ -79,41 +67,8 @@ class _ManageUsersScreen extends State<ManageUsersScreen> {
                             itemCount: snapshot.data?.length,
                             itemBuilder: (context, index){
                                 String name = snapshot.data?[index]['name'] ?? '';
-                                if(searchText.isEmpty || name.toLowerCase().contains(searchText.toLowerCase())){
-                                    return ListTile(                                
-                                    title: Text(snapshot.data?[index]['name']),
-                                    trailing: ElevatedButton(
-                                        onPressed: () async{
-                                            // pop up para confirmar la eliminacion de un usuario
-                                            showDialog(
-                                                context: context,
-                                                builder: (context){
-                                                    return AlertDialog(
-                                                        title: Text("¿Está seguro de eliminar a " + name + "?"),
-                                                        actions: [
-                                                            TextButton(
-                                                                child: Text("No"),
-                                                                onPressed: () => Navigator.of(context).pop(),
-                                                            ),
-                                                            TextButton(
-                                                                child: Text("Sí, estoy seguro"),
-                                                                onPressed: ()async{
-                                                                    await userModel.deleteUser(snapshot.data?[index]["docId"]);
-                                                                    Navigator.of(context).pop();
-                                                                    setState(() {});
-                                                                },
-                                                            ),
-                                                        ]
-                                                    );
-                                                }
-                                            );
-                                        },
-                                        child: Text('Desactivar')
-                                    )
-                                    );
-                                } else{
-                                    return SizedBox.shrink();
-                                } 
+                                String id = snapshot.data?[index]["docId"] ?? '';
+                                return _buildListView(name, id);
                             }
                         );
                     }
@@ -121,4 +76,62 @@ class _ManageUsersScreen extends State<ManageUsersScreen> {
             )
         );
     }
+
+    Widget _buildListView(String name, String id){
+        return FutureBuilder<bool>(
+            future: userModel.isActivate(id),
+            builder: (context, snapshot) {
+                bool activity = snapshot.data ?? false;
+                return ListTile(                                
+                    title: Text(name),
+                    trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [ 
+                            ElevatedButton(
+                                onPressed: activity ?() async{
+                                    await userModel.activateUser(id);
+                                    setState(() {});
+                                }: null,
+                                child: Text('Activar')
+                            ), 
+                            SizedBox(width: 5), 
+                            ElevatedButton(
+                                onPressed: !activity ?() async{
+                                    // pop up para confirmar la eliminacion de un usuario
+                                    showDialog(
+                                        context: context,
+                                        builder: (context){
+                                            return AlertDialog(
+                                                title: Text("¿Está seguro de desactivar a " + name + "?"),
+                                                actions: [
+                                                    TextButton(
+                                                        child: Text("No"),
+                                                        onPressed: () => Navigator.of(context).pop(),
+                                                    ),
+                                                    TextButton(
+                                                        child: Text("Sí, estoy seguro"),
+                                                        onPressed: ()async{
+                                                            await userModel.deactivateUser(id);
+                                                            Navigator.of(context).pop();
+                                                            setState(() {
+                                                            });
+                                                        },
+                                                    ),
+                                                ]
+                                            );
+                                        }
+                                    );
+                                }: null,
+                                child: Text('Desactivar')
+                            )],)
+                );
+            }
+
+        );
+                
+                
+            
+    }
+
+
 }
