@@ -41,6 +41,17 @@ class Controller {
     return result;
   }
 
+  Future<bool> isBanned(String email) async{
+    bool banned = false;
+    List users = await _authModel.getUsers();
+    for(var user in users){
+      if(user['email'] == email && user['is_deleted']){
+        banned = true;
+      }
+    }
+    return banned;
+  }
+
   //Funcion usada para crear las crendenciales de los siguientes admins
   // Future<void> creatCredencialAdmins () async {
   //   String email = 'adminJ@estudiantec.cr';

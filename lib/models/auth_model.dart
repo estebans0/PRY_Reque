@@ -44,6 +44,7 @@ class AuthModel {
         'profile_pic': null,
         'total_donated': 0,
         'supported_projects': 0,
+        'is_deleted' : false,
         'digital_currency' : 0,
       });
     } catch (e) {

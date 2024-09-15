@@ -23,42 +23,53 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final email = _emailController.text;
     final password = _passwordController.text;
-
-    try {
-      await _controller.login(email, password);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login exitoso'), backgroundColor: Colors.green),
-      );
-      if (await _controller.isAdmin(email)) {
-        Navigator.pushReplacementNamed(context, '/home-admin');
-      } else {
-        Navigator.pushReplacementNamed(context, '/home');
-      }
+    // Si no esta baneado se deja entrar
+    if(!await _controller.isBanned(email)){
+      try {
+        await _controller.login(email, password);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login exitoso'), backgroundColor: Colors.green),
+        );
+        if (await _controller.isAdmin(email)) {
+          Navigator.pushReplacementNamed(context, '/home-admin');
+        } else {
+          Navigator.pushReplacementNamed(context, '/home');
+        }
         
 
-    } catch (e) {
-      if (e.toString().contains('invalid-credential')) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Email o contraseña incorrecta'), backgroundColor: Colors.red),
-        );
-      } else if (e.toString().contains('invalid-email')) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Email incorrecto'), backgroundColor: Colors.red),
-        );
-      } else if (e.toString().contains('missing-password')) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Debe ingresar una contraseña'), backgroundColor: Colors.red),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
-        );
+      } catch (e) {
+        if (e.toString().contains('invalid-credential')) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Email o contraseña incorrecta'), backgroundColor: Colors.red),
+          );
+        } else if (e.toString().contains('invalid-email')) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Email incorrecto'), backgroundColor: Colors.red),
+          );
+        } else if (e.toString().contains('missing-password')) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Debe ingresar una contraseña'), backgroundColor: Colors.red),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+          );
+        }
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
       }
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
+    } else{
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('El usuario se encuentra baneado'), backgroundColor: Colors.red),
+        );
+        setState(() {
+          _isLoading = false;
+        });
     }
+
+    
   }
 
   @override
