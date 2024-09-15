@@ -1,4 +1,3 @@
-// views/buy_digital_currency_screen.dart
 import 'package:flutter/material.dart';
 import '../models/wallet_model.dart';
 

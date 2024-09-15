@@ -49,4 +49,33 @@ class ProjectMethods {
 
     return projectData;
   }
+
+
+  // Retorna una lista con todos los proyectos 
+  Future<List> getProjects () async {
+    List projects = [];
+    CollectionReference collectionReferenceProjects = _firestore.collection('Projects');
+    
+    QuerySnapshot queryProject = await collectionReferenceProjects.get();
+    queryProject.docs.forEach ((project){
+      projects.add(project.data());
+      
+    });
+
+    return projects;
+  }
+
+  // Retorna la cantidad de proyectos 
+  Future<int> getNumberProjects () async {
+    List projects = [];
+    CollectionReference collectionReferenceProjects = _firestore.collection('Projects');
+    
+    QuerySnapshot queryProject = await collectionReferenceProjects.get();
+    queryProject.docs.forEach ((project){
+      projects.add(project.data());
+    });
+    return projects.length;
+    // return 'OH';
+  }
+
 }

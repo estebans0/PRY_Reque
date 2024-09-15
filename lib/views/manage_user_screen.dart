@@ -14,13 +14,6 @@ class _ManageUsersScreen extends State<ManageUsersScreen> {
     String searchText = '';
     UserMethods userModel = UserMethods();
 
-    // funcion para desactivar usuarios
-
-    // funcion para filtrar los usuarios segun la busqueda
-    Future<void> _filterUsers() async{
-    }
-
-
     @override
     Widget build(BuildContext context) {
         return Scaffold(
@@ -46,15 +39,14 @@ class _ManageUsersScreen extends State<ManageUsersScreen> {
                                 const Text(
                                     'Gestionar Usuarios',
                                     style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold,),
-
                                 ),
                                 // barra de busqueda
                                 const SizedBox(height: 10),
                                 TextField(
                                     onChanged: (value){
+                                        // hace que se reconstruya el widget cada vez que se cambie el textfield
                                         setState((){
                                             searchText = value;
-                                            // _filterUsers();
                                         });
                                     },
                                     decoration: InputDecoration(hintText: 'Buscar usuario'),
@@ -62,38 +54,70 @@ class _ManageUsersScreen extends State<ManageUsersScreen> {
                                 const SizedBox(height: 20),
                                 Text('Nombre Completo'),
                                 const SizedBox(height: 20),
-                                Expanded(
-                                    child: FutureBuilder(
-                                        future: userModel.getUsers(),
-                                        // snapshot tendra la lista de todos los usuarios
-                                        builder: ((content, snapshot){
-                                            // esperara a que cargue la respuesta de firebase
-                                            if (snapshot.connectionState == ConnectionState.waiting) {
-                                                return LinearProgressIndicator();
-                                            } else{
-                                                return ListView.builder(
-                                                    itemCount: snapshot.data?.length,
-                                                    itemBuilder: (context, index){
-                                                    return ListTile(
-                                                        title: Text(snapshot.data?[index]['name']),
-                                                        trailing: ElevatedButton(
-                                                            // se tiene que crear la funcion de desactivar
-                                                            onPressed: null,
-                                                            child: Text('Desactivar')
-                                                        )
-                                                    );
-                                                    }
-                                                );
-                                            }
-                                        }),
-
-                                    )
-                                )
+                                _buildUserList(),
+                                
                             ]
                         )
                     ),
                 )
                 ]
+            )
+        );
+    }
+
+    Widget _buildUserList(){
+        return Expanded(
+            child: FutureBuilder(
+                future: userModel.getUsers(),
+                // snapshot tendra la lista de todos los usuarios
+                builder: ((content, snapshot){
+                    // esperara a que cargue la respuesta de firebase
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                        return LinearProgressIndicator();
+                    } else{
+                        return ListView.builder(
+                            itemCount: snapshot.data?.length,
+                            itemBuilder: (context, index){
+                                String name = snapshot.data?[index]['name'] ?? '';
+                                if(searchText.isEmpty || name.toLowerCase().contains(searchText.toLowerCase())){
+                                    return ListTile(                                
+                                    title: Text(snapshot.data?[index]['name']),
+                                    trailing: ElevatedButton(
+                                        onPressed: () async{
+                                            // pop up para confirmar la eliminacion de un usuario
+                                            showDialog(
+                                                context: context,
+                                                builder: (context){
+                                                    return AlertDialog(
+                                                        title: Text("¿Está seguro de eliminar a " + name + "?"),
+                                                        actions: [
+                                                            TextButton(
+                                                                child: Text("No"),
+                                                                onPressed: () => Navigator.of(context).pop(),
+                                                            ),
+                                                            TextButton(
+                                                                child: Text("Sí, estoy seguro"),
+                                                                onPressed: ()async{
+                                                                    await userModel.deleteUser(snapshot.data?[index]["docId"]);
+                                                                    Navigator.of(context).pop();
+                                                                    setState(() {});
+                                                                },
+                                                            ),
+                                                        ]
+                                                    );
+                                                }
+                                            );
+                                        },
+                                        child: Text('Desactivar')
+                                    )
+                                    );
+                                } else{
+                                    return SizedBox.shrink();
+                                } 
+                            }
+                        );
+                    }
+                }),
             )
         );
     }

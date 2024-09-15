@@ -11,6 +11,11 @@ class WalletScreen extends StatefulWidget {
 class _WalletScreenState extends State<WalletScreen> {
   final WalletMethods _walletMethods = WalletMethods();
 
+  // Para asegurar que se actualice el balance
+  Future<void> _refreshBalance() async {
+    setState(() {}); // Esto forzará la actualización del FutureBuilder
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,14 +67,23 @@ class _WalletScreenState extends State<WalletScreen> {
               children: [
                 IconButton(
                   icon: const Icon(Icons.shopping_cart),
-                  onPressed: () =>
-                      Navigator.pushNamed(context, '/buy-digital-currency'),
+                  onPressed: () async {
+                    // Navegar a la pantalla de compra de moneda digital y esperar el resultado
+                    final result = await Navigator.pushNamed(
+                        context, '/buy-digital-currency');
+
+                    // Si el resultado es "true", significa que se realizó una compra
+                    if (result == true) {
+                      // Refrescar el balance cuando regresamos a la pantalla de la cartera
+                      _refreshBalance();
+                    }
+                  },
                 ),
                 const SizedBox(width: 20),
                 IconButton(
                   icon: const Icon(Icons.download),
                   onPressed: () {
-                    //Lógica para descargar las transacciones (en el futuro debatible)
+                    // Lógica para descargar las transacciones (en el futuro)
                   },
                 ),
               ],

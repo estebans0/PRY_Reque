@@ -1,4 +1,5 @@
 // lib/main.dart
+import 'package:app/views/home_screen_admin.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'models/firebase_options.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomeScreen(),
         '/create-project': (context) => const ProjectFormScreen(),
         '/edit-profile': (context) => const EditUserScreen(),
+        '/home-admin': (context) => const HomeScreenAdmin(),
         '/wallet': (context) => const WalletScreen(),
         '/buy-digital-currency': (context) => const BuyDigitalCurrencyScreen(),
       },
