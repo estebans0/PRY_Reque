@@ -43,6 +43,7 @@ class NotificationsModel{
         var name = email.replaceAll('@estudiantec.cr', '').replaceAll('@itcr.ac.cr', '');
 
         final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+        // ignore: unused_local_variable
         final response = await http.post(
             url,
             headers: {

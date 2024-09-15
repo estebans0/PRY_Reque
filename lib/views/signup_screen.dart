@@ -61,8 +61,6 @@ class _SignupScreenState extends State<SignupScreen> {
       );
       // una vez hecho el registro exitoso se manda el correo de notificacion
       _notificationModel.sendRegisterEmail(email);
-      // Lo quité para que no se redirija automaticamente y el usuario tenga que hacer login
-      // Navigator.pushReplacementNamed(context, '/home');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),

@@ -44,14 +44,14 @@ class UserMethods {
     CollectionReference usersReference = _firestore.collection('Users');
     // trae todos los documento de la coleccion aka todos los usuarios
     QuerySnapshot queryUsers = await usersReference.get();
-    queryUsers.docs.forEach((document){
+    for (var document in queryUsers.docs) {
       final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
       final user = {
         "name": data['name'],
         "docId": document.id,            // Para poder acceder a cada id del usuario
       };
       users.add(user);
-    });
+    }
     return users;
   }
 
@@ -82,9 +82,9 @@ class UserMethods {
     CollectionReference usersReference = _firestore.collection('Users');
     // trae todos los documento de la coleccion aka todos los usuarios
     QuerySnapshot queryUsers = await usersReference.get();
-    queryUsers.docs.forEach((document){
+    for (var document in queryUsers.docs) {
       users.add(document.data());
-    });
+    }
     return users.length;
   }
  
@@ -94,9 +94,9 @@ class UserMethods {
     CollectionReference donationsReference = _firestore.collection('Donations'); 
 
     QuerySnapshot queryDonations = await donationsReference.get();
-    queryDonations.docs.forEach((donation){
+    for (var donation in queryDonations.docs) {
       donations.add(donation.data());
-    });
+    }
     return donations.length;
   }
 
@@ -116,7 +116,6 @@ class UserMethods {
 
     return formattedDate;
   }
-
   
   // Retorna todas las donaciones.
   Future<List> getDonations() async {

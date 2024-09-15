@@ -1,9 +1,9 @@
 // landing_page.dart
-import 'package:app/views/home_screen_admin.dart';
+// import 'package:app/views/home_screen_admin.dart';
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'signup_screen.dart';
-import 'manage_user_screen.dart';
+// import 'manage_user_screen.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
@@ -21,6 +21,7 @@ class LandingPage extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
+                Navigator.of(context).pop();
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -31,6 +32,7 @@ class LandingPage extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
+                Navigator.of(context).pop();
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const SignupScreen()),

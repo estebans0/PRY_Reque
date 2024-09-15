@@ -7,49 +7,65 @@ class ProjectMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Crear un nuevo proyecto
-  Future<void> createProject(String name, String description, num funding_goal, DateTime? deadline, List imgs) async {
+  Future<void> createProject(String name, String description, num fundingGoal, DateTime? deadline,
+                              List<String> images, List<String> categories) async {
     String userId = _auth.currentUser!.uid;
 
     await _firestore.collection('Projects').add({
-      'user_id': _firestore.collection('Users').doc(userId), // Referencia al usuario que creó el proyecto
+      'user_id': userId, // UID del usuario que creó el proyecto
       'name': name,
       'description': description,
-      'funding_goal': funding_goal,
+      'funding_goal': fundingGoal,
       'deadline': deadline != null ? Timestamp.fromDate(deadline) : null,
       'total_donated': 0,
       'donors_count': 0,
       'views_count': 0,
-      // Subcollection Images: Guardar las imágenes del proyecto
-      'images': imgs.map((img) => {'url': img}).toList(),
-      // Subcollection Announcements: Guardar los anuncios del creador a sus donantes, empieza vacío
-      'announcements': [],
+      'images': images.map((img) => {'url': img}).toList(),
+      'categories': categories,
+      'createdAt': Timestamp.now(),
     });
   }
 
   // Editar un proyecto existente
-  Future<void> editProject(String projectId, String name, String description, num funding_goal, DateTime? deadline, List imgs) async {
+  Future<void> editProject(String projectId, String name, String description, num fundingGoal, DateTime? deadline,
+                            List<String> images, List<String> categories) async {
     await _firestore.collection('Projects').doc(projectId).update({
       'name': name,
       'description': description,
-      'funding_goal': funding_goal,
+      'funding_goal': fundingGoal,
       'deadline': deadline != null ? Timestamp.fromDate(deadline) : null,
-      'images': imgs.map((img) => {'url': img}).toList(),
+      'images': images.map((img) => {'url': img}).toList(),
+      'categories': categories,
     });
   }
 
-  // Obtener datos de un proyecto específico, incluyendo sus imágenes (subcollection 'Images')
+  // Obtener los proyectos del usuario actual por UID
+  Future<List<Map<String, dynamic>>> getProjectsByUserId(String userId) async {
+    QuerySnapshot querySnapshot = await _firestore
+        .collection('Projects')
+        .where('user_id', isEqualTo: userId)
+        .get();
+
+    return querySnapshot.docs.map((doc) {
+      var data = doc.data() as Map<String, dynamic>;
+      data['id'] = doc.id; // Incluir el ID del proyecto
+      return data;
+    }).toList();
+  }
+
+  // Obtener datos de un proyecto específico
   Future<Map<String, dynamic>> getProjectData(String projectId) async {
     DocumentSnapshot projectDoc = await _firestore.collection('Projects').doc(projectId).get();
     Map<String, dynamic> projectData = projectDoc.data() as Map<String, dynamic>;
     projectData['id'] = projectDoc.id;
 
-    // Obtener las imágenes del proyecto
-    QuerySnapshot imgsQuery = await _firestore.collection('Projects').doc(projectId).collection('Images').get();
-    projectData['images'] = imgsQuery.docs.map((img) => img.data()).toList();
-
     return projectData;
   }
 
+  Future<List<String>> getCategories() async {
+    final QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('CategoriaPry').get();
+    return snapshot.docs.map((doc) => doc['name'] as String).toList();
+  }
 
   // Retorna una lista con todos los proyectos 
   Future<List> getProjects () async {
@@ -57,11 +73,9 @@ class ProjectMethods {
     CollectionReference collectionReferenceProjects = _firestore.collection('Projects');
     
     QuerySnapshot queryProject = await collectionReferenceProjects.get();
-    queryProject.docs.forEach ((project){
-      projects.add(project.data());
-      
-    });
-
+    for (var project in queryProject.docs) {
+      projects.add(project.data()); 
+    }
     return projects;
   }
 
@@ -71,11 +85,10 @@ class ProjectMethods {
     CollectionReference collectionReferenceProjects = _firestore.collection('Projects');
     
     QuerySnapshot queryProject = await collectionReferenceProjects.get();
-    queryProject.docs.forEach ((project){
+    for (var project in queryProject.docs) {
       projects.add(project.data());
-    });
+    }
     return projects.length;
     // return 'OH';
   }
-
 }

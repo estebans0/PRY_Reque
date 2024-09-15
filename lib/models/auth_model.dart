@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class AuthModel {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
   
   //Solucion temporal creacion de administradores
   // Future<void> createAdmin(String email, String password) async{
@@ -24,14 +23,9 @@ class AuthModel {
   Future<void> signUp(String email, String password) async {
     try {
       // Crear el usuario en Firebase Authentication
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       // Obtener el UID del usuario creado
       String uid = userCredential.user!.uid;
-      
       //Esto se agrega para evitar error al consultar usuarios
       String nameTemp = email.replaceAll('@estudiantec.cr', '').replaceAll('@itcr.ac.cr', '');
 
@@ -70,17 +64,20 @@ class AuthModel {
     }
   }
 
+  // Obtener UID del usuario autenticado
+  String getCurrentUserId() {
+    return _auth.currentUser!.uid;
+  }
+
   // Retorna una lista con todos los usuarios
   Future<List> getUsers() async {
     List users = [];
     CollectionReference collectionReferenceUsers = _firestore.collection('Users');
     
     QuerySnapshot queryAdmin = await collectionReferenceUsers.get();
-    queryAdmin.docs.forEach ((User){
-      users.add(User.data());
-      
-    });
-
+    for (var User in queryAdmin.docs) {
+      users.add(User.data()); 
+    }
     return users;
   }
 
@@ -90,15 +87,9 @@ class AuthModel {
     CollectionReference collectionReferenceAdmins = _firestore.collection('admin');
     
     QuerySnapshot queryAdmin = await collectionReferenceAdmins.get();
-    queryAdmin.docs.forEach ((admin){
+    for (var admin in queryAdmin.docs) {
       admins.add(admin.data());
-      
-    });
-
+    }
     return admins;
   }
-
-  
-
-
 }

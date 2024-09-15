@@ -25,7 +25,7 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
           children: [
             Title(
               color: Colors.black, 
-              child: Text(
+              child: const Text(
                 'Gestión de proyectos',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,),
               ),
@@ -41,7 +41,7 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                       // hintStyle: TextStyle(color: Colors.grey),
                       filled: true,
                       // fillColor: Colors.grey[800],
-                      focusColor: Color(0xFFE0E0D6),
+                      focusColor: const Color(0xFFE0E0D6),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.0),
                         borderSide: BorderSide.none,
@@ -49,24 +49,24 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                     ),
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 IconButton(
                   // icon: Icon(Icons.filter_list, color: Colors.white),
-                  icon: Icon(Icons.filter_list),
+                  icon: const Icon(Icons.filter_list),
                   onPressed: () {
                     // Add your filter logic here
                   },
                 ),
                 IconButton(
                   // icon: Icon(Icons.search, color: Colors.white),
-                  icon: Icon(Icons.search),
+                  icon: const Icon(Icons.search),
                   onPressed: () {
                     // Add your search logic here
                   },
                 ),
               ],
             ),
-            SizedBox(height: 20, width: 90),
+            const SizedBox(height: 20, width: 90),
             
             // Lista de proyectos
             Expanded( 
@@ -79,7 +79,7 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                     return const Center(child: CircularProgressIndicator());
 
                   } else if (snapshot.hasError) { 
-                    return Center( child: Text('Error al cargar proyectos'));
+                    return const Center( child: Text('Error al cargar proyectos'));
 
                   } else if (snapshot.hasData && snapshot.data!.isNotEmpty) { 
                     return ListView.builder(
@@ -96,7 +96,7 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                       },
                     );
                   } else { 
-                    return Center(
+                    return const Center(
                       child: Text('No hay proyectos disponibles'),
                     );
                   }
@@ -118,13 +118,13 @@ class ProjectTile extends StatelessWidget {
   final int recaudado;
 
   // Constructor que recibe los datos
-  ProjectTile({required this.titulo, required this.meta, required this.recaudado});
+  const ProjectTile({super.key, required this.titulo, required this.meta, required this.recaudado});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 16),
-      padding: EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         // color: Colors.grey[850],
         color:const  Color(0xFFE0E0D6),
@@ -141,7 +141,7 @@ class ProjectTile extends StatelessWidget {
                 titulo,  // Título del proyecto
                 // style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0), fontSize: 18),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 'Meta: $meta  Recaudado: $recaudado',  // Meta y recaudado
                 // style: TextStyle(color: const Color.fromARGB(255, 209, 45, 45)),
@@ -155,7 +155,7 @@ class ProjectTile extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               // backgroundColor: Colors.grey[700],
             ),
-            child: Text('Editar'),
+            child: const Text('Editar'),
           ),
         ],
       ),

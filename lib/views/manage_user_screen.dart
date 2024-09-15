@@ -40,7 +40,7 @@ class _ManageUsersScreen extends State<ManageUsersScreen> {
                                     'Gestionar Usuarios',
                                     style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold,),
                                 ),
-                                Text('Nombre Completo'),
+                                const Text('Nombre Completo'),
                                 const SizedBox(height: 20),
                                 _buildUserList(),
                                 
@@ -61,7 +61,7 @@ class _ManageUsersScreen extends State<ManageUsersScreen> {
                 builder: ((content, snapshot){
                     // esperara a que cargue la respuesta de firebase
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                        return LinearProgressIndicator();
+                        return const LinearProgressIndicator();
                     } else{
                         return ListView.builder(
                             itemCount: snapshot.data?.length,
@@ -92,9 +92,9 @@ class _ManageUsersScreen extends State<ManageUsersScreen> {
                                     await userModel.activateUser(id);
                                     setState(() {});
                                 }: null,
-                                child: Text('Activar')
+                                child: const Text('Activar')
                             ), 
-                            SizedBox(width: 5), 
+                            const SizedBox(width: 5), 
                             ElevatedButton(
                                 onPressed: !activity ?() async{
                                     // pop up para confirmar la eliminacion de un usuario
@@ -102,14 +102,14 @@ class _ManageUsersScreen extends State<ManageUsersScreen> {
                                         context: context,
                                         builder: (context){
                                             return AlertDialog(
-                                                title: Text("¿Está seguro de desactivar a " + name + "?"),
+                                                title: Text("¿Está seguro de desactivar a $name?"),
                                                 actions: [
                                                     TextButton(
-                                                        child: Text("No"),
+                                                        child: const Text("No"),
                                                         onPressed: () => Navigator.of(context).pop(),
                                                     ),
                                                     TextButton(
-                                                        child: Text("Sí, estoy seguro"),
+                                                        child: const Text("Sí, estoy seguro"),
                                                         onPressed: ()async{
                                                             await userModel.deactivateUser(id);
                                                             Navigator.of(context).pop();
@@ -122,7 +122,7 @@ class _ManageUsersScreen extends State<ManageUsersScreen> {
                                         }
                                     );
                                 }: null,
-                                child: Text('Desactivar')
+                                child: const Text('Desactivar')
                             )],)
                 );
             }
