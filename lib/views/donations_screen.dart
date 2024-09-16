@@ -31,42 +31,42 @@ class _donationsPage extends State<donationsPage> {
             ),
             SizedBox(height: 20),
             // Fila de buscar y filtro
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    // style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: 'Buscar...',
-                      // hintStyle: TextStyle(color: Colors.grey),
-                      filled: true,
-                      // fillColor: Colors.grey[800],
-                      focusColor: Color(0xFFE0E0D6),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 8),
-                IconButton(
-                  // icon: Icon(Icons.filter_list, color: Colors.white),
-                  icon: Icon(Icons.filter_list),
-                  onPressed: () {
-                    // Add your filter logic here
-                  },
-                ),
-                IconButton(
-                  // icon: Icon(Icons.search, color: Colors.white),
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    // Add your search logic here
-                  },
-                ),
-              ],
-            ),
-            SizedBox(height: 20, width: 90),
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       child: TextField(
+            //         // style: TextStyle(color: Colors.white),
+            //         decoration: InputDecoration(
+            //           hintText: 'Buscar...',
+            //           // hintStyle: TextStyle(color: Colors.grey),
+            //           filled: true,
+            //           // fillColor: Colors.grey[800],
+            //           focusColor: Color(0xFFE0E0D6),
+            //           border: OutlineInputBorder(
+            //             borderRadius: BorderRadius.circular(8.0),
+            //             borderSide: BorderSide.none,
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     SizedBox(height: 8),
+            //     IconButton(
+            //       // icon: Icon(Icons.filter_list, color: Colors.white),
+            //       icon: Icon(Icons.filter_list),
+            //       onPressed: () {
+            //         // Add your filter logic here
+            //       },
+            //     ),
+            //     IconButton(
+            //       // icon: Icon(Icons.search, color: Colors.white),
+            //       icon: Icon(Icons.search),
+            //       onPressed: () {
+            //         // Add your search logic here
+            //       },
+            //     ),
+            //   ],
+            // ),
+            // SizedBox(height: 20, width: 90),
             
             // Lista de proyectos
             Expanded( 
@@ -86,19 +86,21 @@ class _donationsPage extends State<donationsPage> {
                       itemCount: snapshot.data?.length ?? 0, 
                       itemBuilder: (context, index) {
                         var project = snapshot.data?[index];  // Accedemos al proyecto en la lista
-                        return ProjectTile2(
-                          projectName: project['nameProject'] ?? 'Sin informacion',
-                          userName: project['nameUser'] ?? 'Sin informacion',
-                          date: project['date'] ?? '', 
-                          amount: project['amount'] ?? 0,
-
-                        );
+                        String idDonation = project['idDonation'] ?? '';
+                        String idProject = project['idProject'] ?? '';
+                        String idUser = project['idUser'] ?? '';
+                        bool is_deleted = project['is_deleted'] ?? false;
+                        String projectName = project['nameProject'] ?? 'Sin informacion';
+                        String userName = project['nameUser'] ?? 'Sin informacion';
+                        String date = project['date'] ?? '';
+                        int amount = project['amount'] ?? 0;
+                        return auxBuild(idDonation, idProject, idUser, is_deleted, projectName, userName, date, amount); 
 
                       },
                     );
                   } else { 
                     return Center(
-                      child: Text('No hay proyectos disponibles'),
+                      child: Text('No hay donaciones disponibles'),
                     );
                   }
                 },
@@ -109,19 +111,9 @@ class _donationsPage extends State<donationsPage> {
       ),
     );
   }
-}
-
-class ProjectTile2 extends StatelessWidget {
-  final String projectName;
-  final String userName;
-  final String date;
-  final int amount;
-
-  // Constructor que recibe los datos
-  ProjectTile2({required this.projectName,  required this.userName, required this.date, required this.amount});
 
   @override
-  Widget build(BuildContext context) {
+  Widget auxBuild(String idDonation, String idProject, String idUser, bool is_deleted, String projectName,  String userName, String date, int amount) {
     return Container(
       margin: EdgeInsets.only(bottom: 16),
       padding: EdgeInsets.all(16),
@@ -145,19 +137,26 @@ class ProjectTile2 extends StatelessWidget {
               Text(
                 'Monto: $amount       Fecha: $date',   
               ),
-            ],
+              
+            ], 
           ),
-          ElevatedButton(
-            onPressed: () {
-              // Acción de edición
-            },
-            style: ElevatedButton.styleFrom(
-              // backgroundColor: Colors.grey[700],
-            ),
-            child: Text('Cancelar'),
-          ),
+          Column(
+            children: [ 
+              SizedBox(
+                width: 120,
+                child:  ElevatedButton(
+                  onPressed: !is_deleted ?() async {  
+                    await user_model.deactivateDonation(idDonation, idProject, idUser, amount);
+                    setState(() {});
+                  }: null,
+                  child: const Text('Desactivar')
+                )    
+              )
+            ]
+          )
         ],
       ),
     );
   }
+
 }

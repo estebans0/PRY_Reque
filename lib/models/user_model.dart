@@ -1,6 +1,7 @@
 // lib/models/user_model.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 class UserMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -105,8 +106,7 @@ class UserMethods {
     var userData = _firestore.collection('Users').doc(userId).get();
     return await userData.then((value) => value['is_deleted']);
   }
-
-  
+ 
   // Retorna la cantidad de usuarios.
   Future<int> getNumbertUsers() async{
     List users = [];
@@ -118,15 +118,24 @@ class UserMethods {
     }
     return users.length;
   }
- 
+   
   // Retorna la cantidad de donaciones.
   Future<int> getNumbertDonations() async{
-    List donations = [];
-    CollectionReference donationsReference = _firestore.collection('Donations'); 
+    List donations = []; 
 
-    QuerySnapshot queryDonations = await donationsReference.get();
+    QuerySnapshot queryDonations = await _firestore.collection('Donations').where('is_deleted', isEqualTo: false).get();
+
     for (var donation in queryDonations.docs) {
-      donations.add(donation.data());
+
+      DocumentReference useRef = donation.get('user_id');
+      DocumentSnapshot userSnap = await useRef.get();
+      DocumentReference projectRef = donation.get('project_id');
+      DocumentSnapshot projectSnap = await projectRef.get();
+ 
+
+      if (userSnap.exists && projectSnap.exists && projectSnap['is_deleted'] == false) {  
+        donations.add(donation.data());
+      }
     }
     return donations.length;
   }
@@ -152,28 +161,31 @@ class UserMethods {
   Future<List> getDonations() async {
 
     List donations = [];
-    // Obtener todas las donaciones
+    // Obtener todas las donaciones 
     QuerySnapshot donaciones = await _firestore.collection('Donations').get();
 
     // Recorrer las donaciones obtenidas
     for (QueryDocumentSnapshot donacionDoc in donaciones.docs) { 
- 
+
       DocumentReference useRef = donacionDoc.get('user_id');
       DocumentSnapshot userSnap = await useRef.get();
       DocumentReference projectRef = donacionDoc.get('project_id');
       DocumentSnapshot projectSnap = await projectRef.get();
+ 
 
-      if (userSnap.exists && projectSnap.exists) {  
-
+      if (userSnap.exists && projectSnap.exists && projectSnap['is_deleted'] == false) {  
         donations.add(
           {
+            'idDonation': donacionDoc.id,
+            'idProject' : projectSnap.id,
+            'idUser' : userSnap.id,
+            'is_deleted':  donacionDoc.get('is_deleted'),
             'nameUser': userSnap['name'],
             'nameProject': projectSnap['name'],
             'amount': donacionDoc['amount'],
             'date': formatTimestamp(donacionDoc['donation_date'])
           } 
-        );
-        
+        ); 
       } else {
         print('El documento de usuario no existe para la orden.');
       }  
@@ -198,5 +210,22 @@ class UserMethods {
     return email;
   }
 
+  // Desactiva un usuario 
+  Future<void> deactivateDonation(String idDonation, String idProject, String idUser, int amount) async{
+    try {   
+      await _firestore.collection('Donations').doc(idDonation).update({
+        'is_deleted': true,
+      }); 
+      await _firestore.collection('Projects').doc(idProject).update({
+        'total_donated': FieldValue.increment(-amount),
+      });
+      await _firestore.collection('Users').doc(idUser).update({
+        'digital_currency': FieldValue.increment(amount),
+      }); 
+    } catch (e) {
+      print('ERROR CANCELAR DONACION: ${e.toString()}');
+    }
+  }
 
+  
 }

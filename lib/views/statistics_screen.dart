@@ -20,7 +20,7 @@ class _statisticsScreen extends State<statisticsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFE0E0D6),//Colors.white38,  // Color de fondo negro
+      //backgroundColor: Colors.white,  // Color de fondo negro
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -44,9 +44,10 @@ class _statisticsScreen extends State<statisticsScreen> {
                 maxWidth: 500,
               ),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey, width: 2), // Borde gris
+                //border: Border.all(color: Color(0xFFE0E0D6), width: 2), // Borde gris
                 borderRadius: BorderRadius.circular(20), // Bordes redondeados
-                color:  Colors.white38,
+                color:  Color(0xFFE0E0D6),
+                
                 
               ),
               padding: EdgeInsets.all(20),
