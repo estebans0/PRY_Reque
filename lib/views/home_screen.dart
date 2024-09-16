@@ -4,6 +4,7 @@ import 'package:app/models/project_model.dart';
 import 'package:flutter/material.dart';
 import '../controllers/controller.dart';
 import '../views/project_form_screen.dart';
+import '../views/project_information_screen.dart';
 
 class HomeScreen extends StatefulWidget {
     const HomeScreen({super.key});
@@ -132,7 +133,7 @@ class _HomeScreen extends State<HomeScreen> {
         if (item is Map<String, dynamic>) { 
           var data = item as Map<String, dynamic>; 
           if (_selectedFilter == 'nombre') {
-            print('Busqueda con nombre');
+            //print('Busqueda con nombre');
             return data['name']?.toLowerCase().contains(query) ?? false;
           } else {
             // print('Busqueda con categoria');
@@ -241,6 +242,7 @@ class _HomeScreen extends State<HomeScreen> {
                                 category:   data['categories'].toString() ?? 'Sin categoria',
                                 meta:       data['funding_goal'] ?? 0,  
                                 recaudado:  data['total_donated'] ?? 0,
+                                id:         data['id'] ?? '',
                               );
                             } else {
                               return ListTile(
@@ -337,9 +339,10 @@ class ProjectTile extends StatelessWidget {
   final String category;
   final int meta;
   final int recaudado;
+  final String id;
 
   // Constructor que recibe los datos
-  ProjectTile({required this.titulo, required this.category, required this.meta, required this.recaudado});
+  ProjectTile({required this.titulo, required this.category, required this.meta, required this.recaudado, required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -377,6 +380,13 @@ class ProjectTile extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               // Acción de edición
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProjectInformationScreen(projectId: id),
+                ),
+              );
+            
             },
             style: ElevatedButton.styleFrom(
               // backgroundColor: Colors.grey[700],

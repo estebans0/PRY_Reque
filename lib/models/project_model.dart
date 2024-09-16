@@ -73,8 +73,11 @@ class ProjectMethods {
     CollectionReference collectionReferenceProjects = _firestore.collection('Projects');
     
     QuerySnapshot queryProject = await collectionReferenceProjects.get();
-    for (var project in queryProject.docs) {
-      projects.add(project.data()); 
+
+    for (var document in queryProject.docs) {
+      final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+      data['id'] = document.id; // Incluir el ID del proyecto
+      projects.add(data);
     }
     return projects;
   }
