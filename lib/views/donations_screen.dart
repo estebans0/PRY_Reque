@@ -38,16 +38,17 @@ class _donationsPage extends State<donationsPage> {
       
       body: Padding( 
 
-        padding: const EdgeInsets.all(30), 
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 80),// all(80), 
         child: Column( 
           children: [
             Title(
               color: Colors.black, 
               child: Text(
                 'Gestión de donaciones',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,),
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold,),
               ),
             ),
+            SizedBox(height: 20),
             // Fila de buscar y filtro
             Row(
               children: [
@@ -67,7 +68,7 @@ class _donationsPage extends State<donationsPage> {
                     ),
                   ),
                 ),
-                SizedBox(width: 8),
+                SizedBox(height: 8),
                 IconButton(
                   // icon: Icon(Icons.filter_list, color: Colors.white),
                   icon: Icon(Icons.filter_list),
@@ -128,8 +129,6 @@ class _donationsPage extends State<donationsPage> {
     );
   }
 }
-
-
 
 class ProjectTile2 extends StatelessWidget {
   final String projectName;

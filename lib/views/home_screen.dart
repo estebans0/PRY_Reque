@@ -1,13 +1,39 @@
 // lib/views/home_screen.dart
+import 'package:app/models/auth_model.dart';
+import 'package:app/models/project_model.dart';
 import 'package:flutter/material.dart';
 import '../controllers/controller.dart';
 import '../views/project_form_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+    const HomeScreen({super.key});
+
+    @override
+    State<HomeScreen> createState() => _HomeScreen();
+}
+
+class _HomeScreen extends State<HomeScreen> {
   final Controller _controller = Controller();
+  ProjectMethods project_model = ProjectMethods();
+  AuthModel auth_Model = AuthModel();
+  
+  List _items = []; 
+  List _filteredItems = [];
+  TextEditingController _searchController = TextEditingController();
 
-  HomeScreen({super.key});
 
+  // Lista de opciones para el dropdown (filtrar por nombre o categoría)
+  List<String> _filterOptions = ['nombre'];
+  String _selectedFilter = 'nombre';
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+    _searchController.addListener(_filterItems);
+  }
+  
+  
   Future<void> _logout(BuildContext context) async {
     try {
       await _controller.logout();
@@ -78,56 +104,288 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  // Método para obtener los documentos de Firestore
+  Future<void> _fetchData() async {
+    try { 
+      List tempList = await project_model.getProjects(); 
+      List temp = await auth_Model.getCategories(); 
+
+      // Actualizar el estado con los datos obtenidos
+      setState(() {
+        _items = tempList;
+        _filteredItems = _items; 
+        temp.forEach((element) { _filterOptions.add(element.toString()); },);
+
+      });
+    } catch (e) {
+      print('Error al obtener los datos: $e');
+    }
+  }
+
+  // Método para filtrar los elementos según el texto de búsqueda
+  void _filterItems() {
+    String query = _searchController.text.toLowerCase(); // Convertir la entrada a minúsculas
+    // print(query);
+
+    setState(() {
+      _filteredItems = _items.where((item) {
+        if (item is Map<String, dynamic>) { 
+          var data = item as Map<String, dynamic>; 
+          if (_selectedFilter == 'nombre') {
+            print('Busqueda con nombre');
+            return data['name']?.toLowerCase().contains(query) ?? false;
+          } else {
+            // print('Busqueda con categoria');
+
+            // print('TIPO -> ${data['categories'].runtimeType}'); 
+            // print('SelectedFilte: ${_selectedFilter}');
+
+            return (data['categories'] as List<dynamic>)?.any((elemento) => elemento.toString().toLowerCase() == _selectedFilter.toLowerCase()) ?? false; 
+          }
+        }
+        return false;
+      }).toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Calcular la altura usando MediaQuery
-    double screenHeight = MediaQuery.of(context).size.height;
-    double bottomPadding = screenHeight / 3; // Mover el contenido al 1/3 de la pantalla
+    return Scaffold(  
+      body: Stack( 
+        children: [ 
+          Padding (  
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 100),
+            
+            child: Column( 
+              children: [  
+                // // Titulo
+                Title(
+                  color: Colors.black, 
+                  child: const Text(
+                    'Pantalla principal',
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold,),
+                  ),
+                ),
+                SizedBox(height: 20),
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () => _logout(context),
+                // Fila de buscar y filtro
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child:Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _searchController,
+                          decoration: InputDecoration(
+                            labelText: 'Buscar',
+                            hintText: 'Buscar...',
+                            focusColor: Color(0xFFE0E0D6),
+                            border: OutlineInputBorder(),
+                            prefixIcon: Icon(Icons.search),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10), 
+                      
+                      // DropdownButton para seleccionar el tipo de filtro
+                      IntrinsicWidth(  
+                        child: DropdownButtonFormField<String>(
+                          value: _selectedFilter, // Valor seleccionado por defecto
+                          decoration: InputDecoration(
+                            labelText: 'Filtro',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                          ),
+                          items: _filterOptions.map((String option) {
+                            return DropdownMenuItem<String>(
+                              value: option,
+                              child: Text(option.capitalize()), // Capitalizar texto
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _selectedFilter = newValue ?? 'nombre'; // Actualizar el filtro seleccionado
+                              _filterItems(); // Aplicar el filtro después de cambiar la opción
+                            });
+                          },
+                        ),
+                      ),
+
+
+                    ], 
+                  ), 
+                ),
+    
+                SizedBox(height: 20), 
+                // Expanded para permitir que el ListView ocupe el espacio disponible
+                Expanded(
+                  
+                  child: _filteredItems.isEmpty
+                      ? Center(child: CircularProgressIndicator()) // Mostrar spinner mientras se cargan los datos
+                      : ListView.builder(
+                          itemCount: _filteredItems.length,
+                          itemBuilder: (context, index) {
+                            // Verificar que el tipo de dato sea un Map antes de acceder a campos
+                            if (_filteredItems[index] is Map<String, dynamic>) {
+                              var data = _filteredItems[index] as Map<String, dynamic>;
+                              return ProjectTile( 
+                                titulo:     data['name'] ?? 'Sin título',
+                                category:   data['categories'].toString() ?? 'Sin categoria',
+                                meta:       data['funding_goal'] ?? 0,  
+                                recaudado:  data['total_donated'] ?? 0,
+                              );
+                            } else {
+                              return ListTile(
+                                title: Text('Elemento no reconocido'),
+                              );
+                            }
+                          },
+                        ),
+                ),
+              ],
+            ),
+          ),
+          //Boton de cerrar sesion
+          Positioned(
+            top: 30,
+            left: 20,
+            height: 40, 
+            width: 40, 
+            child: Tooltip( 
+              message: 'Cerrar sesion', 
+              child: FloatingActionButton(
+                onPressed: () =>  _logout(context), 
+                child: Icon(Icons.arrow_back),
+                backgroundColor: Color(0xFFE0E0D6),
+              ),
+            ),
+          ),
+          //Boton de edicion de perfil
+          Positioned(
+            top: 30,
+            right: 20,
+            height: 40, 
+            child: Tooltip( 
+              message: 'Editar perfil', 
+              child: FloatingActionButton(
+                onPressed: () => Navigator.pushNamed(context, '/edit-profile'), 
+                child: Icon(Icons.person),
+              ),
+            ),
+          ),
+          //Boton de cartera digital
+          Positioned(
+            top: 90,
+            right: 20,
+            height: 40, 
+            child: Tooltip( 
+              message: 'Cartera Digital', 
+              child: FloatingActionButton(
+                onPressed: () => Navigator.pushNamed(context, '/wallet'), 
+                child: Icon(Icons.wallet),
+              ),
+            ),
+          ),
+          //Boton de crear proyectos
+          Positioned(
+            top: 165,
+            right: 20,
+            height: 40, 
+            child: Tooltip( 
+              message: 'Crear Proyecto', 
+              child: FloatingActionButton(
+                onPressed: () => Navigator.pushNamed(context, '/create-project'), 
+                child: Icon(Icons.create_new_folder),
+              ),
+            ),
+          ),
+          //Boton de editar proyectos
+          Positioned(
+            top: 225,
+            right: 20,
+            height: 40, 
+            child: Tooltip( 
+              message: 'Editar Proyectos', 
+              child: FloatingActionButton(
+                onPressed: () => _showEditProjectDialog(context), 
+                child: Icon(Icons.edit_document),
+              ),
+            ),
           ),
         ],
+      ),  
+    );
+  }
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
+  }
+}
+
+class ProjectTile extends StatelessWidget {
+  final String titulo;
+  final String category;
+  final int meta;
+  final int recaudado;
+
+  // Constructor que recibe los datos
+  ProjectTile({required this.titulo, required this.category, required this.meta, required this.recaudado});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        // color: Colors.grey[850],
+        color:const  Color(0xFFE0E0D6),
+        borderRadius: BorderRadius.circular(8.0),
+        // border: Border.all(color: const Color.fromARGB(255, 29, 120, 204)),
       ),
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.only(bottom: bottomPadding), // Mover el contenido hacia arriba
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Bienvenido a la pantalla principal',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              Text(
+                '${titulo}',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 35),
-              ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, '/create-project'),
-                child: const Text('Crear Proyecto'),
+              SizedBox(height: 8),
+              Text(
+                'Categorias: ${category.replaceAll('[', '').replaceAll(']', '')}',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => _showEditProjectDialog(context),
-                child: const Text('Editar Proyectos'),
+              const SizedBox(height: 8),
+              Text(
+                'Meta: $meta  Recaudado: $recaudado',  // Meta y recaudado
+                // style: TextStyle(color: const Color.fromARGB(255, 209, 45, 45)),
               ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, '/edit-profile'),
-                child: const Text('Editar perfil'),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, '/wallet'),
-                child: const Text('Cartera Digital'),
-              )
             ],
           ),
-        ),
+          ElevatedButton(
+            onPressed: () {
+              // Acción de edición
+            },
+            style: ElevatedButton.styleFrom(
+              // backgroundColor: Colors.grey[700],
+            ),
+            child: const Text('Información'),
+          ),
+        ],
       ),
     );
   }
 }
+

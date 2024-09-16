@@ -1,27 +1,6 @@
-import 'package:app/models/auth_model.dart';
-import 'package:app/models/firebase_options.dart';
-import 'package:app/models/project_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart'; 
-import 'package:flutter/material.dart';
-
-
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp(
-//     options: DefaultFirebaseOptions.currentPlatform,
-//   );
-//   runApp(MyApp());
-// }
-
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: ProjectManagementPage(),
-//     );
-//   }
-// }
+import 'package:app/models/auth_model.dart'; 
+import 'package:app/models/project_model.dart'; 
+import 'package:flutter/material.dart'; 
 
 
 class ProjectManagementPage extends StatefulWidget {
@@ -109,7 +88,7 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
         // title: Text("Firebase Firestore Example"), 
       body: Padding(
         // padding: const EdgeInsets.all(60), 
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 60),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 80),
         
         child: Column( 
           children: [
@@ -218,7 +197,7 @@ class ProjectTile extends StatelessWidget {
   final int recaudado;
 
   // Constructor que recibe los datos
-  ProjectTile({required this.titulo, required this.meta, required this.recaudado});
+  ProjectTile({required this.titulo, required this.category, required this.meta, required this.recaudado});
 
   @override
   Widget build(BuildContext context) {

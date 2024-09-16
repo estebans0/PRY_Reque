@@ -1,8 +1,28 @@
+import 'package:app/controllers/controller.dart'; 
 import 'package:app/views/donations_screen.dart';
 import 'package:app/views/manage_projects_screen.dart';
 import 'package:app/views/manage_user_screen.dart'; 
-import 'package:app/views/statistics_screen.dart';  
+import 'package:app/views/statistics_screen.dart'; 
 import 'package:flutter/material.dart'; 
+
+
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//   );
+//   runApp(MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: HomeScreenAdmin(),
+//     );
+//   }
+// }
+
 
 class HomeScreenAdmin extends StatefulWidget {
   const HomeScreenAdmin({super.key});
@@ -14,6 +34,7 @@ class HomeScreenAdmin extends StatefulWidget {
 class _HomeScreenAdminState extends State<HomeScreenAdmin> with SingleTickerProviderStateMixin { 
 
   late TabController controller;
+  final Controller _controller = Controller();
 
   @override
   void initState(){
@@ -31,13 +52,34 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> with SingleTickerProv
     controller.dispose();
   }
 
+  Future<void> _logout(BuildContext context) async {
+    try {
+      await _controller.logout();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Sesión cerrada exitosamente'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.pushReplacementNamed(context, '/');
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error al cerrar sesión: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold( 
+      
       appBar: AppBar(
+        centerTitle: true, 
         title: Text("Administración"),
-        centerTitle: true,
+        automaticallyImplyLeading: false,
         
         bottom: TabBar(
           controller: controller,
@@ -49,32 +91,37 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> with SingleTickerProv
           ]
         ),
       ),
-      body: TabBarView(
-        controller: controller,
+      body: Stack(
         children: [
-          // Tab1(),
-          statisticsScreen(),
-          // Tab2(),
-          ProjectManagementPage(),
-          ManageUsersScreen(),
-          donationsPage(),
-        ]
+          TabBarView(
+            controller: controller,
+            children: [ 
+              statisticsScreen(), 
+              ProjectManagementPage(),
+              ManageUsersScreen(),
+              donationsPage(),
+            ]
+          ),
+          //Boton de cerrar sesion
+          Positioned(
+            bottom: 30,
+            left: 20,
+            height: 40, 
+            width: 40, 
+            child: Tooltip( 
+              message: 'Cerrar sesion', 
+              child: FloatingActionButton(
+                onPressed: () =>  _logout(context), 
+                child: Icon(Icons.arrow_back),
+              ),
+            ),
+          ), 
+        ],
+
       ), 
-      // floatingActionButton: Container(  
-      //   padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-      //   alignment: Alignment.bottomLeft,
-      //   child: FloatingActionButton(
-      //     onPressed: () {
-      //       Navigator.push(
-      //             context,
-      //             MaterialPageRoute(builder: (context) => const SignupScreen()),
-      //       );
-      //     },
-      //     child: Icon(Icons.arrow_back), 
-      //   ) 
-      // ),
-      
     );
   }
   
 }
+
+
