@@ -12,6 +12,7 @@ class LandingPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(''),
+        automaticallyImplyLeading: false,
       ),
       body: Stack(
         children: [
