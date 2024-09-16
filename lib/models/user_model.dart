@@ -59,7 +59,23 @@ class UserMethods {
   Future<void> deactivateUser(String userId) async{
     await _firestore.collection('Users').doc(userId).update({
       'is_deleted': true,
-    });
+    }); 
+
+    CollectionReference coleccion = FirebaseFirestore.instance.collection('Projects');
+
+    try {  
+      QuerySnapshot querySnapshot = await coleccion.where('user_id', isEqualTo: userId).get();
+       
+      for (QueryDocumentSnapshot doc in querySnapshot.docs) { 
+        await doc.reference.update({
+            'is_deleted': true,
+        }); 
+      }
+    } catch (e) {
+      print('Error al actualizar el documento: $e');
+    }
+
+
   }
 
   // Activa un usuario 
@@ -67,6 +83,21 @@ class UserMethods {
     await _firestore.collection('Users').doc(userId).update({
       'is_deleted': false,
     });
+
+    CollectionReference coleccion = FirebaseFirestore.instance.collection('Projects');
+
+    try {  
+      QuerySnapshot querySnapshot = await coleccion.where('user_id', isEqualTo: userId).get();
+       
+      for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+        print('Tenia almenos un proyecto');
+        await doc.reference.update({
+            'is_deleted': false,
+        }); 
+      }
+    } catch (e) {
+      print('Error al actualizar el documento: $e');
+    }
   }
 
   // Averigua si un usuario esta activado o desactivado  

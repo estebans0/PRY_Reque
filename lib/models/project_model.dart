@@ -21,6 +21,7 @@ class ProjectMethods {
       'donors_count': 0,
       'views_count': 0,
       'images': images.map((img) => {'url': img}).toList(),
+      'is_deleted' : false,
       'categories': categories,
       'createdAt': Timestamp.now(),
     });
@@ -67,12 +68,12 @@ class ProjectMethods {
     return snapshot.docs.map((doc) => doc['name'] as String).toList();
   }
 
-  // Retorna una lista con todos los proyectos 
+  // Retorna una lista con todos los proyectos activos
   Future<List> getProjects () async {
-    List projects = [];
+    List projects = []; 
     CollectionReference collectionReferenceProjects = _firestore.collection('Projects');
     
-    QuerySnapshot queryProject = await collectionReferenceProjects.get();
+    QuerySnapshot queryProject = await collectionReferenceProjects.where('is_deleted', isEqualTo : false).get();
 
     for (var document in queryProject.docs) {
       final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
@@ -82,12 +83,12 @@ class ProjectMethods {
     return projects;
   }
 
-  // Retorna la cantidad de proyectos 
+  // Retorna la cantidad de proyectos activos
   Future<int> getNumberProjects () async {
-    List projects = [];
+    List projects = []; 
     CollectionReference collectionReferenceProjects = _firestore.collection('Projects');
     
-    QuerySnapshot queryProject = await collectionReferenceProjects.get();
+    QuerySnapshot queryProject = await collectionReferenceProjects.where('is_deleted', isEqualTo : false).get();
     for (var project in queryProject.docs) {
       projects.add(project.data());
     }

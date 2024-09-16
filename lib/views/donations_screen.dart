@@ -79,7 +79,7 @@ class _donationsPage extends State<donationsPage> {
                     return const Center(child: CircularProgressIndicator());
 
                   } else if (snapshot.hasError) { 
-                    return Center( child: Text('Error al cargar proyectos'));
+                    return Center( child: Text('Error al cargar donaciones'));
 
                   } else if (snapshot.hasData && snapshot.data!.isNotEmpty) { 
                     return ListView.builder(
