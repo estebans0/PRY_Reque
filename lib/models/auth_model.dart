@@ -91,13 +91,28 @@ class AuthModel {
     QuerySnapshot queryAdmin = await collectionReferenceAdmins.get();
     queryAdmin.docs.forEach ((admin){
       admins.add(admin.data());
-      
     });
 
     return admins;
   }
 
-  
+  Future<List> getCategories () async {
+    List categories = [];
+    CollectionReference collectionRefCategories = _firestore.collection('CategoriaPry');
+    // print('Hola');
+    
+    QuerySnapshot queryCategories = await collectionRefCategories.get();
+    queryCategories.docs.forEach ((category){
+      // categories.add(admin.data());
+      categories.add(category.get('name').toString());
+      // print(category.get('name')); 
+    });
+    // print('Lista: ${categories}');
+    // if (categories[0] == 'Videojuego'){
+    //   print('Si son strings');
+    // }
+    return categories;
+  }
 
 
 }

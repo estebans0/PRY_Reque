@@ -1,3 +1,4 @@
+import 'package:app/models/auth_model.dart';
 import 'package:app/models/firebase_options.dart';
 import 'package:app/models/project_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,22 +6,22 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp(
-//     options: DefaultFirebaseOptions.currentPlatform,
-//   );
-//   runApp(MyApp());
-// }
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(MyApp());
+}
 
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: ProjectManagementPage(),
-//     );
-//   }
-// }
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: ProjectManagementPage(),
+    );
+  }
+}
 
 
 class ProjectManagementPage extends StatefulWidget {
@@ -33,6 +34,7 @@ class ProjectManagementPage extends StatefulWidget {
 
 class _ProjectManagementPage extends State<ProjectManagementPage> {
   ProjectMethods project_model = ProjectMethods();
+  AuthModel auth_Model = AuthModel();
   
   List _items = []; 
   List _filteredItems = [];
@@ -40,7 +42,7 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
 
 
   // Lista de opciones para el dropdown (filtrar por nombre o categoría)
-  List<String> _filterOptions = ['nombre', 'categoría', 'Otra'];
+  List<String> _filterOptions = ['nombre'];
   String _selectedFilter = 'nombre';
 
   @override
@@ -53,14 +55,15 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
   // Método para obtener los documentos de Firestore
   Future<void> _fetchData() async {
     try { 
-      List tempList = await project_model.getProjects();
+      List tempList = await project_model.getProjects(); 
+      List temp = await auth_Model.getCategories(); 
 
       // Actualizar el estado con los datos obtenidos
       setState(() {
         _items = tempList;
-        _filteredItems = _items;
-        List<String> lex= ['Extra', 'Extra2', 'Extra3'];
-        _filterOptions.addAll(lex);
+        _filteredItems = _items; 
+        temp.forEach((element) { print('Elemento -> ${element}'); _filterOptions.add(element.toString()); },);
+
       });
     } catch (e) {
       print('Error al obtener los datos: $e');
@@ -151,8 +154,7 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                   SizedBox(width: 10), 
                   
                    // DropdownButton para seleccionar el tipo de filtro
-                  SizedBox(
-                    width: 120, 
+                  IntrinsicWidth(  
                     child: DropdownButtonFormField<String>(
                       value: _selectedFilter, // Valor seleccionado por defecto
                       decoration: InputDecoration(
