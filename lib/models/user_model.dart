@@ -44,21 +44,37 @@ class UserMethods {
     CollectionReference usersReference = _firestore.collection('Users');
     // trae todos los documento de la coleccion aka todos los usuarios
     QuerySnapshot queryUsers = await usersReference.get();
-    queryUsers.docs.forEach((document){
+    for (var document in queryUsers.docs) {
       final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
       final user = {
         "name": data['name'],
         "docId": document.id,            // Para poder acceder a cada id del usuario
       };
       users.add(user);
-    });
+    }
     return users;
   }
 
-  // Elimina a un usuario 
-  Future<void> deleteUser(String userId) async{
-    _firestore.collection('Users').doc(userId).delete();
+  // Desactiva un usuario 
+  Future<void> deactivateUser(String userId) async{
+    await _firestore.collection('Users').doc(userId).update({
+      'is_deleted': true,
+    });
   }
+
+  // Activa un usuario 
+  Future<void> activateUser(String userId) async{
+    await _firestore.collection('Users').doc(userId).update({
+      'is_deleted': false,
+    });
+  }
+
+  // Averigua si un usuario esta activado o desactivado  
+  Future<bool> isActivate(String userId) async{
+    var userData = _firestore.collection('Users').doc(userId).get();
+    return await userData.then((value) => value['is_deleted']);
+  }
+
   
   // Retorna la cantidad de usuarios.
   Future<int> getNumbertUsers() async{
@@ -66,9 +82,9 @@ class UserMethods {
     CollectionReference usersReference = _firestore.collection('Users');
     // trae todos los documento de la coleccion aka todos los usuarios
     QuerySnapshot queryUsers = await usersReference.get();
-    queryUsers.docs.forEach((document){
+    for (var document in queryUsers.docs) {
       users.add(document.data());
-    });
+    }
     return users.length;
   }
  
@@ -78,9 +94,9 @@ class UserMethods {
     CollectionReference donationsReference = _firestore.collection('Donations'); 
 
     QuerySnapshot queryDonations = await donationsReference.get();
-    queryDonations.docs.forEach((donation){
+    for (var donation in queryDonations.docs) {
       donations.add(donation.data());
-    });
+    }
     return donations.length;
   }
 
@@ -100,7 +116,6 @@ class UserMethods {
 
     return formattedDate;
   }
-
   
   // Retorna todas las donaciones.
   Future<List> getDonations() async {
@@ -134,5 +149,23 @@ class UserMethods {
     }
     return donations;
 }
+
+  // Obtener el correo de un usuario por su id
+  Future<String> getEmailbyID(String id) async{
+    String email = '';
+    try{
+      // buscar al usuario con el id
+      DocumentReference userDoc = FirebaseFirestore.instance.collection('Users').doc(id);
+      DocumentSnapshot userSnapshot = await userDoc.get();
+
+      if(userSnapshot.exists){
+        email = userSnapshot.get('email') as String;
+      }
+    } catch (e){
+      print('No se encontro el email');
+    }
+    return email;
+  }
+
 
 }

@@ -115,7 +115,7 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
           children: [
             Title(
               color: Colors.black, 
-              child: Text(
+              child: const Text(
                 'Gestión de proyectos',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold,),
               ),
@@ -218,13 +218,13 @@ class ProjectTile extends StatelessWidget {
   final int recaudado;
 
   // Constructor que recibe los datos
-  ProjectTile({required this.titulo, required this.category, required this.meta, required this.recaudado});
+  ProjectTile({required this.titulo, required this.meta, required this.recaudado});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 16),
-      padding: EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         // color: Colors.grey[850],
         color:const  Color(0xFFE0E0D6),
@@ -246,7 +246,7 @@ class ProjectTile extends StatelessWidget {
                 'Categorias: ${category.replaceAll('[', '').replaceAll(']', '')}',
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 'Meta: $meta  Recaudado: $recaudado',  // Meta y recaudado
                 // style: TextStyle(color: const Color.fromARGB(255, 209, 45, 45)),
@@ -260,7 +260,7 @@ class ProjectTile extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               // backgroundColor: Colors.grey[700],
             ),
-            child: Text('Editar'),
+            child: const Text('Editar'),
           ),
         ],
       ),
