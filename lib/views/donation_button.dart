@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import '../controllers/controller.dart';
+import '../models/user_model.dart';
+import '../models/notifications_model.dart';
 
 class DonationButton extends StatelessWidget {
   final Controller _controller = Controller();
   final String? projectId;
   final VoidCallback onDonationComplete;
+  final UserMethods _userModel = UserMethods();
+  final NotificationsModel _notificationModel = NotificationsModel();
+
 
   DonationButton({
     required this.projectId,
@@ -46,8 +51,19 @@ class DonationButton extends StatelessWidget {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Donación realizada con éxito')));
 
+                      // Manda la notificacion al creador sobre una nueva donacion
+                      var projectData = await _controller.getProjectData(projectId!);
+                      var ownerId = projectData['user_id'];
+                      String emailOwner = await _userModel.getEmailbyID(ownerId);
+                      _notificationModel.sendNotifEmail(emailOwner);
+
                       //Refresca el balance
                       onDonationComplete();
+
+                      // Mnada la notificacion de agradecimiento al donante
+                      var userId = await _controller.getCurrentUserId();
+                      String userEmail = await _userModel.getEmailbyID(userId);
+                      _notificationModel.sendThankEmail(userEmail);
 
                       //Navega de vuelta a la pantalla principal y limpia el stack de navegación
                       Navigator.pushNamedAndRemoveUntil(
