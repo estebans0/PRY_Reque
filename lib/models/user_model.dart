@@ -133,7 +133,7 @@ class UserMethods {
       DocumentSnapshot projectSnap = await projectRef.get();
  
 
-      if (userSnap.exists && projectSnap.exists && projectSnap['is_deleted'] == false) {  
+      if (userSnap.exists && projectSnap.exists) {  
         donations.add(donation.data());
       }
     }
@@ -173,7 +173,7 @@ class UserMethods {
       DocumentSnapshot projectSnap = await projectRef.get();
  
 
-      if (userSnap.exists && projectSnap.exists && projectSnap['is_deleted'] == false) {  
+      if (userSnap.exists && projectSnap.exists) {  
         donations.add(
           {
             'idDonation': donacionDoc.id,

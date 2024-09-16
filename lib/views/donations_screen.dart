@@ -149,7 +149,7 @@ class _donationsPage extends State<donationsPage> {
                     await user_model.deactivateDonation(idDonation, idProject, idUser, amount);
                     setState(() {});
                   }: null,
-                  child: const Text('Desactivar')
+                  child: const Text('Cancelar')
                 )    
               )
             ]
