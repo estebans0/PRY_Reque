@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/wallet_model.dart';
-import 'donation_button.dart'; // Importamos el DonationButton
+import 'donation_button.dart';
 
 class WalletScreen extends StatefulWidget {
   const WalletScreen({super.key});
