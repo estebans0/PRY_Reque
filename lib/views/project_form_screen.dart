@@ -2,6 +2,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../controllers/controller.dart';
+import '../models/user_model.dart';
+import '../models/notifications_model.dart';
 
 class ProjectFormScreen extends StatefulWidget {
   final String? projectId;
@@ -18,6 +20,8 @@ class _ProjectFormScreenState extends State<ProjectFormScreen> {
   final TextEditingController _deadlineController = TextEditingController();
   final List<String> _imagesController = [];
   final List<String> _selectedCategories = [];
+  final UserMethods _userModel = UserMethods();
+  final NotificationsModel _notificationModel = NotificationsModel();
 
   bool _isLoading = false;
 
@@ -123,6 +127,12 @@ class _ProjectFormScreenState extends State<ProjectFormScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Proyecto actualizado exitosamente'), backgroundColor: Colors.green),
         );
+        // Notificar al creador del proyecto de los cambios
+        var projectData = await _controller.getProjectData(widget.projectId!);
+        var userId = projectData['user_id'];
+        String email = await _userModel.getEmailbyID(userId);
+        _notificationModel.sendUpdateEmail(email);
+
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

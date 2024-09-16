@@ -5,13 +5,11 @@ class NotificationsModel{
 
     // plantillas de mensajes
     final String registerMsg = '''¡Muchas gracias por unirte a la comunidad de Innovafund! 
-    Nuestra plataforma te ofrece todas las herramientas necesarias para crear tu 
-    proyecto y conectar con miles de personas que están dispuestas a apoyar tus ideas. \n
+    Nuestra plataforma te ofrece todas las herramientas necesarias para crear tu  proyecto y conectar con miles de personas que están dispuestas a apoyar tus ideas. \n
     ¡Mucha suerte!''';
-    final String updateMsg = '''Se ha actualizado la información de tu proyecto, 
-    ingresa a Innovafund para ver estos cambios.''';
-    final String thankDonor = '''¡Muchas gracias por donar al proyecto, Tu donación 
-    está haciendo la diferencia!''';
+    final String updateMsg = '''Se ha actualizado la información de tu proyecto
+    Ingresa a Innovafund para ver estos cambios.''';
+    final String thankDonor = '''¡Muchas gracias por donar al proyecto, Tu donación está haciendo la diferencia!''';
     final String notifyOwner = '''¡Haz recibido una nueva donacion en tu proyecto!
     Ingresa a Innovafund para ver el monto recaudado''';
 

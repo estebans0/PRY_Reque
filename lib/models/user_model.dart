@@ -150,4 +150,22 @@ class UserMethods {
     return donations;
 }
 
+  // Obtener el correo de un usuario por su id
+  Future<String> getEmailbyID(String id) async{
+    String email = '';
+    try{
+      // buscar al usuario con el id
+      DocumentReference userDoc = FirebaseFirestore.instance.collection('Users').doc(id);
+      DocumentSnapshot userSnapshot = await userDoc.get();
+
+      if(userSnapshot.exists){
+        email = userSnapshot.get('email') as String;
+      }
+    } catch (e){
+      print('No se encontro el email');
+    }
+    return email;
+  }
+
+
 }
