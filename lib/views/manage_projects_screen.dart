@@ -6,22 +6,22 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(MyApp());
-}
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//   );
+//   runApp(MyApp());
+// }
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: ProjectManagementPage(),
-    );
-  }
-}
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: ProjectManagementPage(),
+//     );
+//   }
+// }
 
 
 class ProjectManagementPage extends StatefulWidget {
@@ -62,7 +62,7 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
       setState(() {
         _items = tempList;
         _filteredItems = _items; 
-        temp.forEach((element) { print('Elemento -> ${element}'); _filterOptions.add(element.toString()); },);
+        temp.forEach((element) { _filterOptions.add(element.toString()); },);
 
       });
     } catch (e) {
@@ -78,31 +78,18 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
     setState(() {
       _filteredItems = _items.where((item) {
         if (item is Map<String, dynamic>) { 
-          var data = item as Map<String, dynamic>;
-          // Filtrar por coincidencia en algún campo (ejemplo: 'campo1')
-            // return data['name']?.toLowerCase().contains(query) ?? false;
-          // Filtrar por el campo seleccionado (nombre o categoría)
+          var data = item as Map<String, dynamic>; 
           if (_selectedFilter == 'nombre') {
             print('Busqueda con nombre');
             return data['name']?.toLowerCase().contains(query) ?? false;
-          } else if (_selectedFilter == 'categoría') {
-            print('Busqueda con categoria');
-            return data['name']?.toLowerCase().contains(query) ?? false;
-          }
-        }
-        return false;
-      }).toList();
-    });
-  }
+          } else {
+            // print('Busqueda con categoria');
 
-  void _applyAdvancedFilter() {
-    setState(() {
-      _filteredItems = _items.where((item) {
-        if (item is Map<String, dynamic>) {
-          var data = item as Map<String, dynamic>;
-          // Aquí puedes aplicar un filtro personalizado
-          // Ejemplo: Filtrar donde 'campo2' contenga alguna condición
-          return data['name']?.toLowerCase().contains('p') ?? false;
+            // print('TIPO -> ${data['categories'].runtimeType}'); 
+            // print('SelectedFilte: ${_selectedFilter}');
+
+            return (data['categories'] as List<dynamic>)?.any((elemento) => elemento.toString().toLowerCase() == _selectedFilter.toLowerCase()) ?? false; 
+          }
         }
         return false;
       }).toList();
@@ -199,6 +186,7 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                           var data = _filteredItems[index] as Map<String, dynamic>;
                           return ProjectTile( 
                             titulo:     data['name'] ?? 'Sin título',
+                            category:   data['categories'].toString() ?? 'Sin categoria',
                             meta:       data['funding_goal'] ?? 0,  
                             recaudado:  data['total_donated'] ?? 0,
                           );
@@ -225,11 +213,12 @@ extension StringExtension on String {
 
 class ProjectTile extends StatelessWidget {
   final String titulo;
+  final String category;
   final int meta;
   final int recaudado;
 
   // Constructor que recibe los datos
-  ProjectTile({required this.titulo, required this.meta, required this.recaudado});
+  ProjectTile({required this.titulo, required this.category, required this.meta, required this.recaudado});
 
   @override
   Widget build(BuildContext context) {
@@ -249,8 +238,13 @@ class ProjectTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                titulo,  // Título del proyecto
-                // style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0), fontSize: 18),
+                '${titulo}',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Categorias: ${category.replaceAll('[', '').replaceAll(']', '')}',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 8),
               Text(

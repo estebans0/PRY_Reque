@@ -50,7 +50,6 @@ class ProjectMethods {
     return projectData;
   }
 
-
   // Retorna una lista con todos los proyectos 
   Future<List> getProjects () async {
     List projects = [];
