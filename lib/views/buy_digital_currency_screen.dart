@@ -64,12 +64,11 @@ class _BuyDigitalCurrencyScreenState extends State<BuyDigitalCurrencyScreen> {
                     ),
                   );
 
-                  // Navegar a la pantalla de Wallet, eliminando las pantallas previas del stack
+                  //Va hacia a la pantalla de Wallet, eliminando las pantallas previas del stack
                   Navigator.pushNamedAndRemoveUntil(
                     context,
-                    '/wallet', // Ruta de la cartera digital
-                    ModalRoute.withName(
-                        '/home'), // Ruta de la pantalla principal (home_screen)
+                    '/wallet',
+                    ModalRoute.withName('/home'),
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
