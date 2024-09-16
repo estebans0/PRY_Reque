@@ -1,5 +1,6 @@
 import 'package:app/models/auth_model.dart'; 
-import 'package:app/models/project_model.dart'; 
+import 'package:app/models/project_model.dart';
+import 'package:app/views/project_form_screen_admin.dart'; 
 import 'package:flutter/material.dart'; 
 
 
@@ -58,14 +59,10 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
       _filteredItems = _items.where((item) {
         if (item is Map<String, dynamic>) { 
           var data = item as Map<String, dynamic>; 
-          if (_selectedFilter == 'nombre') {
-            print('Busqueda con nombre');
-            return data['name']?.toLowerCase().contains(query) ?? false;
-          } else {
-            // print('Busqueda con categoria');
+          if (_selectedFilter == 'nombre') { 
 
-            // print('TIPO -> ${data['categories'].runtimeType}'); 
-            // print('SelectedFilte: ${_selectedFilter}');
+            return data['name']?.toLowerCase().contains(query) ?? false;
+          } else { 
 
             return (data['categories'] as List<dynamic>)?.any((elemento) => elemento.toString().toLowerCase() == _selectedFilter.toLowerCase()) ?? false; 
           }
@@ -163,12 +160,12 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                         // Verificar que el tipo de dato sea un Map antes de acceder a campos
                         if (_filteredItems[index] is Map<String, dynamic>) {
                           var data = _filteredItems[index] as Map<String, dynamic>;
-                          return ProjectTile( 
-                            titulo:     data['name'] ?? 'Sin título',
-                            category:   data['categories'].toString() ?? 'Sin categoria',
-                            meta:       data['funding_goal'] ?? 0,  
-                            recaudado:  data['total_donated'] ?? 0,
-                          );
+                          String idProject =   data['id'] ?? '';
+                          String titulo =      data['name'] ?? 'Sin título';
+                          String category =    data['categories'].toString() ?? 'Sin categoria';
+                          int meta =           data['funding_goal'] ?? 0;
+                          int recaudado =      data['total_donated'] ?? 0;
+                          return auxBuild(context, idProject, titulo, category, meta, recaudado);  
                         } else {
                           return ListTile(
                             title: Text('Elemento no reconocido'),
@@ -182,26 +179,9 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
       )
     );
   }
-}
 
-extension StringExtension on String {
-  String capitalize() {
-    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
-  }
-}
-
-class ProjectTile extends StatelessWidget {
-  final String titulo;
-  final String category;
-  final int meta;
-  final int recaudado;
-
-  // Constructor que recibe los datos
-  ProjectTile({required this.titulo, required this.category, required this.meta, required this.recaudado});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget auxBuild(BuildContext context, String idProject, String titulo, String category, int meta, int recaudado) {
+    return Container( 
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -231,18 +211,36 @@ class ProjectTile extends StatelessWidget {
                 // style: TextStyle(color: const Color.fromARGB(255, 209, 45, 45)),
               ),
             ],
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // Acción de edición
-            },
-            style: ElevatedButton.styleFrom(
-              // backgroundColor: Colors.grey[700],
+          ), 
+
+          Align(
+            alignment: Alignment.centerRight,
+            child: ElevatedButton(
+              onPressed: () {
+                // Navegar a la página de edición pasando el proyecto
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ProjectFormScreenAdmin(projectId: idProject),
+                  ), 
+                );
+                // setState(() {});
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Color(0xFFE0E0D6)),
+              child: Text('Editar'),
             ),
-            child: const Text('Editar'),
-          ),
+          ) 
         ],
       ),
     );
   }
+
 }
+
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
+  }
+}
+ 
