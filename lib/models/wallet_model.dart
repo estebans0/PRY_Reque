@@ -50,7 +50,7 @@ class WalletMethods {
       //Se Obtiene el nombre del proyecto
       DocumentSnapshot projectDoc = await projectRef.get();
       String projectName =
-          (projectDoc.data() as Map<String, dynamic>)['description'] ??
+          (projectDoc.data() as Map<String, dynamic>)['name'] ??
               'Proyecto desconocido';
 
       //Se añade el nombre del proyecto a los datos de la transacción
@@ -85,7 +85,7 @@ class WalletMethods {
           donationData['project_id'] as DocumentReference;
       DocumentSnapshot projectDoc = await projectRef.get();
       String projectName =
-          (projectDoc.data() as Map<String, dynamic>)['description'] ??
+          (projectDoc.data() as Map<String, dynamic>)['name'] ??
               'Proyecto desconocido';
 
       //Añadir el nombre del proyecto
@@ -122,7 +122,8 @@ class WalletMethods {
       //Crear un enlace temporal para forzar la descarga del archivo
       // ignore: unused_local_variable
       final anchor = html.AnchorElement(href: url)
-        ..setAttribute("download", "donations.txt") // Nombre del archivo
+        ..setAttribute(
+            "download", "Historial de donaciones.txt") // Nombre del archivo
         ..click(); //Se Simula un clic en el enlace para iniciar la descarga
 
       //Liberar la URL del blob después de la descarga

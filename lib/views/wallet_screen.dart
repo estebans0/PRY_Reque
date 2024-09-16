@@ -141,8 +141,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 IconButton(
                   icon: const Icon(Icons.download),
                   onPressed: () {
-                    _walletMethods
-                        .downloadDonations(); // Lógica para descargar las transacciones (en el futuro)
+                    _walletMethods.downloadDonations();
                   },
                 ),
               ],
