@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../models/wallet_model.dart';
-import 'donation_button.dart';
 
 class WalletScreen extends StatefulWidget {
   const WalletScreen({super.key});
@@ -28,21 +27,21 @@ class _WalletScreenState extends State<WalletScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Organiza en una fila el balance y las transacciones recientes
+            //Organiza en una fila el balance y las transacciones recientes
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Contenedor para el balance
+                //Contenedor para el balance
                 FutureBuilder<double>(
                   future: _walletMethods.getDigitalCurrency(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator(); // Muestra un cargando mientras se obtiene el balance
+                      return const CircularProgressIndicator(); //Muestra un cargando mientras se obtiene el balance
                     } else if (snapshot.hasError) {
                       return const Text('Error al cargar el balance');
                     } else {
                       return Container(
-                        width: 150, // Ajustar el tamaño del contenedor
+                        width: 150,
                         padding: const EdgeInsets.all(16.0),
                         decoration: BoxDecoration(
                           color: Colors.grey[300],
@@ -66,7 +65,7 @@ class _WalletScreenState extends State<WalletScreen> {
                   },
                 ),
 
-                // Contenedor para las transacciones recientes
+                //Contenedor para las transacciones recientes
                 FutureBuilder<List<Map<String, dynamic>>>(
                   future: _walletMethods.getRecentTransactions(),
                   builder: (context, transactionSnapshot) {
@@ -81,7 +80,7 @@ class _WalletScreenState extends State<WalletScreen> {
                       return const Text('No hay transacciones recientes');
                     } else {
                       return Container(
-                        width: 250, // Ajustar el tamaño del contenedor
+                        width: 250,
                         padding: const EdgeInsets.all(16.0),
                         decoration: BoxDecoration(
                           color: Colors.grey[300],
@@ -115,15 +114,9 @@ class _WalletScreenState extends State<WalletScreen> {
               ],
             ),
 
-            const SizedBox(height: 40), // Espaciado
+            const SizedBox(height: 40),
 
-            DonationButton(
-              onDonationComplete: _refreshBalance,
-            ),
-
-            const SizedBox(height: 40), // Espaciado
-
-            // Botones de acciones
+            //Botones de accion
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

@@ -10,7 +10,7 @@ class NotificationsModel{
     final String updateMsg = '''Se ha actualizado la información de tu proyecto
     Ingresa a Innovafund para ver estos cambios.''';
     final String thankDonor = '''¡Muchas gracias por donar al proyecto, Tu donación está haciendo la diferencia!''';
-    final String notifyOwner = '''¡Haz recibido una nueva donacion en tu proyecto!
+    final String notifyOwner = '''¡Has recibido una nueva donacion en tu proyecto!
     Ingresa a Innovafund para ver el monto recaudado''';
 
     /*

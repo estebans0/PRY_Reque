@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import '../controllers/controller.dart';
 import '../models/user_model.dart';
 import '../models/notifications_model.dart';
+import 'donation_button.dart';
 
 class ProjectInformationScreen extends StatefulWidget {
   final String? projectId;
   const ProjectInformationScreen({this.projectId, super.key});
   @override
-  _ProjectInformationScreenState createState() => _ProjectInformationScreenState();
+  _ProjectInformationScreenState createState() =>
+      _ProjectInformationScreenState();
 }
 
 class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
@@ -29,7 +31,7 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
   void initState() {
     super.initState();
     if (widget.projectId != null) {
-      _loadProjectData();  // Cargar los datos de un proyecto existente
+      _loadProjectData(); // Cargar los datos de un proyecto existente
     }
   }
 
@@ -45,17 +47,24 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
         _descriptionController.text = projectData['description'];
         _fundingGoalController.text = projectData['funding_goal'].toString();
         _deadlineController.text = projectData['deadline'] != null
-            ? (projectData['deadline'] as Timestamp).toDate().toString() : '';
+            ? (projectData['deadline'] as Timestamp).toDate().toString()
+            : '';
         // Verifica que las imágenes sean de tipo String y las añade correctamente
         _imagesController.addAll(
-          (projectData['images'] as List<dynamic>).map((img) => img['url'] as String).toList(),
+          (projectData['images'] as List<dynamic>)
+              .map((img) => img['url'] as String)
+              .toList(),
         );
         _selectedCategories.addAll(
-          (projectData['categories'] as List<dynamic>).map((cat) => cat as String).toList(),
+          (projectData['categories'] as List<dynamic>)
+              .map((cat) => cat as String)
+              .toList(),
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al cargar datos del proyecto: $e'), backgroundColor: Colors.red),
+          SnackBar(
+              content: Text('Error al cargar datos del proyecto: $e'),
+              backgroundColor: Colors.red),
         );
       } finally {
         setState(() {
@@ -64,7 +73,6 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
       }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +89,8 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
                   TextField(
                     readOnly: true,
                     controller: _nameController,
-                    decoration: const InputDecoration(labelText: 'Nombre del Proyecto'),
+                    decoration:
+                        const InputDecoration(labelText: 'Nombre del Proyecto'),
                   ),
                   TextField(
                     readOnly: true,
@@ -116,7 +125,8 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
                       _selectedCategories.isNotEmpty
                           ? 'Categorías actuales: ${_selectedCategories.join(', ')}'
                           : 'No hay categorías seleccionadas',
-                      style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
+                      style: const TextStyle(
+                          fontSize: 14, fontStyle: FontStyle.italic),
                       textAlign: TextAlign.left,
                     ),
                   ),
@@ -131,14 +141,19 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
                             padding: const EdgeInsets.all(4.0),
                             child: Image.network(url, width: 100, height: 100),
                           ),
-                          
                         ],
                       );
                     }).toList(),
                   ),
-                  
-                  // agregar el boton de donar
-                  
+                  const SizedBox(height: 20),
+                  Center(
+                    child: DonationButton(
+                      projectId: widget.projectId!,
+                      onDonationComplete: () {
+                        //Aca se puede agregar algo por si no se refrescan los datos del proyecto al donar
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),

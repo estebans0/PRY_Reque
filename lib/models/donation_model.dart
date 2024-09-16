@@ -98,13 +98,13 @@ class DonationMethods {
     double currentTotal =
         (projectDoc.data() as Map<String, dynamic>)['total_donated'] ?? 0.0;
 
-    // Sumar la cantidad donada al total actual
+    //Suma la cantidad donada al total actual
     double newTotal = currentTotal + donationAmount;
 
-    // Actualizar el campo 'total_donated' en el proyecto
+    //Actualizar el campo 'total_donated' en el proyecto
     await projectRef.update({'total_donated': newTotal});
 
-    // Si el usuario es un nuevo donante, actualizamos el contador de donantes
+    //Si el usuario es un nuevo donante, se actualiza el contador de donantes
     if (isNewDonor) {
       int currentDonorsCount =
           (projectDoc.data() as Map<String, dynamic>)['donors_count'] ?? 0;
@@ -112,21 +112,21 @@ class DonationMethods {
     }
   }
 
-  // Función para actualizar los datos de donaciones del usuario
+  //Función para actualizar los datos de donaciones del usuario
   Future<void> updateUserDonationData(
       DocumentReference userRef, int donationAmount, bool isNewProject) async {
-    // Obtener el valor actual de 'total_donated' del usuario
+    //Obtener el valor actual de 'total_donated' del usuario
     DocumentSnapshot userDoc = await userRef.get();
     double currentTotalDonated =
         (userDoc.data() as Map<String, dynamic>)['total_donated'] ?? 0.0;
 
-    // Sumar la cantidad donada al total actual de donaciones del usuario
+    //Sumar la cantidad donada al total actual de donaciones del usuario
     double newTotalDonated = currentTotalDonated + donationAmount;
 
-    // Actualizar el campo 'total_donated' en el documento del usuario
+    //Actualizar el campo 'total_donated' en el documento del usuario
     await userRef.update({'total_donated': newTotalDonated});
 
-    // Si es la primera vez donando a este proyecto, incrementar 'supported_projects'
+    //Si es la primera vez donando a este proyecto, incrementar 'supported_projects'
     if (isNewProject) {
       int currentSupportedProjects =
           (userDoc.data() as Map<String, dynamic>)['supported_projects'] ?? 0;

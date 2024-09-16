@@ -35,6 +35,7 @@ class _BuyDigitalCurrencyScreenState extends State<BuyDigitalCurrencyScreen> {
                   _selectedPaymentMethod = newValue;
                 });
               },
+              //Esto es un placeholder, al final no se implementan formas de pago
               items: ['Método 1', 'Método 2', 'Método 3'].map((String method) {
                 return DropdownMenuItem<String>(
                   value: method,
@@ -43,6 +44,7 @@ class _BuyDigitalCurrencyScreenState extends State<BuyDigitalCurrencyScreen> {
               }).toList(),
             ),
             const SizedBox(height: 20),
+            //Campo para ingresar monto a comprar
             TextField(
               controller: _amountController,
               keyboardType: TextInputType.number,
