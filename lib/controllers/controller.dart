@@ -101,7 +101,6 @@ class Controller {
     // Obtener la referencia del usuario autenticado
     String userId = getCurrentUserId();
     DocumentReference userRef = _donationModel.getUserDocumentReference(userId);
-
     // Obtener el balance del usuario utilizando la referencia
     return await _donationModel.getDigitalCurrency(userRef);
   }
