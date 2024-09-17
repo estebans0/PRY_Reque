@@ -23,7 +23,7 @@ class LandingPage extends StatelessWidget {
             right: 0, // Para centrar el texto horizontalmente
             child: Center(
               child: Text(
-                'Proyecto 1 - Requerimientos de Software',
+                'Innovafund',
                 style: TextStyle(
                   fontSize: 28, 
                   fontWeight: FontWeight.bold,

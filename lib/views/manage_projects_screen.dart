@@ -227,8 +227,12 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                 );
                 // setState(() {});
               },
-              style: ElevatedButton.styleFrom(backgroundColor: Color(0xFFE0E0D6)),
-              child: Text('Editar'),
+              // style: ElevatedButton.styleFrom(backgroundColor: Color(0xFFE0E0D6)),
+              // child: Text('Editar'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 63, 119, 133),
+              ),
+              child: Text('Editar', style: TextStyle(color: Color.fromARGB(255, 212, 209, 184)),),
             ),
           ) 
         ],
