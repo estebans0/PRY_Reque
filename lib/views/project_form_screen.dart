@@ -271,11 +271,11 @@ class _ProjectFormScreenState extends State<ProjectFormScreen> {
                   child: Container(
                     width: 800,
                     height: 600,
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 212, 209, 184), //fromRGBO(212, 209, 184, 50),
+                      color: const Color.fromARGB(255, 212, 209, 184), //fromRGBO(212, 209, 184, 50),
                       borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                           color: Colors.black26,
                           blurRadius: 8,
