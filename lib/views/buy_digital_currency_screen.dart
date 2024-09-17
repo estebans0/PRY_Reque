@@ -141,8 +141,10 @@ class _BuyDigitalCurrencyScreenState extends State<BuyDigitalCurrencyScreen> {
                 onPressed: () {
                   Navigator.pop(context); //Vuelve a la pantalla anterior
                 },
-                child: Icon(Icons.arrow_back),
-                backgroundColor: Color(0xFFE0E0D6),
+                // child: Icon(Icons.arrow_back),
+                // backgroundColor: Color(0xFFE0E0D6),
+                backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                child: Icon(Icons.arrow_back, color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
           ),

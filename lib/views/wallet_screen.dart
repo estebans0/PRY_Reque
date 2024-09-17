@@ -88,13 +88,13 @@ class _WalletScreenState extends State<WalletScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   const Text(
-                                    'Balance actual',
+                                    'Fondo actual',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   const SizedBox(height: 10),
-                                  Text('Balance: ${snapshot.data}'),
+                                  Text('Monedas: ${snapshot.data}'),
                                 ],
                               ),
                             );
@@ -212,8 +212,10 @@ class _WalletScreenState extends State<WalletScreen> {
                 onPressed: () {
                   Navigator.pop(context); // Vuelve a la pantalla anterior
                 },
-                child: Icon(Icons.arrow_back),
-                backgroundColor: Color(0xFFE0E0D6),
+                // child: Icon(Icons.arrow_back),
+                // backgroundColor: Color(0xFFE0E0D6),
+                backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                child: Icon(Icons.arrow_back, color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
           ),
