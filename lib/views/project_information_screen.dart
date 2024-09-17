@@ -82,81 +82,105 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
+          : Stack(
                 children: [
-                  TextField(
-                    readOnly: true,
-                    controller: _nameController,
-                    decoration:
-                        const InputDecoration(labelText: 'Nombre del Proyecto'),
-                  ),
-                  TextField(
-                    readOnly: true,
-                    controller: _descriptionController,
-                    decoration: const InputDecoration(
-                      labelText: 'Descripción',
-                      hintText: 'Ejemplo: Este proyecto trata sobre...',
+                // cuadro del frente
+                Center(
+                  child: Container(
+                    width: 800,
+                    height: 600,
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 212, 209, 184), //fromRGBO(212, 209, 184, 50),
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
                     ),
-                  ),
-                  TextField(
-                    readOnly: true,
-                    controller: _fundingGoalController,
-                    decoration: const InputDecoration(
-                      labelText: 'Meta de Financiamiento',
-                      hintText: 'Ejemplo: 5000',
-                    ),
-                    keyboardType: TextInputType.number,
-                  ),
-                  TextField(
-                    readOnly: true,
-                    controller: _deadlineController,
-                    decoration: const InputDecoration(
-                      labelText: 'Fecha Límite (opcional)',
-                      hintText: 'Formato: AAAA-MM-DD',
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  // Mostrar categorías seleccionadas
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      _selectedCategories.isNotEmpty
-                          ? 'Categorías actuales: ${_selectedCategories.join(', ')}'
-                          : 'No hay categorías seleccionadas',
-                      style: const TextStyle(
-                          fontSize: 14, fontStyle: FontStyle.italic),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Wrap(
-                    children: _imagesController.asMap().entries.map((entry) {
-                      int index = entry.key;
-                      String url = entry.value;
-                      return Stack(
+                  child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Image.network(url, width: 100, height: 100),
+                          TextField(
+                            readOnly: true,
+                            controller: _nameController,
+                            decoration:
+                                const InputDecoration(labelText: 'Nombre del Proyecto'),
+                          ),
+                          TextField(
+                            readOnly: true,
+                            controller: _descriptionController,
+                            decoration: const InputDecoration(
+                              labelText: 'Descripción',
+                              hintText: 'Ejemplo: Este proyecto trata sobre...',
+                            ),
+                          ),
+                          TextField(
+                            readOnly: true,
+                            controller: _fundingGoalController,
+                            decoration: const InputDecoration(
+                              labelText: 'Meta de Financiamiento',
+                              hintText: 'Ejemplo: 5000',
+                            ),
+                            keyboardType: TextInputType.number,
+                          ),
+                          TextField(
+                            readOnly: true,
+                            controller: _deadlineController,
+                            decoration: const InputDecoration(
+                              labelText: 'Fecha Límite (opcional)',
+                              hintText: 'Formato: AAAA-MM-DD',
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          // Mostrar categorías seleccionadas
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              _selectedCategories.isNotEmpty
+                                  ? 'Categorías actuales: ${_selectedCategories.join(', ')}'
+                                  : 'No hay categorías seleccionadas',
+                              style: const TextStyle(
+                                  fontSize: 14, fontStyle: FontStyle.italic),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Wrap(
+                            children: _imagesController.asMap().entries.map((entry) {
+                              int index = entry.key;
+                              String url = entry.value;
+                              return Stack(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Image.network(url, width: 100, height: 100),
+                                  ),
+                                ],
+                              );
+                            }).toList(),
+                          ),
+                          const SizedBox(height: 20),
+                          Center(
+                            child: DonationButton(
+                              projectId: widget.projectId!,
+                              onDonationComplete: () {
+                                //Aca se puede agregar algo por si no se refrescan los datos del proyecto al donar
+                              },
+                            ),
                           ),
                         ],
-                      );
-                    }).toList(),
-                  ),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: DonationButton(
-                      projectId: widget.projectId!,
-                      onDonationComplete: () {
-                        //Aca se puede agregar algo por si no se refrescan los datos del proyecto al donar
-                      },
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
+
+                )
+                )
+                ]
+          )
     );
   }
 }

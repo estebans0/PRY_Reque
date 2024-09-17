@@ -264,97 +264,120 @@ class _ProjectFormScreenStateAdmin extends State<ProjectFormScreenAdmin> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
+          : Stack(
                 children: [
-                  TextField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(labelText: 'Nombre del Proyecto'),
-                  ),
-                  TextField(
-                    controller: _descriptionController,
-                    decoration: const InputDecoration(
-                      labelText: 'Descripción',
-                      hintText: 'Ejemplo: Este proyecto trata sobre...',
+                // cuadro del frente
+                Center(
+                  child: Container(
+                    width: 800,
+                    height: 600,
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 212, 209, 184), //fromRGBO(212, 209, 184, 50),
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
                     ),
-                  ),
-                  TextField(
-                    controller: _fundingGoalController,
-                    decoration: const InputDecoration(
-                      labelText: 'Meta de Financiamiento',
-                      hintText: 'Ejemplo: 5000',
-                    ),
-                    keyboardType: TextInputType.number,
-                  ),
-                  TextField(
-                    controller: _deadlineController,
-                    decoration: const InputDecoration(
-                      labelText: 'Fecha Límite (opcional)',
-                      hintText: 'Formato: AAAA-MM-DD',
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  // Botón para seleccionar categorías
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Text('Categorías'),
-                      const SizedBox(width: 20),
-                      IconButton(
-                        icon: const Icon(Icons.arrow_right),
-                        onPressed: _showCategoryDialog, // Mostrar diálogo de categorías
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  // Mostrar categorías seleccionadas
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      _selectedCategories.isNotEmpty
-                          ? 'Categorías actuales: ${_selectedCategories.join(', ')}'
-                          : 'No hay categorías seleccionadas',
-                      style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Wrap(
-                    children: _imagesController.asMap().entries.map((entry) {
-                      int index = entry.key;
-                      String url = entry.value;
-                      return Stack(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Image.network(url, width: 100, height: 100),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: _nameController,
+                          decoration: const InputDecoration(labelText: 'Nombre del Proyecto'),
+                        ),
+                        TextField(
+                          controller: _descriptionController,
+                          decoration: const InputDecoration(
+                            labelText: 'Descripción',
+                            hintText: 'Ejemplo: Este proyecto trata sobre...',
                           ),
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: GestureDetector(
-                              onTap: () => _removeImage(index),
-                              child: const Icon(Icons.close, color: Colors.red),
+                        ),
+                        TextField(
+                          controller: _fundingGoalController,
+                          decoration: const InputDecoration(
+                            labelText: 'Meta de Financiamiento',
+                            hintText: 'Ejemplo: 5000',
+                          ),
+                          keyboardType: TextInputType.number,
+                        ),
+                        TextField(
+                          controller: _deadlineController,
+                          decoration: const InputDecoration(
+                            labelText: 'Fecha Límite (opcional)',
+                            hintText: 'Formato: AAAA-MM-DD',
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        // Botón para seleccionar categorías
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Text('Categorías'),
+                            const SizedBox(width: 20),
+                            IconButton(
+                              icon: const Icon(Icons.arrow_right),
+                              onPressed: _showCategoryDialog, // Mostrar diálogo de categorías
                             ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        // Mostrar categorías seleccionadas
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            _selectedCategories.isNotEmpty
+                                ? 'Categorías actuales: ${_selectedCategories.join(', ')}'
+                                : 'No hay categorías seleccionadas',
+                            style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
+                            textAlign: TextAlign.left,
                           ),
-                        ],
-                      );
-                    }).toList(),
+                        ),
+                        const SizedBox(height: 20),
+                        Wrap(
+                          children: _imagesController.asMap().entries.map((entry) {
+                            int index = entry.key;
+                            String url = entry.value;
+                            return Stack(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Image.network(url, width: 100, height: 100),
+                                ),
+                                Positioned(
+                                  right: 0,
+                                  top: 0,
+                                  child: GestureDetector(
+                                    onTap: () => _removeImage(index),
+                                    child: const Icon(Icons.close, color: Colors.red),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: _addImage,
+                          child: const Text('Agregar imagen'),
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: _saveProject,
+                          child: const Text('Guardar'),
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _addImage,
-                    child: const Text('Agregar imagen'),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _saveProject,
-                    child: const Text('Guardar'),
-                  ),
-                ],
-              ),
-            ),
+                ),
+                ),
+                ]
+          )
     );
   }
 }
