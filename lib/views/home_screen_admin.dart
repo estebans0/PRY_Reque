@@ -78,7 +78,7 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> with SingleTickerProv
       
       appBar: AppBar(
         centerTitle: true, 
-        title: Text("Administración"),
+        title: Text("Administración", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 42, 69, 105))),
         automaticallyImplyLeading: false,
         
         bottom: TabBar(
@@ -107,12 +107,13 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> with SingleTickerProv
             bottom: 30,
             left: 20,
             height: 40, 
-            width: 40, 
+            width: 40,  
             child: Tooltip( 
               message: 'Cerrar sesion', 
               child: FloatingActionButton(
-                onPressed: () =>  _logout(context), 
-                child: Icon(Icons.arrow_back),
+                onPressed: () =>  _logout(context),
+                backgroundColor:  Color.fromARGB(255, 63, 119, 133),
+                child: Icon(Icons.arrow_back, color: Color.fromARGB(255, 212, 209, 184),),
               ),
             ),
           ), 

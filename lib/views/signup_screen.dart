@@ -164,8 +164,8 @@ class _SignupScreenState2 extends State<SignupScreen> {
                     MaterialPageRoute(builder: (context) => const LandingPage()),
                   );
                 }, 
-                child: Icon(Icons.arrow_back),
-                backgroundColor: Color(0xFFE0E0D6),
+                backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                child: Icon(Icons.arrow_back, color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
           ),

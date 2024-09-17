@@ -170,7 +170,7 @@ class _HomeScreen extends State<HomeScreen> {
                   color: Colors.black, 
                   child: const Text(
                     'Pantalla principal',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold,),
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 42, 69, 105),),
                   ),
                 ),
                 SizedBox(height: 20),
@@ -264,9 +264,9 @@ class _HomeScreen extends State<HomeScreen> {
             child: Tooltip( 
               message: 'Cerrar sesion', 
               child: FloatingActionButton(
-                onPressed: () =>  _logout(context), 
-                child: Icon(Icons.arrow_back),
-                backgroundColor: Color(0xFFE0E0D6),
+                onPressed: () =>  _logout(context),  
+                backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                child: Icon(Icons.arrow_back, color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
           ),
@@ -279,7 +279,9 @@ class _HomeScreen extends State<HomeScreen> {
               message: 'Editar perfil', 
               child: FloatingActionButton(
                 onPressed: () => Navigator.pushNamed(context, '/edit-profile'), 
-                child: Icon(Icons.person),
+                // child: Icon(Icons.person),
+                backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                child: Icon(Icons.person, color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
           ),
@@ -292,7 +294,9 @@ class _HomeScreen extends State<HomeScreen> {
               message: 'Cartera Digital', 
               child: FloatingActionButton(
                 onPressed: () => Navigator.pushNamed(context, '/wallet'), 
-                child: Icon(Icons.wallet),
+                // child: Icon(Icons.wallet),
+                backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                child: Icon(Icons.wallet, color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
           ),
@@ -305,7 +309,9 @@ class _HomeScreen extends State<HomeScreen> {
               message: 'Crear Proyecto', 
               child: FloatingActionButton(
                 onPressed: () => Navigator.pushNamed(context, '/create-project'), 
-                child: Icon(Icons.create_new_folder),
+                // child: Icon(Icons.create_new_folder),
+                backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                child: Icon(Icons.create_new_folder, color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
           ),
@@ -318,7 +324,9 @@ class _HomeScreen extends State<HomeScreen> {
               message: 'Editar Proyectos', 
               child: FloatingActionButton(
                 onPressed: () => _showEditProjectDialog(context), 
-                child: Icon(Icons.edit_document),
+                // child: Icon(Icons.edit_document),
+                backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                child: Icon(Icons.edit_document, color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
           ),
