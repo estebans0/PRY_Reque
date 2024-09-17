@@ -10,7 +10,6 @@ class DonationButton extends StatelessWidget {
   final UserMethods _userModel = UserMethods();
   final NotificationsModel _notificationModel = NotificationsModel();
 
-
   DonationButton({
     required this.projectId,
     required this.onDonationComplete,
@@ -52,9 +51,11 @@ class DonationButton extends StatelessWidget {
                           content: Text('Donación realizada con éxito')));
 
                       // Manda la notificacion al creador sobre una nueva donacion
-                      var projectData = await _controller.getProjectData(projectId!);
+                      var projectData =
+                          await _controller.getProjectData(projectId!);
                       var ownerId = projectData['user_id'];
-                      String emailOwner = await _userModel.getEmailbyID(ownerId);
+                      String emailOwner =
+                          await _userModel.getEmailbyID(ownerId);
                       _notificationModel.sendNotifEmail(emailOwner);
 
                       //Refresca el balance
@@ -100,7 +101,16 @@ class DonationButton extends StatelessWidget {
       onPressed: () {
         showDonationPopup(context); //Mostrar el popup para ingresar monto
       },
-      child: const Text("Donar"),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color.fromARGB(255, 63, 119, 133),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+      ),
+      child: const Text(
+        "Donar",
+        style: TextStyle(color: Color.fromARGB(255, 212, 209, 184)),
+      ),
     );
   }
 }

@@ -45,8 +45,8 @@ class _WalletScreenState extends State<WalletScreen> {
           //cuadro principal
           Center(
             child: Container(
-              width: 440,
-              height: 340,
+              width: 435,
+              height: 360,
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 213, 209, 184),
@@ -118,7 +118,7 @@ class _WalletScreenState extends State<WalletScreen> {
                           } else {
                             return Container(
                               width: 230,
-                              height: 220,
+                              height: 240,
                               padding: const EdgeInsets.all(16.0),
                               decoration: BoxDecoration(
                                 color: const Color.fromARGB(255, 223, 220,
