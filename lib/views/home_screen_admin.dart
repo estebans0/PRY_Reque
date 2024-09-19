@@ -87,7 +87,7 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> with SingleTickerProv
             Text("Estadisticas"),
             Text("Proyectos"), 
             Text("Usuarios"),
-            Text("Donasiones"), 
+            Text("Donaciones"), 
           ]
         ),
       ),
