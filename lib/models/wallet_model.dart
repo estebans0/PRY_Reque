@@ -1,4 +1,4 @@
-import 'dart:html' as html; //Para Flutter Web, no deberia de servir en android
+// import 'dart:html' as html; //Para Flutter Web, no deberia de servir en android
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -120,17 +120,17 @@ class WalletMethods {
       }
 
       //Crea un blob de texto para descargar en el navegador
-      final blob = html.Blob([content], 'text/plain');
-      final url = html.Url.createObjectUrlFromBlob(blob);
+      // final blob = html.Blob([content], 'text/plain');
+      // final url = html.Url.createObjectUrlFromBlob(blob);
 
       //Crea un enlace temporal para forzar la descarga del archivo
-      final anchor = html.AnchorElement(href: url)
-        ..setAttribute(
-            "download", "Historial de donaciones.txt") //Nombre del archivo
-        ..click(); //Se Simula un clic en el enlace para iniciar la descarga
+      // final anchor = html.AnchorElement(href: url)
+        // ..setAttribute(
+        //     "download", "Historial de donaciones.txt") //Nombre del archivo
+        // ..click(); //Se Simula un clic en el enlace para iniciar la descarga
 
       //Se libera la URL del blob después de la descarga
-      html.Url.revokeObjectUrl(url);
+      // html.Url.revokeObjectUrl(url);
     } catch (e) {
       print('Error al descargar donaciones: ${e.toString()}');
       throw Exception('Error al descargar donaciones');
