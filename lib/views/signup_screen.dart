@@ -108,7 +108,7 @@ class _SignupScreenState2 extends State<SignupScreen> {
           Center(
             child: Container(
               width: 300,
-              height: 200,
+              height: 250,
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 212, 209, 184), //fromRGBO(212, 209, 184, 50),

@@ -85,14 +85,14 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
         // title: Text("Firebase Firestore Example"), 
       body: Padding(
         // padding: const EdgeInsets.all(60), 
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 80),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         
         child: Column( 
           children: [
             Title(
               color: Colors.black, 
               child: const Text(
-                'Gestión de proyectos',
+                'Proyectos',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold,),
               ),
             ),
@@ -183,60 +183,118 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
   Widget auxBuild(BuildContext context, String idProject, String titulo, String category, int meta, int recaudado) {
     return Container( 
       margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
+      // padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         // color: Colors.grey[850],
         color:const  Color(0xFFE0E0D6),
         borderRadius: BorderRadius.circular(8.0),
         // border: Border.all(color: const Color.fromARGB(255, 29, 120, 204)),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${titulo}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              Text(
-                'Categorias: ${category.replaceAll('[', '').replaceAll(']', '')}',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Meta: $meta  Recaudado: $recaudado',  // Meta y recaudado
-                // style: TextStyle(color: const Color.fromARGB(255, 209, 45, 45)),
-              ),
-            ],
-          ), 
+      
+      child:LayoutBuilder(
+        builder: (context, Constraints) {
+          if(Constraints.maxWidth < 800){
+            return Column(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${titulo}',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Categorias: ${category.replaceAll('[', '').replaceAll(']', '')}',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Meta: $meta  Recaudado: $recaudado',  // Meta y recaudado
+                      // style: TextStyle(color: const Color.fromARGB(255, 209, 45, 45)),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                ), 
+                // Align(
+                Column(                  
+                  // alignment: Alignment.centerRight,
+                  children: [
+                    SizedBox(
+                      child: ElevatedButton(
+                        onPressed: () { 
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ProjectFormScreenAdmin(projectId: idProject),
+                            ), 
+                          ); 
+                        }, 
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                        ),
+                        child: Text('Editar', style: TextStyle(color: Color.fromARGB(255, 212, 209, 184)),),
+                      ),
+                    )
+                  ],
+                ) 
+              ],         
+            );
+          } else {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${titulo}',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Categorias: ${category.replaceAll('[', '').replaceAll(']', '')}',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Meta: $meta  Recaudado: $recaudado',  // Meta y recaudado
+                      // style: TextStyle(color: const Color.fromARGB(255, 209, 45, 45)),
+                    ),
+                  ],
+                ), 
 
-          Align(
-            alignment: Alignment.centerRight,
-            child: ElevatedButton(
-              onPressed: () {
-                // Navegar a la página de edición pasando el proyecto
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        ProjectFormScreenAdmin(projectId: idProject),
-                  ), 
-                );
-                // setState(() {});
-              },
-              // style: ElevatedButton.styleFrom(backgroundColor: Color(0xFFE0E0D6)),
-              // child: Text('Editar'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 63, 119, 133),
-              ),
-              child: Text('Editar', style: TextStyle(color: Color.fromARGB(255, 212, 209, 184)),),
-            ),
-          ) 
-        ],
-      ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Navegar a la página de edición pasando el proyecto
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ProjectFormScreenAdmin(projectId: idProject),
+                        ), 
+                      );
+                      // setState(() {});
+                    },
+                    // style: ElevatedButton.styleFrom(backgroundColor: Color(0xFFE0E0D6)),
+                    // child: Text('Editar'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                    ),
+                    child: Text('Editar', style: TextStyle(color: Color.fromARGB(255, 212, 209, 184)),),
+                  ),
+                ) 
+              ],
+            );
+          }
+        }
+      )
+       
+
+
     );
   }
 

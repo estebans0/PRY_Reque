@@ -1,5 +1,6 @@
 import 'package:app/models/user_model.dart';  
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
  
 class donationsPage extends StatefulWidget {
     const donationsPage({super.key});
@@ -19,13 +20,13 @@ class _donationsPage extends State<donationsPage> {
       
       body: Padding( 
 
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 80),// all(80), 
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),// all(80), 
         child: Column( 
           children: [
             Title(
               color: Colors.black, 
               child: Text(
-                'Gestión de donaciones',
+                'Donaciones',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold,),
               ),
             ),
@@ -116,46 +117,92 @@ class _donationsPage extends State<donationsPage> {
   Widget auxBuild(String idDonation, String idProject, String idUser, bool is_deleted, String projectName,  String userName, String date, int amount) {
     return Container(
       margin: EdgeInsets.only(bottom: 16),
-      padding: EdgeInsets.all(16),
+      height: 140,
+      // padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         // color: Colors.grey[850],
         color:const  Color(0xFFE0E0D6),
         borderRadius: BorderRadius.circular(8.0),
         // border: Border.all(color: const Color.fromARGB(255, 29, 120, 204)),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Benefactor: $userName    -    Proyecto: $projectName',    
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              Text(
-                'Monto: $amount       Fecha: $date',   
-              ),
-              
-            ], 
-          ),
-          Column(
-            children: [ 
-              SizedBox(
-                width: 120,
-                child:  ElevatedButton(
-                  onPressed: !is_deleted ?() async {  
-                    await user_model.deactivateDonation(idDonation, idProject, idUser, amount);
-                    setState(() {});
-                  }: null,
-                  child: const Text('Cancelar')
-                )    
-              )
-            ]
-          )
-        ],
-      ),
+      
+      child:LayoutBuilder(
+        builder: (context, Constraints) {
+          if(Constraints.maxWidth < 800){
+            return Column ( 
+              children: [
+                Column( 
+                  children: [ 
+                    Text(
+                      'Benefactor: $userName',    
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Proyecto: $projectName',    
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Monto: $amount       Fecha: $date',   
+                    ),
+                  ],
+                ),
+                
+                Column( 
+                  children: [
+                    SizedBox(
+                      width: 120,
+                      child:  ElevatedButton(
+                        onPressed: !is_deleted ?() async {  
+                          await user_model.deactivateDonation(idDonation, idProject, idUser, amount);
+                          setState(() {});
+                        }: null,
+                        child: const Text('Cancelar')
+                      )    
+                    ) 
+                  ],
+                ),
+              ],
+            );
+          } else {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Benefactor: $userName    -    Proyecto: $projectName',    
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Monto: $amount       Fecha: $date',   
+                    ),
+                    
+                  ], 
+                ),
+                Column(
+                  children: [ 
+                    SizedBox(
+                      width: 120,
+                      child:  ElevatedButton(
+                        onPressed: !is_deleted ?() async {  
+                          await user_model.deactivateDonation(idDonation, idProject, idUser, amount);
+                          setState(() {});
+                        }: null,
+                        child: const Text('Cancelar')
+                      )    
+                    )
+                  ]
+                )
+              ],
+            );
+          }
+        }
+      )
+      
     );
   }
 

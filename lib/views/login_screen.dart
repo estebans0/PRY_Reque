@@ -101,7 +101,7 @@ class _LoginScreen extends State<LoginScreen> {
           Center(
             child: Container(
               width: 300,
-              height: 200,
+              height: 250,
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 212, 209, 184), //fromRGBO(212, 209, 184, 50),
@@ -127,7 +127,7 @@ class _LoginScreen extends State<LoginScreen> {
                   decoration: const InputDecoration(labelText: 'Password'),
                   obscureText: true,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 14),
                 _isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : ElevatedButton(

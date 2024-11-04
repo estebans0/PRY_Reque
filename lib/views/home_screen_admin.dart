@@ -104,7 +104,7 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> with SingleTickerProv
           ),
           //Boton de cerrar sesion
           Positioned(
-            bottom: 30,
+            top: 30,
             left: 20,
             height: 40, 
             width: 40,  

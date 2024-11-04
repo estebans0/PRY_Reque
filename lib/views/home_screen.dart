@@ -161,7 +161,7 @@ class _HomeScreen extends State<HomeScreen> {
       body: Stack( 
         children: [ 
           Padding (  
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 100),
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             
             child: Column( 
               children: [  
@@ -363,46 +363,115 @@ class ProjectTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(8.0),
         // border: Border.all(color: const Color.fromARGB(255, 29, 120, 204)),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${titulo}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              Text(
-                'Categorias: ${category.replaceAll('[', '').replaceAll(']', '')}',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Meta: $meta  Recaudado: $recaudado',  // Meta y recaudado
-                // style: TextStyle(color: const Color.fromARGB(255, 209, 45, 45)),
-              ),
-            ],
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // Acción de edición
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProjectInformationScreen(projectId: id),
+      
+      child:LayoutBuilder(
+        builder: (context, Constraints) {
+          if(Constraints.maxWidth < 800){
+            return Column(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${titulo}',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Categorias: ${category.replaceAll('[', '').replaceAll(']', '')}',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Meta: $meta  Recaudado: $recaudado',  // Meta y recaudado
+                      // style: TextStyle(color: const Color.fromARGB(255, 209, 45, 45)),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                ),                
+                Column(
+                  children: [
+                    SizedBox(
+                      child:  ElevatedButton(
+                        onPressed: () {
+                          // Acción de edición
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProjectInformationScreen(projectId: id),
+                            ),
+                          );                        
+                        }, 
+                        child: const Text('Información'),
+                      ),
+
+                    )
+                  ],
+
                 ),
-              );
-            
-            },
-            style: ElevatedButton.styleFrom(
-              // backgroundColor: Colors.grey[700],
-            ),
-            child: const Text('Información'),
-          ),
-        ],
-      ),
+                      
+              ],
+
+            );
+          }
+          else {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${titulo}',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Categorias: ${category.replaceAll('[', '').replaceAll(']', '')}',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Meta: $meta  Recaudado: $recaudado',  // Meta y recaudado
+                      // style: TextStyle(color: const Color.fromARGB(255, 209, 45, 45)),
+                    ),
+                  ],
+                ),
+                
+                Column(
+
+                  children: [
+                    SizedBox(
+
+                      child:  ElevatedButton(
+                        onPressed: () {
+                          // Acción de edición
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProjectInformationScreen(projectId: id),
+                            ),
+                          );
+                        
+                        },
+                        style: ElevatedButton.styleFrom(
+                          // backgroundColor: Colors.grey[700],
+                        ),
+                        child: const Text('Información'),
+                      ),
+
+                    )
+                  ],
+
+                ),
+                      
+              ],
+            );
+          }
+        }
+      ) 
+
     );
   }
 }
