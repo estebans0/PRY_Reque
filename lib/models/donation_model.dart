@@ -1,9 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../models/auth_model.dart';
+import '../models/notifications_model.dart';
 
 class DonationMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthModel _authModel = AuthModel();
+  final NotificationsModel _notificationModel = NotificationsModel();
+
 
   String getCurrentUserId() {
     final User? user = _auth.currentUser;
@@ -75,6 +80,14 @@ class DonationMethods {
 
     //Actualizar el total donado por el usuario y los proyectos soportados si es nuevo donante
     await updateUserDonationData(userRef, donationAmount, !hasDonatedBefore);
+
+    // Si la donacion es muy grande se notifica al administrador
+    if(donationAmount > 100000){
+      List admins = await _authModel.getAdmins();
+      for (int i = 0; i < admins.length; i++) {
+        _notificationModel.sendBigDonationEmail(admins[i]['email']);
+      }
+    }
   }
 
   //Función para verificar si el usuario ya ha donado a este proyecto

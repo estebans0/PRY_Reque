@@ -17,6 +17,9 @@ class ProjectMethods {
                               List<String> images, List<String> categories) async {
     String userId = _auth.currentUser!.uid;
 
+    // Revisar actividad sospecha
+    await checkSus(name);
+
     await _firestore.collection('Projects').add({
       'user_id': userId, // UID del usuario que creó el proyecto
       'name': name,
@@ -36,6 +39,10 @@ class ProjectMethods {
   // Editar un proyecto existente
   Future<void> editProject(String projectId, String name, String description, num fundingGoal, DateTime? deadline,
                             List<String> images, List<String> categories) async {
+
+    // Revisar actividad sospecha
+    await checkSus(name);
+
     await _firestore.collection('Projects').doc(projectId).update({
       'name': name,
       'description': description,
@@ -107,10 +114,27 @@ class ProjectMethods {
           _notificationModel.sendDateLimitEmail(admins[i]['email']);
         }
       }
+    }
   }
+
+  // Se considerara como actividad sospechosa si dos proyectos se llaman igual al crear o editar el proyecto
+  Future<void> checkSus(String name) async {
+    CollectionReference collectionReferenceProjects = _firestore.collection('Projects');
+
+    QuerySnapshot queryProject = await collectionReferenceProjects.where('name', isEqualTo : name).get();
+    if (queryProject != null){
+      List admins = await _authModel.getAdmins();
+      for (int i = 0; i < admins.length; i++) {
+        _notificationModel.sendSusEmail(admins[i]['email']);
+      }
+    }
+    
 
 
   }
+
+
+  
 
   // Retorna la cantidad de proyectos activos
   Future<int> getNumberProjects () async {

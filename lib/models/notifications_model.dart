@@ -16,9 +16,11 @@ class NotificationsModel{
     final String dateLimit = ''' Estimado administrador, 
     Un proyecto esta apunto de alcanzar su fecha limite sin alcanzar el objetivo de financiacion.
     Ingresa a Innovafund para ver el proyecto.''';
+    // Se manda cuando dos proyectos al crear o editar su nombre son iguales
     final String susProject = '''Estimado administrador, 
     Hay un proyecto con actividad sospechosa.
     Ingresa a Innovafund para ver el proyecto.''';
+    // Se manda cuando son mayores a 100mil
     final String bigDonation = '''Estimado administrador, 
     Se realizo una donacion anormalmente grande.
     Ingresa a Innovafund para ver la donacion.''';
@@ -81,7 +83,5 @@ class NotificationsModel{
                 },
             }),
         );
-
-
     }
 }
