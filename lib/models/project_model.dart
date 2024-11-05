@@ -1,10 +1,16 @@
 // lib/models/project_model.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../models/auth_model.dart';
+import '../models/notifications_model.dart';
+
 
 class ProjectMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthModel _authModel = AuthModel();
+  final NotificationsModel _notificationModel = NotificationsModel();
+
 
   // Crear un nuevo proyecto
   Future<void> createProject(String name, String description, num fundingGoal, DateTime? deadline,
@@ -78,9 +84,32 @@ class ProjectMethods {
     for (var document in queryProject.docs) {
       final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
       data['id'] = document.id; // Incluir el ID del proyecto
+      // Cada vez que se obtenga todos los proyectos se revisa si estan cerca del fecha limite para mandar la noti
+      await checkDateLimit(data);
       projects.add(data);
     }
     return projects;
+  }
+
+  Future<void> checkDateLimit(Map<String, dynamic> project) async{
+    // Se notificaran de proyectos a tres dias de vencer
+    const int daysToDeadline = 3;
+
+    // Obtener la fecha límite del proyecto 
+    DateTime? deadline = project['deadline']?.toDate(); 
+    if (deadline != null) {
+      DateTime currentDate = DateTime.now();
+      Duration difference = deadline.difference(currentDate);
+
+      if (difference.inDays <= daysToDeadline && difference.inDays.isNegative == false) {
+        List admins = await _authModel.getAdmins();
+        for (int i = 0; i < admins.length; i++) {
+          _notificationModel.sendDateLimitEmail(admins[i]['email']);
+        }
+      }
+  }
+
+
   }
 
   // Retorna la cantidad de proyectos activos

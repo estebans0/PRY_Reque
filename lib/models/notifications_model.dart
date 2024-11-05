@@ -11,7 +11,17 @@ class NotificationsModel{
     Ingresa a Innovafund para ver estos cambios.''';
     final String thankDonor = '''¡Muchas gracias por donar al proyecto, Tu donación está haciendo la diferencia!''';
     final String notifyOwner = '''¡Has recibido una nueva donacion en tu proyecto!
-    Ingresa a Innovafund para ver el monto recaudado''';
+    Ingresa a Innovafund para ver el monto recaudado.''';
+
+    final String dateLimit = ''' Estimado administrador, 
+    Un proyecto esta apunto de alcanzar su fecha limite sin alcanzar el objetivo de financiacion.
+    Ingresa a Innovafund para ver el proyecto.''';
+    final String susProject = '''Estimado administrador, 
+    Hay un proyecto con actividad sospechosa.
+    Ingresa a Innovafund para ver el proyecto.''';
+    final String bigDonation = '''Estimado administrador, 
+    Se realizo una donacion anormalmente grande.
+    Ingresa a Innovafund para ver la donacion.''';
 
     /*
     cuando ya este listo lo del registro agregarle el nombre completo
@@ -33,6 +43,18 @@ class NotificationsModel{
         sendEmail(email, notifyOwner.trim());
     }
 
+    Future sendDateLimitEmail(String email) async{
+        sendEmail(email, dateLimit.trim());
+    }
+
+    Future sendSusEmail(String email) async{
+        sendEmail(email, susProject.trim());
+    }
+
+    Future sendBigDonationEmail(String email) async{
+        sendEmail(email, bigDonation.trim());
+    }
+
     Future sendEmail(String email, String messageContent) async{
         const serviceId = 'service_c7w9dqe';
         const templateId = 'template_3it95fn';
@@ -45,6 +67,7 @@ class NotificationsModel{
         final response = await http.post(
             url,
             headers: {
+                'origin': 'http://localhost',
                 'Content-Type': 'application/json',
             },
             body: json.encode({
