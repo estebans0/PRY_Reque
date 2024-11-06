@@ -47,7 +47,7 @@ class _ManageRolesScreen extends State<ManageRolesScreen> {
         title: Center(
           child: Text( 
             'Gestion de Roles', 
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold,), 
+            style: TextStyle(color: Color.fromARGB(255, 63, 119, 133), fontSize: 30, fontWeight: FontWeight.bold,), 
           ),
         ),
       ), 
@@ -143,7 +143,7 @@ class _ManageRolesScreen extends State<ManageRolesScreen> {
                   const SizedBox(height: 8),
                   Text(
                     'Nombre: $name',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color.fromARGB(255, 63, 119, 133), fontSize: 14, fontWeight: FontWeight.bold),
                   ), 
                   const SizedBox(height: 8),
                   // DropdownButton para seleccionar el rol
@@ -152,21 +152,27 @@ class _ManageRolesScreen extends State<ManageRolesScreen> {
                     children: [
                       Text(
                         'Rol: ',
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Color.fromARGB(255, 63, 119, 133), fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       DropdownButton <String>( 
-                        value: currentRol,                         
+                        value: currentRol,  
+                        // style: TextStyle(color: Colors.blue, fontSize: 14, fontWeight: FontWeight.bold),
+                        dropdownColor: Color.fromARGB(255, 224, 224, 214), 
+
                         items: roles.map((role) {
                           return DropdownMenuItem(
                             value: role,
-                            child: Text(role),
+                            child: Text(
+                              role,
+                              style: TextStyle(color: Color.fromARGB(255, 63, 119, 133), fontSize: 14, fontWeight: FontWeight.bold),
+                            ), 
                           );
                         }).toList(),
                         onChanged: (newRole) {
                           if (newRole != null) {
                             onRoleChanged(newRole);
-                            print('Cambiando el rol de mi amigo: $name');
-                            print('El nuevo rol es: $newRole');
+                            // print('Cambiando el rol de mi amigo: $name');
+                            // print('El nuevo rol es: $newRole');
                           }
                         },
                       ),
