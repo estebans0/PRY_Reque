@@ -228,5 +228,11 @@ class UserMethods {
     }
   }
 
+  // Cambiar rol de usuario 
+  Future<void> changeUserRol(String userId, String newRol) async{
+    await _firestore.collection('Users').doc(userId).update({
+      'rol': newRol,
+    }); 
+  }
   
 }

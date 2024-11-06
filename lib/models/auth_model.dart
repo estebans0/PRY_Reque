@@ -36,7 +36,7 @@ class AuthModel {
         'name': nameTemp,
         'phone_num': null,
         'profile_pic': null,
-        'rol' : "",
+        'rol' : "Usuario",
         'total_donated': 0,
         'supported_projects': 0,
         'is_deleted' : false,

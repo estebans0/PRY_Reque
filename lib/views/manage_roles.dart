@@ -32,6 +32,14 @@ class _ManageRolesScreen extends State<ManageRolesScreen> {
     }
   }
 
+  Future<void> updateUserRole(String docId, String newRole, int index) async {
+    setState(() {
+      lstUsers[index]['rol'] = newRole;
+    });
+     
+    await userMethods.changeUserRol(docId, newRole);     
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +77,14 @@ class _ManageRolesScreen extends State<ManageRolesScreen> {
                             String id   = data['docId']  ?? ''; 
                             String name = data['name']   ?? '';
                             String currentRol   = data['rol']  ?? ''; 
-                            return userDataBox(context, roles, id, name, currentRol);  
+                            return userDataBox(
+                              context, 
+                              roles, 
+                              id, 
+                              name, 
+                              currentRol, 
+                              (newRol) {updateUserRole(id, newRol, index);}
+                            );  
                           } else {
                             return ListTile(
                               title: Text('No se han podido cargar los usuarios'),
@@ -83,6 +98,7 @@ class _ManageRolesScreen extends State<ManageRolesScreen> {
               
             ),
           ),
+
           Positioned(
             top: 35,
             left: 20,
@@ -110,7 +126,7 @@ class _ManageRolesScreen extends State<ManageRolesScreen> {
     );
   }
 
-  Widget userDataBox(BuildContext context, List<String> roles, String docId, String name, String currentRol) {
+  Widget userDataBox(BuildContext context, List<String> roles, String docId, String name, String currentRol, Function(String) onRoleChanged) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),       
       decoration: BoxDecoration(         
@@ -148,8 +164,9 @@ class _ManageRolesScreen extends State<ManageRolesScreen> {
                         }).toList(),
                         onChanged: (newRole) {
                           if (newRole != null) {
-                            // onRoleChanged(newRole);
-                            print('Cambiando el rol');
+                            onRoleChanged(newRole);
+                            print('Cambiando el rol de mi amigo: $name');
+                            print('El nuevo rol es: $newRole');
                           }
                         },
                       ),
