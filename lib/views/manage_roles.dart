@@ -44,50 +44,69 @@ class _ManageRolesScreen extends State<ManageRolesScreen> {
         ),
       ), 
 
-      body: Padding( 
-        // padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),// all(80), 
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 70),// all(80), 
+      body: Stack( 
         
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 70),// all(80),
 
+            child: Column( 
+              
+              children: [          
 
-        child: Column( 
-          
-          children: [          
-
-            SizedBox(height: 20),
-            
-            Expanded(
-            
-              child: lstUsers.isEmpty
-                ? Center(child: CircularProgressIndicator()) // Mostrar spinner mientras se cargan los datos
-                : ListView.builder(
-                    itemCount: lstUsers.length,
-                    itemBuilder: (context, index) {
-                      // Verificar que el tipo de dato sea un Map antes de acceder a campos
-                      if (lstUsers[index] is Map<String, dynamic>) {
-                        var data = lstUsers[index] as Map<String, dynamic>;
-                        String id   = data['docId']  ?? ''; 
-                        String name = data['name']   ?? '';
-                        String currentRol   = data['rol']  ?? ''; 
-                        return userDataBox(context, roles, id, name, currentRol);  
-                      } else {
-                        return ListTile(
-                          title: Text('No se han podido cargar los usuarios'),
-                        );
-                      }
-                    },
-                  ),
+                SizedBox(height: 20),
+                
+                Expanded(
+                
+                  child: lstUsers.isEmpty
+                    ? Center(child: CircularProgressIndicator()) // Mostrar spinner mientras se cargan los datos
+                    : ListView.builder(
+                        itemCount: lstUsers.length,
+                        itemBuilder: (context, index) {
+                          // Verificar que el tipo de dato sea un Map antes de acceder a campos
+                          if (lstUsers[index] is Map<String, dynamic>) {
+                            var data = lstUsers[index] as Map<String, dynamic>;
+                            String id   = data['docId']  ?? ''; 
+                            String name = data['name']   ?? '';
+                            String currentRol   = data['rol']  ?? ''; 
+                            return userDataBox(context, roles, id, name, currentRol);  
+                          } else {
+                            return ListTile(
+                              title: Text('No se han podido cargar los usuarios'),
+                            );
+                          }
+                        },
+                      ),
+                ),
+                          
+              ]
+              
             ),
-                       
-          ]
-          
+          ),
+          Positioned(
+            top: 35,
+            left: 20,
+            height: 40, 
+            width: 40, 
+            child: Tooltip( 
+              message: 'Volver', 
+              child: FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LandingPage()),
+                  );
+                }, 
+                backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                child: Icon(Icons.arrow_back, color: Color.fromARGB(255, 212, 209, 184)),
+              ),
+            ),
+          ),
+
+        ] 
+           
       ),
-
-      
-
-
-
-    ),
+ 
     );
   }
 
@@ -112,17 +131,14 @@ class _ManageRolesScreen extends State<ManageRolesScreen> {
                   ), 
                   const SizedBox(height: 8),
                   // DropdownButton para seleccionar el rol
-                  Row(
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         'Rol: ',
                         style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                       ),
-                      DropdownButton <String>(
-                        // iconDisabledColor: Colors.white,
-                        // dropdownColor: Colors.amber,
-                        // color: const Color.fromARGB(255, 1, 0, 0),
+                      DropdownButton <String>( 
                         value: currentRol,                         
                         items: roles.map((role) {
                           return DropdownMenuItem(
