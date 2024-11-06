@@ -9,7 +9,6 @@ class DonationMethods {
   final AuthModel _authModel = AuthModel();
   final NotificationsModel _notificationModel = NotificationsModel();
 
-
   String getCurrentUserId() {
     final User? user = _auth.currentUser;
     if (user != null) {
@@ -36,7 +35,9 @@ class DonationMethods {
 
     //Extrae el campo 'digital_currency' del documento del usuario
     double balance =
-        (userDoc.data() as Map<String, dynamic>)['digital_currency'] ?? 0.0;
+        (userDoc.data() as Map<String, dynamic>)['digital_currency']
+                ?.toDouble() ??
+            0.0;
 
     return balance;
   }
@@ -58,7 +59,6 @@ class DonationMethods {
       DocumentReference projectRef, int donationAmount) async {
     //Verifica si el usuario ya ha donado al proyecto
     bool hasDonatedBefore = await checkIfUserHasDonated(projectRef, userRef);
-
     //referencia a la colección de donaciones
     CollectionReference donations = _firestore.collection('Donations');
 
@@ -66,6 +66,7 @@ class DonationMethods {
     DateTime now = DateTime.now();
 
     //Crea un nuevo documento en la colección de donaciones
+
     await donations.add({
       'amount': donationAmount,
       'donation_date': now,
@@ -73,16 +74,17 @@ class DonationMethods {
       'project_id': projectRef,
       'user_id': userRef,
     });
-
     //Actualizar el total donado en el proyecto correspondiente
+
     await updateProjectTotalDonated(
         projectRef, donationAmount, !hasDonatedBefore);
 
     //Actualizar el total donado por el usuario y los proyectos soportados si es nuevo donante
+
     await updateUserDonationData(userRef, donationAmount, !hasDonatedBefore);
 
     // Si la donacion es muy grande se notifica al administrador
-    if(donationAmount > 100000){
+    if (donationAmount > 100000) {
       List admins = await _authModel.getAdmins();
       for (int i = 0; i < admins.length; i++) {
         _notificationModel.sendBigDonationEmail(admins[i]['email']);
@@ -108,12 +110,10 @@ class DonationMethods {
       DocumentReference projectRef, int donationAmount, bool isNewDonor) async {
     // Obtener el valor actual de 'total_donated'
     DocumentSnapshot projectDoc = await projectRef.get();
-    double currentTotal =
-        (projectDoc.data() as Map<String, dynamic>)['total_donated'] ?? 0.0;
-
+    int currentTotal =
+        (projectDoc.data() as Map<String, dynamic>)['total_donated'] ?? 0;
     //Suma la cantidad donada al total actual
-    double newTotal = currentTotal + donationAmount;
-
+    int newTotal = currentTotal + donationAmount;
     //Actualizar el campo 'total_donated' en el proyecto
     await projectRef.update({'total_donated': newTotal});
 
@@ -130,12 +130,10 @@ class DonationMethods {
       DocumentReference userRef, int donationAmount, bool isNewProject) async {
     //Obtener el valor actual de 'total_donated' del usuario
     DocumentSnapshot userDoc = await userRef.get();
-    double currentTotalDonated =
-        (userDoc.data() as Map<String, dynamic>)['total_donated'] ?? 0.0;
-
+    int currentTotalDonated =
+        (userDoc.data() as Map<String, dynamic>)['total_donated'] ?? 0;
     //Sumar la cantidad donada al total actual de donaciones del usuario
-    double newTotalDonated = currentTotalDonated + donationAmount;
-
+    int newTotalDonated = currentTotalDonated + donationAmount;
     //Actualizar el campo 'total_donated' en el documento del usuario
     await userRef.update({'total_donated': newTotalDonated});
 

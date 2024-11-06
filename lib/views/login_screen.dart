@@ -25,31 +25,35 @@ class _LoginScreen extends State<LoginScreen> {
     final email = _emailController.text;
     final password = _passwordController.text;
     // Si no esta baneado se deja entrar
-    if(!await _controller.isBanned(email)){
+    if (!await _controller.isBanned(email)) {
       try {
         await _controller.login(email, password);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Login exitoso'), backgroundColor: Colors.green),
+          const SnackBar(
+              content: Text('Login exitoso'), backgroundColor: Colors.green),
         );
         if (await _controller.isAdmin(email)) {
           Navigator.pushReplacementNamed(context, '/home-admin');
         } else {
           Navigator.pushReplacementNamed(context, '/home');
         }
-        
-
       } catch (e) {
         if (e.toString().contains('invalid-credential')) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Email o contraseña incorrecta'), backgroundColor: Colors.red),
+            const SnackBar(
+                content: Text('Email o contraseña incorrecta'),
+                backgroundColor: Colors.red),
           );
         } else if (e.toString().contains('invalid-email')) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Email incorrecto'), backgroundColor: Colors.red),
+            const SnackBar(
+                content: Text('Email incorrecto'), backgroundColor: Colors.red),
           );
         } else if (e.toString().contains('missing-password')) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Debe ingresar una contraseña'), backgroundColor: Colors.red),
+            const SnackBar(
+                content: Text('Debe ingresar una contraseña'),
+                backgroundColor: Colors.red),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -61,16 +65,18 @@ class _LoginScreen extends State<LoginScreen> {
           _isLoading = false;
         });
       }
-    } else{
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('El usuario se encuentra baneado'), backgroundColor: Colors.red),
-        );
-        setState(() {
-          _isLoading = false;
-        });
-    } 
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('El usuario se encuentra baneado'),
+            backgroundColor: Colors.red),
+      );
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
- 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,7 +95,7 @@ class _LoginScreen extends State<LoginScreen> {
               child: Text(
                 'Inicio de sesion',
                 style: TextStyle(
-                  fontSize: 28, 
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: Color.fromARGB(255, 42, 69, 105), // rgb(42, 69, 105)
                 ),
@@ -104,7 +110,8 @@ class _LoginScreen extends State<LoginScreen> {
               height: 250,
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 212, 209, 184), //fromRGBO(212, 209, 184, 50),
+                color: Color.fromARGB(
+                    255, 212, 209, 184), //fromRGBO(212, 209, 184, 50),
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
@@ -118,26 +125,29 @@ class _LoginScreen extends State<LoginScreen> {
                 // mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                TextField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(labelText: 'Email'),
-                ),
-                TextField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(labelText: 'Password'),
-                  obscureText: true,
-                ),
-                const SizedBox(height: 14),
-                _isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : ElevatedButton(
-                        onPressed: _login,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                  TextField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(labelText: 'Email'),
+                  ),
+                  TextField(
+                    controller: _passwordController,
+                    decoration: const InputDecoration(labelText: 'Password'),
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 14),
+                  _isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : ElevatedButton(
+                          onPressed: _login,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                          ),
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 212, 209, 184)),
+                          ),
                         ),
-                        child: const Text('Login', style: TextStyle(color: Color.fromARGB(255, 212, 209, 184)),),
-                      ),
-                  
                 ],
               ),
             ),
@@ -146,28 +156,27 @@ class _LoginScreen extends State<LoginScreen> {
           Positioned(
             top: 30,
             left: 20,
-            height: 40, 
-            width: 40, 
-            child: Tooltip( 
-              message: 'Volver', 
+            height: 40,
+            width: 40,
+            child: Tooltip(
+              message: 'Volver',
               child: FloatingActionButton(
+                heroTag: 'login_back_button',
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const LandingPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const LandingPage()),
                   );
-                }, 
+                },
                 backgroundColor: Color.fromARGB(255, 63, 119, 133),
-                child: Icon(Icons.arrow_back, color: Color.fromARGB(255, 212, 209, 184)),
+                child: Icon(Icons.arrow_back,
+                    color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
           ),
-
         ],
       ),
     );
   }
 }
-
-
-

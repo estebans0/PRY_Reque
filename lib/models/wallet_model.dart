@@ -7,7 +7,7 @@ class WalletMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //Función para obtener el balance actual  del usuario
-  Future<double> getDigitalCurrency() async {
+  Future<int> getDigitalCurrency() async {
     String userId = _auth.currentUser!.uid; //Obtener el UID del usuario
 
     //Obtiene el documento
@@ -15,8 +15,9 @@ class WalletMethods {
         await _firestore.collection('Users').doc(userId).get();
 
     //Extrae el campo 'digital_currency' del documento del usuario
-    double balance =
-        (userDoc.data() as Map<String, dynamic>)['digital_currency'] ?? 0.0;
+    int balance =
+        (userDoc.data() as Map<String, dynamic>)['digital_currency']?.toInt() ??
+            0;
 
     return balance; //Retorna el balance de moneda digital
   }
@@ -63,7 +64,7 @@ class WalletMethods {
     return transactions;
   }
 
-  //Función para obtener todas las donaciones del usuario para la descarga
+  //Función para obtener todas las donaciones del usuario
   Future<List<Map<String, dynamic>>> getAllUserDonations() async {
     String userId = _auth.currentUser!.uid;
     DocumentReference userRef = _firestore.collection('Users').doc(userId);
@@ -98,56 +99,12 @@ class WalletMethods {
     return donations;
   }
 
-  //Función para descargar todas las donaciones del usuario en un archivo de texto
-  Future<void> downloadDonations() async {
-    try {
-      //Se Obtienien todas las donaciones del usuario
-      List<Map<String, dynamic>> donations = await getAllUserDonations();
-
-      //Formatear el contenido del archivo de texto
-      String content = 'Historial de Donaciones:\n\n';
-
-      for (var donation in donations) {
-        //Formato de fecha día/mes/año
-        String formattedDate = _formatDate(donation['donation_date'].toDate());
-        String status =
-            donation['is_deleted'] == true ? 'Cancelada' : 'Completada';
-
-        content += 'Fecha: $formattedDate\n';
-        content +=
-            'Donaste ${donation['amount']} al proyecto ${donation['project_name']}\n';
-        content += 'Estado: $status\n\n';
-      }
-
-      //Crea un blob de texto para descargar en el navegador
-      // final blob = html.Blob([content], 'text/plain');
-      // final url = html.Url.createObjectUrlFromBlob(blob);
-
-      //Crea un enlace temporal para forzar la descarga del archivo
-      // final anchor = html.AnchorElement(href: url)
-        // ..setAttribute(
-        //     "download", "Historial de donaciones.txt") //Nombre del archivo
-        // ..click(); //Se Simula un clic en el enlace para iniciar la descarga
-
-      //Se libera la URL del blob después de la descarga
-      // html.Url.revokeObjectUrl(url);
-    } catch (e) {
-      print('Error al descargar donaciones: ${e.toString()}');
-      throw Exception('Error al descargar donaciones');
-    }
-  }
-
-  //Método auxiliar para el formato de la fecha en día/mes/año
-  String _formatDate(DateTime date) {
-    return '${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute}:${date.second}';
-  }
-
   //Función para actualizar el balance de digital_currency del usuario
   Future<void> updateDigitalCurrency(double amount) async {
     String userId = _auth.currentUser!.uid;
 
     //Obtener el balance actual
-    double currentBalance = await getDigitalCurrency();
+    int currentBalance = await getDigitalCurrency();
 
     //Actualizar el balance
     await _firestore.collection('Users').doc(userId).update({

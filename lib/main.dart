@@ -1,4 +1,5 @@
 // lib/main.dart
+import 'package:app/views/general_forum_screen.dart';
 import 'package:app/views/home_screen_admin.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         '/home-admin': (context) => const HomeScreenAdmin(),
         '/wallet': (context) => const WalletScreen(),
         '/buy-digital-currency': (context) => const BuyDigitalCurrencyScreen(),
+        '/general-forum': (context) => GeneralForumScreen()
       },
     );
   }

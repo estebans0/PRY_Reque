@@ -43,10 +43,12 @@ class DonationButton extends StatelessWidget {
               child: const Text('Donar'),
               onPressed: () async {
                 if (donationAmount > 0) {
+                  print("Iniciando proceso de donación..."); // Debug
                   try {
                     if (projectId != null) {
                       await _controller.makeDonation(
                           projectId!, donationAmount);
+                      print("Donación completada en Firestore."); // Debug
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Donación realizada con éxito')));
 
@@ -57,27 +59,35 @@ class DonationButton extends StatelessWidget {
                       String emailOwner =
                           await _userModel.getEmailbyID(ownerId);
                       _notificationModel.sendNotifEmail(emailOwner);
+                      print(
+                          "Notificación enviada al propietario del proyecto."); // Debug
 
                       //Refresca el balance
                       onDonationComplete();
+                      print("Balance actualizado."); // Debug
 
                       // Mnada la notificacion de agradecimiento al donante
                       var userId = await _controller.getCurrentUserId();
                       String userEmail = await _userModel.getEmailbyID(userId);
                       _notificationModel.sendThankEmail(userEmail);
-
+                      print(
+                          "Correo de agradecimiento enviado al donante."); // Debug
                       //Navega de vuelta a la pantalla principal y limpia el stack de navegación
                       Navigator.pushNamedAndRemoveUntil(
                         context,
                         '/home',
                         (route) => false,
                       );
+                      print(
+                          "Navegación a la pantalla principal completada."); // Debug
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Project ID no válido')),
                       );
                     }
                   } catch (e) {
+                    print(
+                        "Error en el proceso de donación: ${e.toString()}"); // Debug
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(e.toString())),
                     );

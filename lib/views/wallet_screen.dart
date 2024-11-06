@@ -13,7 +13,59 @@ class _WalletScreenState extends State<WalletScreen> {
 
   //Para asegurar que se actualice el balance
   Future<void> _refreshBalance() async {
-    setState(() {}); //Fuerza la actualización del FutureBuilder
+    setState(() {}); // Fuerza la actualización del FutureBuilder
+  }
+
+  // Función para mostrar el historial de donaciones en un popup
+  Future<void> _showDonationsPopup(BuildContext context) async {
+    try {
+      // Se obtienen todas las donaciones del usuario
+      List<Map<String, dynamic>> donations =
+          await _walletMethods.getAllUserDonations();
+
+      // Se construye el contenido en formato de texto
+      String content = donations.isNotEmpty
+          ? donations.map((donation) {
+              String formattedDate =
+                  _formatDate(donation['donation_date'].toDate());
+              String status =
+                  donation['is_deleted'] == true ? 'Cancelada' : 'Completada';
+              return 'Fecha: $formattedDate\n'
+                  'Donaste ${donation['amount']} al proyecto ${donation['project_name']}\n'
+                  'Estado: $status\n';
+            }).join('\n\n')
+          : 'No tienes donaciones registradas.';
+
+      // Mostrar el contenido en un AlertDialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Historial de Donaciones'),
+            content: SingleChildScrollView(
+              child: Text(content),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Cerrar'),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Cierra el popup
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al cargar donaciones: $e')),
+      );
+    }
+  }
+
+  // Método auxiliar para el formato de la fecha en día/mes/año
+  String _formatDate(DateTime date) {
+    return '${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute}:${date.second}';
   }
 
   @override
@@ -24,11 +76,11 @@ class _WalletScreenState extends State<WalletScreen> {
       ),
       body: Stack(
         children: [
-          //Posiciona y centra el título
-          Positioned(
-            top: 50, //Ajusta la posición vertical
+          // Posiciona y centra el título
+          const Positioned(
+            top: 50,
             left: 0,
-            right: 0, //Para centrar el texto horizontalmente
+            right: 0,
             child: Center(
               child: Text(
                 'Cartera Digital',
@@ -42,16 +94,16 @@ class _WalletScreenState extends State<WalletScreen> {
             ),
           ),
 
-          //cuadro principal
+          // Cuadro principal
           Center(
             child: Container(
-              width: 435,
-              height: 360,
-              padding: EdgeInsets.all(20),
+              width: 425,
+              height: 370,
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 213, 209, 184),
+                color: const Color.fromARGB(255, 213, 209, 184),
                 borderRadius: BorderRadius.circular(15),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black26,
                     blurRadius: 8,
@@ -65,13 +117,13 @@ class _WalletScreenState extends State<WalletScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      //Contenedor para el balance
-                      FutureBuilder<double>(
+                      // Contenedor para el balance
+                      FutureBuilder<int>(
                         future: _walletMethods.getDigitalCurrency(),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return const CircularProgressIndicator(); //Muestra un cargando mientras se obtiene el balance
+                            return const CircularProgressIndicator();
                           } else if (snapshot.hasError) {
                             return const Text('Error al cargar el balance');
                           } else {
@@ -80,8 +132,7 @@ class _WalletScreenState extends State<WalletScreen> {
                               height: 100,
                               padding: const EdgeInsets.all(16.0),
                               decoration: BoxDecoration(
-                                color: const Color.fromARGB(
-                                    255, 223, 220, 198), //Fondo de balance
+                                color: const Color.fromARGB(255, 223, 220, 198),
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                               child: Column(
@@ -102,7 +153,7 @@ class _WalletScreenState extends State<WalletScreen> {
                         },
                       ),
 
-                      //Contenedor para las transacciones recientes
+                      // Contenedor para las transacciones recientes
                       FutureBuilder<List<Map<String, dynamic>>>(
                         future: _walletMethods.getRecentTransactions(),
                         builder: (context, transactionSnapshot) {
@@ -117,12 +168,11 @@ class _WalletScreenState extends State<WalletScreen> {
                             return const Text('No hay transacciones recientes');
                           } else {
                             return Container(
-                              width: 230,
-                              height: 240,
+                              width: 220,
+                              height: 230,
                               padding: const EdgeInsets.all(16.0),
                               decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 223, 220,
-                                    198), //Fondo de transacciones recientes
+                                color: const Color.fromARGB(255, 223, 220, 198),
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                               child: Column(
@@ -154,10 +204,10 @@ class _WalletScreenState extends State<WalletScreen> {
                     ],
                   ),
 
-                  //Espaciado
+                  // Espaciado
                   const SizedBox(height: 40),
 
-                  //Botones de accion
+                  // Botones de acción
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -176,13 +226,14 @@ class _WalletScreenState extends State<WalletScreen> {
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
-                        child: Icon(Icons.shopping_cart,
+                        child: const Icon(Icons.shopping_cart,
                             color: Color.fromARGB(255, 212, 209, 184)),
                       ),
                       const SizedBox(width: 20),
                       ElevatedButton(
                         onPressed: () {
-                          _walletMethods.downloadDonations();
+                          _showDonationsPopup(
+                              context); // Llama al popup para mostrar donaciones
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
@@ -191,7 +242,7 @@ class _WalletScreenState extends State<WalletScreen> {
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
-                        child: Icon(Icons.download,
+                        child: const Icon(Icons.download,
                             color: Color.fromARGB(255, 212, 209, 184)),
                       ),
                     ],
@@ -212,10 +263,9 @@ class _WalletScreenState extends State<WalletScreen> {
                 onPressed: () {
                   Navigator.pop(context); // Vuelve a la pantalla anterior
                 },
-                // child: Icon(Icons.arrow_back),
-                // backgroundColor: Color(0xFFE0E0D6),
                 backgroundColor: Color.fromARGB(255, 63, 119, 133),
-                child: Icon(Icons.arrow_back, color: Color.fromARGB(255, 212, 209, 184)),
+                child: const Icon(Icons.arrow_back,
+                    color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
           ),

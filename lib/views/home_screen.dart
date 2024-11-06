@@ -7,21 +7,20 @@ import '../views/project_form_screen.dart';
 import '../views/project_information_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-    const HomeScreen({super.key});
+  const HomeScreen({super.key});
 
-    @override
-    State<HomeScreen> createState() => _HomeScreen();
+  @override
+  State<HomeScreen> createState() => _HomeScreen();
 }
 
 class _HomeScreen extends State<HomeScreen> {
   final Controller _controller = Controller();
   ProjectMethods project_model = ProjectMethods();
   AuthModel auth_Model = AuthModel();
-  
-  List _items = []; 
+
+  List _items = [];
   List _filteredItems = [];
   TextEditingController _searchController = TextEditingController();
-
 
   // Lista de opciones para el dropdown (filtrar por nombre o categoría)
   List<String> _filterOptions = ['nombre'];
@@ -33,8 +32,7 @@ class _HomeScreen extends State<HomeScreen> {
     _fetchData();
     _searchController.addListener(_filterItems);
   }
-  
-  
+
   Future<void> _logout(BuildContext context) async {
     try {
       await _controller.logout();
@@ -61,7 +59,9 @@ class _HomeScreen extends State<HomeScreen> {
 
     if (projects.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No tienes proyectos registrados para editar'), backgroundColor: Colors.red),
+        const SnackBar(
+            content: Text('No tienes proyectos registrados para editar'),
+            backgroundColor: Colors.red),
       );
       return;
     }
@@ -84,7 +84,8 @@ class _HomeScreen extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProjectFormScreen(projectId: projects[index]['id']),
+                        builder: (context) =>
+                            ProjectFormScreen(projectId: projects[index]['id']),
                       ),
                     );
                   },
@@ -107,16 +108,19 @@ class _HomeScreen extends State<HomeScreen> {
 
   // Método para obtener los documentos de Firestore
   Future<void> _fetchData() async {
-    try { 
-      List tempList = await project_model.getProjects(); 
-      List temp = await auth_Model.getCategories(); 
+    try {
+      List tempList = await project_model.getProjects();
+      List temp = await auth_Model.getCategories();
 
       // Actualizar el estado con los datos obtenidos
       setState(() {
         _items = tempList;
-        _filteredItems = _items; 
-        temp.forEach((element) { _filterOptions.add(element.toString()); },);
-
+        _filteredItems = _items;
+        temp.forEach(
+          (element) {
+            _filterOptions.add(element.toString());
+          },
+        );
       });
     } catch (e) {
       print('Error al obtener los datos: $e');
@@ -125,23 +129,27 @@ class _HomeScreen extends State<HomeScreen> {
 
   // Método para filtrar los elementos según el texto de búsqueda
   void _filterItems() {
-    String query = _searchController.text.toLowerCase(); // Convertir la entrada a minúsculas
+    String query = _searchController.text
+        .toLowerCase(); // Convertir la entrada a minúsculas
     // print(query);
 
     setState(() {
       _filteredItems = _items.where((item) {
-        if (item is Map<String, dynamic>) { 
-          var data = item as Map<String, dynamic>; 
+        if (item is Map<String, dynamic>) {
+          var data = item as Map<String, dynamic>;
           if (_selectedFilter == 'nombre') {
             //print('Busqueda con nombre');
             return data['name']?.toLowerCase().contains(query) ?? false;
           } else {
             // print('Busqueda con categoria');
 
-            // print('TIPO -> ${data['categories'].runtimeType}'); 
+            // print('TIPO -> ${data['categories'].runtimeType}');
             // print('SelectedFilte: ${_selectedFilter}');
 
-            return (data['categories'] as List<dynamic>)?.any((elemento) => elemento.toString().toLowerCase() == _selectedFilter.toLowerCase()) ?? false; 
+            return (data['categories'] as List<dynamic>)?.any((elemento) =>
+                    elemento.toString().toLowerCase() ==
+                    _selectedFilter.toLowerCase()) ??
+                false;
           }
         }
         return false;
@@ -157,20 +165,23 @@ class _HomeScreen extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(  
-      body: Stack( 
-        children: [ 
-          Padding (  
+    return Scaffold(
+      body: Stack(
+        children: [
+          Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            
-            child: Column( 
-              children: [  
+            child: Column(
+              children: [
                 // // Titulo
                 Title(
-                  color: Colors.black, 
+                  color: Colors.black,
                   child: const Text(
                     'Pantalla principal',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 42, 69, 105),),
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 42, 69, 105),
+                    ),
                   ),
                 ),
                 SizedBox(height: 20),
@@ -178,7 +189,7 @@ class _HomeScreen extends State<HomeScreen> {
                 // Fila de buscar y filtro
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child:Row(
+                  child: Row(
                     children: [
                       Expanded(
                         child: TextField(
@@ -192,57 +203,62 @@ class _HomeScreen extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(width: 10), 
-                      
+                      SizedBox(width: 10),
+
                       // DropdownButton para seleccionar el tipo de filtro
-                      IntrinsicWidth(  
+                      IntrinsicWidth(
                         child: DropdownButtonFormField<String>(
-                          value: _selectedFilter, // Valor seleccionado por defecto
+                          value:
+                              _selectedFilter, // Valor seleccionado por defecto
                           decoration: InputDecoration(
                             labelText: 'Filtro',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(14),
                             ),
-                            contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
                           ),
                           items: _filterOptions.map((String option) {
                             return DropdownMenuItem<String>(
                               value: option,
-                              child: Text(option.capitalize()), // Capitalizar texto
+                              child: Text(
+                                  option.capitalize()), // Capitalizar texto
                             );
                           }).toList(),
                           onChanged: (String? newValue) {
                             setState(() {
-                              _selectedFilter = newValue ?? 'nombre'; // Actualizar el filtro seleccionado
+                              _selectedFilter = newValue ??
+                                  'nombre'; // Actualizar el filtro seleccionado
                               _filterItems(); // Aplicar el filtro después de cambiar la opción
                             });
                           },
                         ),
                       ),
-
-
-                    ], 
-                  ), 
+                    ],
+                  ),
                 ),
-    
-                SizedBox(height: 20), 
+
+                SizedBox(height: 20),
                 // Expanded para permitir que el ListView ocupe el espacio disponible
                 Expanded(
-                  
                   child: _filteredItems.isEmpty
-                      ? Center(child: CircularProgressIndicator()) // Mostrar spinner mientras se cargan los datos
+                      ? Center(
+                          child:
+                              CircularProgressIndicator()) // Mostrar spinner mientras se cargan los datos
                       : ListView.builder(
                           itemCount: _filteredItems.length,
                           itemBuilder: (context, index) {
                             // Verificar que el tipo de dato sea un Map antes de acceder a campos
                             if (_filteredItems[index] is Map<String, dynamic>) {
-                              var data = _filteredItems[index] as Map<String, dynamic>;
-                              return ProjectTile( 
-                                titulo:     data['name'] ?? 'Sin título',
-                                category:   data['categories'].toString() ?? 'Sin categoria',
-                                meta:       data['funding_goal'] ?? 0,  
-                                recaudado:  data['total_donated'] ?? 0,
-                                id:         data['id'] ?? '',
+                              var data =
+                                  _filteredItems[index] as Map<String, dynamic>;
+                              return ProjectTile(
+                                titulo: data['name'] ?? 'Sin título',
+                                category: data['categories'].toString() ??
+                                    'Sin categoria',
+                                meta: data['funding_goal'] ?? 0,
+                                recaudado: data['total_donated'] ?? 0,
+                                id: data['id'] ?? '',
                               );
                             } else {
                               return ListTile(
@@ -259,14 +275,16 @@ class _HomeScreen extends State<HomeScreen> {
           Positioned(
             top: 30,
             left: 20,
-            height: 40, 
-            width: 40, 
-            child: Tooltip( 
-              message: 'Cerrar sesion', 
+            height: 40,
+            width: 40,
+            child: Tooltip(
+              message: 'Cerrar sesion',
               child: FloatingActionButton(
-                onPressed: () =>  _logout(context),  
+                heroTag: 'home_logout_button',
+                onPressed: () => _logout(context),
                 backgroundColor: Color.fromARGB(255, 63, 119, 133),
-                child: Icon(Icons.arrow_back, color: Color.fromARGB(255, 212, 209, 184)),
+                child: Icon(Icons.arrow_back,
+                    color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
           ),
@@ -274,14 +292,16 @@ class _HomeScreen extends State<HomeScreen> {
           Positioned(
             top: 30,
             right: 20,
-            height: 40, 
-            child: Tooltip( 
-              message: 'Editar perfil', 
+            height: 40,
+            child: Tooltip(
+              message: 'Editar perfil',
               child: FloatingActionButton(
-                onPressed: () => Navigator.pushNamed(context, '/edit-profile'), 
+                heroTag: 'home_edit_profile_button',
+                onPressed: () => Navigator.pushNamed(context, '/edit-profile'),
                 // child: Icon(Icons.person),
                 backgroundColor: Color.fromARGB(255, 63, 119, 133),
-                child: Icon(Icons.person, color: Color.fromARGB(255, 212, 209, 184)),
+                child: Icon(Icons.person,
+                    color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
           ),
@@ -289,49 +309,72 @@ class _HomeScreen extends State<HomeScreen> {
           Positioned(
             top: 90,
             right: 20,
-            height: 40, 
-            child: Tooltip( 
-              message: 'Cartera Digital', 
+            height: 40,
+            child: Tooltip(
+              message: 'Cartera Digital',
               child: FloatingActionButton(
-                onPressed: () => Navigator.pushNamed(context, '/wallet'), 
+                heroTag: 'home_wallet_button',
+                onPressed: () => Navigator.pushNamed(context, '/wallet'),
                 // child: Icon(Icons.wallet),
                 backgroundColor: Color.fromARGB(255, 63, 119, 133),
-                child: Icon(Icons.wallet, color: Color.fromARGB(255, 212, 209, 184)),
+                child: Icon(Icons.wallet,
+                    color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
           ),
           //Boton de crear proyectos
           Positioned(
-            top: 165,
+            top: 150,
             right: 20,
-            height: 40, 
-            child: Tooltip( 
-              message: 'Crear Proyecto', 
+            height: 40,
+            child: Tooltip(
+              message: 'Crear Proyecto',
               child: FloatingActionButton(
-                onPressed: () => Navigator.pushNamed(context, '/create-project'), 
+                heroTag: 'home_create_project_button',
+                onPressed: () =>
+                    Navigator.pushNamed(context, '/create-project'),
                 // child: Icon(Icons.create_new_folder),
                 backgroundColor: Color.fromARGB(255, 63, 119, 133),
-                child: Icon(Icons.create_new_folder, color: Color.fromARGB(255, 212, 209, 184)),
+                child: Icon(Icons.create_new_folder,
+                    color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
           ),
           //Boton de editar proyectos
           Positioned(
-            top: 225,
+            top: 210,
             right: 20,
-            height: 40, 
-            child: Tooltip( 
-              message: 'Editar Proyectos', 
+            height: 40,
+            child: Tooltip(
+              message: 'Editar Proyectos',
               child: FloatingActionButton(
-                onPressed: () => _showEditProjectDialog(context), 
+                heroTag: 'home_edit_project_button',
+                onPressed: () => _showEditProjectDialog(context),
                 // child: Icon(Icons.edit_document),
                 backgroundColor: Color.fromARGB(255, 63, 119, 133),
-                child: Icon(Icons.edit_document, color: Color.fromARGB(255, 212, 209, 184)),
+                child: Icon(Icons.edit_document,
+                    color: Color.fromARGB(255, 212, 209, 184)),
+              ),
+            ),
+          ),
+          //Boton para el Foro General
+          Positioned(
+            top: 270,
+            right: 20,
+            height: 40,
+            child: Tooltip(
+              message: 'Foro General',
+              child: FloatingActionButton(
+                heroTag: 'home_forum_button',
+                onPressed: () => Navigator.pushNamed(context, '/general-forum'),
+                backgroundColor: const Color.fromARGB(255, 63, 119, 133),
+                child: const Icon(Icons.chat,
+                    color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
           ),
         ],
-      ),  
+      ),
     );
   }
 }
@@ -350,23 +393,26 @@ class ProjectTile extends StatelessWidget {
   final String id;
 
   // Constructor que recibe los datos
-  ProjectTile({required this.titulo, required this.category, required this.meta, required this.recaudado, required this.id});
+  ProjectTile(
+      {required this.titulo,
+      required this.category,
+      required this.meta,
+      required this.recaudado,
+      required this.id});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        // color: Colors.grey[850],
-        color:const  Color(0xFFE0E0D6),
-        borderRadius: BorderRadius.circular(8.0),
-        // border: Border.all(color: const Color.fromARGB(255, 29, 120, 204)),
-      ),
-      
-      child:LayoutBuilder(
-        builder: (context, Constraints) {
-          if(Constraints.maxWidth < 800){
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          // color: Colors.grey[850],
+          color: const Color(0xFFE0E0D6),
+          borderRadius: BorderRadius.circular(8.0),
+          // border: Border.all(color: const Color.fromARGB(255, 29, 120, 204)),
+        ),
+        child: LayoutBuilder(builder: (context, Constraints) {
+          if (Constraints.maxWidth < 800) {
             return Column(
               children: [
                 Column(
@@ -374,105 +420,94 @@ class ProjectTile extends StatelessWidget {
                   children: [
                     Text(
                       '${titulo}',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 8),
                     Text(
                       'Categorias: ${category.replaceAll('[', '').replaceAll(']', '')}',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Meta: $meta  Recaudado: $recaudado',  // Meta y recaudado
+                      'Meta: $meta  Recaudado: $recaudado', // Meta y recaudado
                       // style: TextStyle(color: const Color.fromARGB(255, 209, 45, 45)),
                     ),
                     const SizedBox(height: 8),
                   ],
-                ),                
+                ),
                 Column(
                   children: [
                     SizedBox(
-                      child:  ElevatedButton(
+                      child: ElevatedButton(
                         onPressed: () {
                           // Acción de edición
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProjectInformationScreen(projectId: id),
+                              builder: (context) =>
+                                  ProjectInformationScreen(projectId: id),
                             ),
-                          );                        
-                        }, 
+                          );
+                        },
                         child: const Text('Información'),
                       ),
-
                     )
                   ],
-
                 ),
-                      
               ],
-
             );
-          }
-          else {
+          } else {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       '${titulo}',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 8),
                     Text(
                       'Categorias: ${category.replaceAll('[', '').replaceAll(']', '')}',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Meta: $meta  Recaudado: $recaudado',  // Meta y recaudado
+                      'Meta: $meta  Recaudado: $recaudado', // Meta y recaudado
                       // style: TextStyle(color: const Color.fromARGB(255, 209, 45, 45)),
                     ),
                   ],
                 ),
-                
                 Column(
-
                   children: [
                     SizedBox(
-
-                      child:  ElevatedButton(
+                      child: ElevatedButton(
                         onPressed: () {
                           // Acción de edición
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProjectInformationScreen(projectId: id),
+                              builder: (context) =>
+                                  ProjectInformationScreen(projectId: id),
                             ),
                           );
-                        
                         },
                         style: ElevatedButton.styleFrom(
-                          // backgroundColor: Colors.grey[700],
-                        ),
+                            // backgroundColor: Colors.grey[700],
+                            ),
                         child: const Text('Información'),
                       ),
-
                     )
                   ],
-
                 ),
-                      
               ],
             );
           }
-        }
-      ) 
-
-    );
+        }));
   }
 }
-

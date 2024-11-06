@@ -23,7 +23,7 @@ class _BuyDigitalCurrencyScreenState extends State<BuyDigitalCurrencyScreen> {
       body: Stack(
         children: [
           //Posiciona y centra el título
-          Positioned(
+          const Positioned(
             top: 50, //Ajusta la posición vertical
             left: 0,
             right: 0, //Para centrar el texto horizontalmente
@@ -45,11 +45,12 @@ class _BuyDigitalCurrencyScreenState extends State<BuyDigitalCurrencyScreen> {
             child: Container(
               width: 360,
               height: 250,
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 212, 209, 184), //Color de fondo
+                color:
+                    const Color.fromARGB(255, 212, 209, 184), //Color de fondo
                 borderRadius: BorderRadius.circular(15),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black26,
                     blurRadius: 8,
@@ -116,7 +117,7 @@ class _BuyDigitalCurrencyScreenState extends State<BuyDigitalCurrencyScreen> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                      backgroundColor: const Color.fromARGB(255, 63, 119, 133),
                     ),
                     child: const Text(
                       'Confirmar',
@@ -143,8 +144,9 @@ class _BuyDigitalCurrencyScreenState extends State<BuyDigitalCurrencyScreen> {
                 },
                 // child: Icon(Icons.arrow_back),
                 // backgroundColor: Color(0xFFE0E0D6),
-                backgroundColor: Color.fromARGB(255, 63, 119, 133),
-                child: Icon(Icons.arrow_back, color: Color.fromARGB(255, 212, 209, 184)),
+                backgroundColor: const Color.fromARGB(255, 63, 119, 133),
+                child: const Icon(Icons.arrow_back,
+                    color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
           ),
