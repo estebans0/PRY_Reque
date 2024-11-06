@@ -50,6 +50,7 @@ class UserMethods {
       final user = {
         "name": data['name'],
         "docId": document.id,            // Para poder acceder a cada id del usuario
+        "rol" : data['rol'],
       };
       users.add(user);
     }

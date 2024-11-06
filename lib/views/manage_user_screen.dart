@@ -4,7 +4,6 @@ import '../models/user_model.dart';
 class ManageUsersScreen extends StatefulWidget {
     const ManageUsersScreen({super.key});
 
-
     @override
     _ManageUsersScreen createState() => _ManageUsersScreen();
 }
@@ -127,9 +126,7 @@ class _ManageUsersScreen extends State<ManageUsersScreen> {
                 );
             }
 
-        );
-                
-                
+        ); 
             
     }
 

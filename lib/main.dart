@@ -1,6 +1,7 @@
 // lib/main.dart
 import 'package:app/views/general_forum_screen.dart';
 import 'package:app/views/home_screen_admin.dart';
+import 'package:app/views/manage_roles.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'models/firebase_options.dart';
