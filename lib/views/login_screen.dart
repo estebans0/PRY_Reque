@@ -34,7 +34,13 @@ class _LoginScreen extends State<LoginScreen> {
         );
         if (await _controller.isAdmin(email)) {
           Navigator.pushReplacementNamed(context, '/home-admin');
-        } else {
+        }if (await _controller.isAnalyst(email)){
+          Navigator.pushReplacementNamed(context, '/home-analyst');
+        }if (await _controller.isInCharge(email)){
+          Navigator.pushReplacementNamed(context, '/home-inCharge');
+        }if (await _controller.isSupervisor(email)){
+          Navigator.pushReplacementNamed(context, '/home-supervisor');
+        } if (await _controller.isUser(email)){
           Navigator.pushReplacementNamed(context, '/home');
         }
       } catch (e) {

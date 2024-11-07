@@ -1,16 +1,17 @@
 import 'package:app/models/project_model.dart';
 import 'package:app/models/user_model.dart'; 
 import 'package:flutter/material.dart';
+import 'package:app/views/landing_page.dart';
 
 
-class statisticsScreen extends StatefulWidget {
-    const statisticsScreen({super.key});
+class StatisticsScreen extends StatefulWidget {
+    const StatisticsScreen({super.key});
 
     @override
-    State<statisticsScreen> createState() => _statisticsScreen();
+    State<StatisticsScreen> createState() => _StatisticsScreen();
 }
 
-class _statisticsScreen extends State<statisticsScreen> {
+class _StatisticsScreen extends State<StatisticsScreen> {
   ProjectMethods project_model = ProjectMethods();
   UserMethods user_model = UserMethods();
 
@@ -26,6 +27,26 @@ class _statisticsScreen extends State<statisticsScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             // Título 'Estadísticas' fuera del cuadro
+            Positioned(
+                top: 35,
+                left: 20,
+                height: 40, 
+                width: 40, 
+                child: Tooltip( 
+                  message: 'Volver', 
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LandingPage()),
+                      );
+                    }, 
+                    backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                    child: Icon(Icons.arrow_back, color: Color.fromARGB(255, 212, 209, 184)),
+                  ),
+                ),
+              ),
+            
             Text(
               'Estadísticas',
               style: TextStyle(
@@ -139,11 +160,13 @@ class _statisticsScreen extends State<statisticsScreen> {
                           return Text('N/A');
                         },
                       ),
+                      
                     ]
                   ), 
                 ],
               ),
             ),
+            
           ],
         ),
       ),

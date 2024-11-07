@@ -23,7 +23,7 @@ class _ManageRolesScreen extends State<ManageRolesScreen> {
   Future<void> fetchData () async {
     try { 
       List auxListUsers = await userMethods.getUsers();
-      roles = ['Usuario', 'Administrador', 'Analista', 'Encargado', 'Supervizor'];
+      roles = ['Usuario', 'Administrador', 'Analista', 'Encargado', 'Supervisor'];
       setState(() {
         lstUsers = auxListUsers; 
       });

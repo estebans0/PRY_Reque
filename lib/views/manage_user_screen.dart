@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/user_model.dart';
+import 'package:app/views/landing_page.dart';
 
 class ManageUsersScreen extends StatefulWidget {
     const ManageUsersScreen({super.key});
@@ -37,7 +38,7 @@ class _ManageUsersScreen extends State<ManageUsersScreen> {
                             children: [
                                 const Text(
                                     'Gestionar Usuarios',
-                                    style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold,),
+                                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold,),
                                 ),
                                 const Text('Nombre Completo'),
                                 const SizedBox(height: 20),
@@ -46,7 +47,26 @@ class _ManageUsersScreen extends State<ManageUsersScreen> {
                             ]
                         )
                     ),
-                )
+                ),
+                Positioned(
+                    top: 35,
+                    left: 20,
+                    height: 40, 
+                    width: 40, 
+                    child: Tooltip( 
+                    message: 'Volver', 
+                    child: FloatingActionButton(
+                        onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const LandingPage()),
+                        );
+                        }, 
+                        backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                        child: Icon(Icons.arrow_back, color: Color.fromARGB(255, 212, 209, 184)),
+                    ),
+                    ),
+                ),
                 ]
             )
         );

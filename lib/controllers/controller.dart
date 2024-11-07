@@ -74,11 +74,59 @@ class Controller {
   }
 
   Future<bool> isAdmin(String email) async {
-    List admins = await _authModel.getAdmins();
+    List users = await _authModel.getUsers();
     bool result = false;
 
-    for (int i = 0; i < admins.length; i++) {
-      if (admins[i]['email'] == email) {
+    for (var user in users) {
+      if (user['email'] == email && user['rol'] == "Administrador") {
+        result = true;
+      }
+    }
+    return result;
+  }
+
+  Future<bool> isAnalyst(String email) async {
+    List users = await _authModel.getUsers();
+    bool result = false;
+
+    for (var user in users) {
+      if (user['email'] == email && user['rol'] == "Analista") {
+        result = true;
+      }
+    }
+    return result;
+  }
+
+  Future<bool> isInCharge(String email) async {
+    List users = await _authModel.getUsers();
+    bool result = false;
+
+    for (var user in users) {
+      if (user['email'] == email && user['rol'] == "Encargado") {
+        result = true;
+      }
+    }
+    return result;
+  }
+  
+  Future<bool> isSupervisor(String email) async {
+    List users = await _authModel.getUsers();
+    bool result = false;
+
+    for (var user in users) {
+      if (user['email'] == email && user['rol'] == "Supervisor") {
+        result = true;
+      }
+    }
+    return result;
+  }
+
+  Future<bool> isUser(String email) async {
+    List users = await _authModel.getUsers();
+    bool result = false;
+
+    for (var user in users) {
+      if (user['email'] == email && user['rol'] == "Usuario") {
         result = true;
       }
     }
