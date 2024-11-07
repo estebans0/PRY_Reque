@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../controllers/controller.dart';
 import '../views/project_form_screen.dart';
 import '../views/project_information_screen.dart';
+import '../views/comments_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -393,67 +394,79 @@ class ProjectTile extends StatelessWidget {
   final String id;
 
   // Constructor que recibe los datos
-  ProjectTile(
-      {required this.titulo,
-      required this.category,
-      required this.meta,
-      required this.recaudado,
-      required this.id});
+  ProjectTile({
+    required this.titulo,
+    required this.category,
+    required this.meta,
+    required this.recaudado,
+    required this.id,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          // color: Colors.grey[850],
-          color: const Color(0xFFE0E0D6),
-          borderRadius: BorderRadius.circular(8.0),
-          // border: Border.all(color: const Color.fromARGB(255, 29, 120, 204)),
-        ),
-        child: LayoutBuilder(builder: (context, Constraints) {
-          if (Constraints.maxWidth < 800) {
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFE0E0D6),
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth < 800) {
             return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${titulo}',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'Categorias: ${category.replaceAll('[', '').replaceAll(']', '')}',
-                      style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Meta: $meta  Recaudado: $recaudado', // Meta y recaudado
-                      // style: TextStyle(color: const Color.fromARGB(255, 209, 45, 45)),
-                    ),
-                    const SizedBox(height: 8),
-                  ],
+                Text(
+                  titulo,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                Column(
+                const SizedBox(height: 8),
+                Text(
+                  'Categorías: ${category.replaceAll('[', '').replaceAll(']', '')}',
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Meta: $meta  Recaudado: $recaudado',
+                  style: const TextStyle(fontSize: 14, color: Colors.black87),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Acción de edición
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ProjectInformationScreen(projectId: id),
-                            ),
-                          );
-                        },
-                        child: const Text('Información'),
-                      ),
-                    )
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ProjectInformationScreen(projectId: id),
+                          ),
+                        );
+                      },
+                      child: const Text('Información'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CommentsScreen(projectId: id),
+                          ),
+                        );
+                      },
+                      child: const Text('Comentarios'),
+                    ),
                   ],
                 ),
               ],
@@ -466,48 +479,59 @@ class ProjectTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${titulo}',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'Categorias: ${category.replaceAll('[', '').replaceAll(']', '')}',
-                      style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      titulo,
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Meta: $meta  Recaudado: $recaudado', // Meta y recaudado
-                      // style: TextStyle(color: const Color.fromARGB(255, 209, 45, 45)),
+                      'Categorías: ${category.replaceAll('[', '').replaceAll(']', '')}',
+                      style: const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Meta: $meta  Recaudado: $recaudado',
+                      style:
+                          const TextStyle(fontSize: 14, color: Colors.black87),
                     ),
                   ],
                 ),
                 Column(
                   children: [
-                    SizedBox(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Acción de edición
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ProjectInformationScreen(projectId: id),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                            // backgroundColor: Colors.grey[700],
-                            ),
-                        child: const Text('Información'),
-                      ),
-                    )
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ProjectInformationScreen(projectId: id),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(),
+                      child: const Text('Información'),
+                    ),
+                    const SizedBox(height: 8),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CommentsScreen(projectId: id),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(),
+                      child: const Text('Comentarios'),
+                    ),
                   ],
                 ),
               ],
             );
           }
-        }));
+        },
+      ),
+    );
   }
 }

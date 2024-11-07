@@ -1,10 +1,12 @@
-// project_form_screen.dart
+// project_information_screen.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../controllers/controller.dart';
 import '../models/user_model.dart';
 import '../models/notifications_model.dart';
 import 'donation_button.dart';
+import '../models/project_model.dart';
+import 'project_forum_screen.dart'; // Asegúrate de tener la ruta correcta
 
 class ProjectInformationScreen extends StatefulWidget {
   final String? projectId;
@@ -24,14 +26,17 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
   final List<String> _selectedCategories = [];
   final UserMethods _userModel = UserMethods();
   final NotificationsModel _notificationModel = NotificationsModel();
+  final ProjectMethods _projectMethods = ProjectMethods();
 
   bool _isLoading = false;
+  double averageRating = 0.0;
 
   @override
   void initState() {
     super.initState();
     if (widget.projectId != null) {
-      _loadProjectData(); // Cargar los datos de un proyecto existente
+      _loadProjectData();
+      _fetchAverageRating();
     }
   }
 
@@ -49,7 +54,6 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
         _deadlineController.text = projectData['deadline'] != null
             ? (projectData['deadline'] as Timestamp).toDate().toString()
             : '';
-        // Verifica que las imágenes sean de tipo String y las añade correctamente
         _imagesController.addAll(
           (projectData['images'] as List<dynamic>)
               .map((img) => img['url'] as String)
@@ -74,6 +78,15 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
     }
   }
 
+  Future<void> _fetchAverageRating() async {
+    if (widget.projectId != null) {
+      double rating = await _projectMethods.getAverageRating(widget.projectId!);
+      setState(() {
+        averageRating = rating;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,15 +96,14 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : Stack(
-                children: [
-                // cuadro del frente
+              children: [
                 Center(
                   child: Container(
                     width: 800,
                     height: 600,
                     padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 212, 209, 184), //fromRGBO(212, 209, 184, 50),
+                      color: Color.fromARGB(255, 212, 209, 184),
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: [
                         BoxShadow(
@@ -101,15 +113,30 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
                         ),
                       ],
                     ),
-                  child: Padding(
+                    child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
-                          TextField(
-                            readOnly: true,
-                            controller: _nameController,
-                            decoration:
-                                const InputDecoration(labelText: 'Nombre del Proyecto'),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  readOnly: true,
+                                  controller: _nameController,
+                                  decoration: const InputDecoration(
+                                      labelText: 'Nombre del Proyecto'),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                '⭐ ${averageRating.toStringAsFixed(1)}',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color.fromARGB(255, 0, 0, 0),
+                                ),
+                              ),
+                            ],
                           ),
                           TextField(
                             readOnly: true,
@@ -137,7 +164,6 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          // Mostrar categorías seleccionadas
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
@@ -151,36 +177,60 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
                           ),
                           const SizedBox(height: 20),
                           Wrap(
-                            children: _imagesController.asMap().entries.map((entry) {
+                            children:
+                                _imagesController.asMap().entries.map((entry) {
                               int index = entry.key;
                               String url = entry.value;
                               return Stack(
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(4.0),
-                                    child: Image.network(url, width: 100, height: 100),
+                                    child: Image.network(url,
+                                        width: 100, height: 100),
                                   ),
                                 ],
                               );
                             }).toList(),
                           ),
                           const SizedBox(height: 20),
-                          Center(
-                            child: DonationButton(
-                              projectId: widget.projectId!,
-                              onDonationComplete: () {
-                                //Aca se puede agregar algo por si no se refrescan los datos del proyecto al donar
-                              },
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              DonationButton(
+                                projectId: widget.projectId!,
+                                onDonationComplete: () {
+                                  // Acción después de donar
+                                },
+                              ),
+                              const SizedBox(width: 10),
+                              FloatingActionButton(
+                                heroTag: 'project_forum_button',
+                                backgroundColor:
+                                    const Color.fromARGB(255, 63, 119, 133),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProjectForumScreen(
+                                          projectId: widget.projectId!),
+                                    ),
+                                  );
+                                },
+                                tooltip: 'Foro Interno',
+                                child: const Icon(
+                                  Icons.chat,
+                                  color: Color.fromARGB(255, 212, 209, 184),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ),
-
-                )
-                )
-                ]
-          )
+                  ),
+                ),
+              ],
+            ),
     );
   }
 }
