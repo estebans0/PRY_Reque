@@ -83,13 +83,13 @@ class AuthModel {
   }
 
   // Retorna una lista con todos los administradores 
-  Future<List> getAdmins () async {
+  Future<List> getAdmins() async {
     List admins = [];
-    CollectionReference collectionReferenceAdmins = _firestore.collection('admin');
+    CollectionReference collectionReferenceUsers = _firestore.collection('Users');
     
-    QuerySnapshot queryAdmin = await collectionReferenceAdmins.get();
-    for (var admin in queryAdmin.docs) {
-      admins.add(admin.data());
+    QuerySnapshot queryAdmin = await collectionReferenceUsers.where('rol', isEqualTo: "Administrador").get();
+    for (var User in queryAdmin.docs) {
+      admins.add(User.data()); 
     }
     return admins;
   }

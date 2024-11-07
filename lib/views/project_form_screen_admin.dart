@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import '../controllers/controller.dart';
 import '../models/user_model.dart';
 import '../models/notifications_model.dart';
+import '../models/project_model.dart';
+
 
 class ProjectFormScreenAdmin extends StatefulWidget {
   final String? projectId;
@@ -22,14 +24,18 @@ class _ProjectFormScreenStateAdmin extends State<ProjectFormScreenAdmin> {
   final List<String> _selectedCategories = [];
   final UserMethods _userModel = UserMethods();
   final NotificationsModel _notificationModel = NotificationsModel();
+  final ProjectMethods _projectMethods = ProjectMethods();
 
   bool _isLoading = false;
+  double averageRating = 0.0;
+
 
   @override
   void initState() {
     super.initState();
     if (widget.projectId != null) {
       _loadProjectData();  // Cargar los datos si es un proyecto existente
+      _fetchAverageRating();
     }
   }
 
@@ -62,6 +68,15 @@ class _ProjectFormScreenStateAdmin extends State<ProjectFormScreenAdmin> {
           _isLoading = false;
         });
       }
+    }
+  }
+
+  Future<void> _fetchAverageRating() async {
+    if (widget.projectId != null) {
+      double rating = await _projectMethods.getAverageRating(widget.projectId!);
+      setState(() {
+        averageRating = rating;
+      });
     }
   }
 
@@ -287,9 +302,26 @@ class _ProjectFormScreenStateAdmin extends State<ProjectFormScreenAdmin> {
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
-                        TextField(
-                          controller: _nameController,
-                          decoration: const InputDecoration(labelText: 'Nombre del Proyecto'),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                readOnly: true,
+                                controller: _nameController,
+                                decoration: const InputDecoration(
+                                    labelText: 'Nombre del Proyecto'),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              '⭐ ${averageRating.toStringAsFixed(1)}',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: const Color.fromARGB(255, 0, 0, 0),
+                              ),
+                            ),
+                          ],
                         ),
                         TextField(
                           controller: _descriptionController,
@@ -313,20 +345,17 @@ class _ProjectFormScreenStateAdmin extends State<ProjectFormScreenAdmin> {
                             hintText: 'Formato: AAAA-MM-DD',
                           ),
                         ),
-                        const SizedBox(height: 10),
                         // Botón para seleccionar categorías
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             const Text('Categorías'),
-                            const SizedBox(width: 20),
                             IconButton(
                               icon: const Icon(Icons.arrow_right),
                               onPressed: _showCategoryDialog, // Mostrar diálogo de categorías
                             ),
                           ],
                         ),
-                        const SizedBox(height: 10),
                         // Mostrar categorías seleccionadas
                         Align(
                           alignment: Alignment.centerLeft,
@@ -338,7 +367,6 @@ class _ProjectFormScreenStateAdmin extends State<ProjectFormScreenAdmin> {
                             textAlign: TextAlign.left,
                           ),
                         ),
-                        const SizedBox(height: 20),
                         Wrap(
                           children: _imagesController.asMap().entries.map((entry) {
                             int index = entry.key;
@@ -361,12 +389,10 @@ class _ProjectFormScreenStateAdmin extends State<ProjectFormScreenAdmin> {
                             );
                           }).toList(),
                         ),
-                        const SizedBox(height: 20),
                         ElevatedButton(
                           onPressed: _addImage,
                           child: const Text('Agregar imagen'),
                         ),
-                        const SizedBox(height: 20),
                         ElevatedButton(
                           onPressed: _saveProject,
                           child: const Text('Guardar'),

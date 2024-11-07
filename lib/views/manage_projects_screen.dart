@@ -2,6 +2,7 @@ import 'package:app/models/auth_model.dart';
 import 'package:app/models/project_model.dart';
 import 'package:app/views/project_form_screen_admin.dart'; 
 import 'package:flutter/material.dart'; 
+import '../views/comments_screen.dart';
 
 
 class ProjectManagementPage extends StatefulWidget {
@@ -236,7 +237,23 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                         ),
                         child: Text('Editar', style: TextStyle(color: Color.fromARGB(255, 212, 209, 184)),),
                       ),
-                    )
+                    ), 
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CommentsScreen(projectId: idProject),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                      ),
+                      child: Text('Comentarios', style: TextStyle(color: Color.fromARGB(255, 212, 209, 184)),),
+
+                    ),
+                    
                   ],
                 ) 
               ],         
