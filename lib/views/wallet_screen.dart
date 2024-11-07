@@ -76,9 +76,10 @@ class _WalletScreenState extends State<WalletScreen> {
       ),
       body: Stack(
         children: [
+        
           // Posiciona y centra el título
           const Positioned(
-            top: 50,
+            top: 10,
             left: 0,
             right: 0,
             child: Center(
@@ -98,7 +99,7 @@ class _WalletScreenState extends State<WalletScreen> {
           Center(
             child: Container(
               width: 425,
-              height: 370,
+              height: 500,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: const Color.fromARGB(255, 213, 209, 184),
@@ -115,7 +116,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // Contenedor para el balance
                       FutureBuilder<int>(
@@ -153,6 +154,62 @@ class _WalletScreenState extends State<WalletScreen> {
                         },
                       ),
 
+                      // // Contenedor para las transacciones recientes
+                      // FutureBuilder<List<Map<String, dynamic>>>(
+                      //   future: _walletMethods.getRecentTransactions(),
+                      //   builder: (context, transactionSnapshot) {
+                      //     if (transactionSnapshot.connectionState ==
+                      //         ConnectionState.waiting) {
+                      //       return const CircularProgressIndicator();
+                      //     } else if (transactionSnapshot.hasError) {
+                      //       return Text(
+                      //           'Error al cargar transacciones: ${transactionSnapshot.error}');
+                      //     } else if (transactionSnapshot.hasData &&
+                      //         transactionSnapshot.data!.isEmpty) {
+                      //       return const Text('No hay transacciones recientes');
+                      //     } else {
+                      //       return Container(
+                      //         width: 220,
+                      //         height: 230,
+                      //         padding: const EdgeInsets.all(16.0),
+                      //         decoration: BoxDecoration(
+                      //           color: const Color.fromARGB(255, 223, 220, 198),
+                      //           borderRadius: BorderRadius.circular(8.0),
+                      //         ),
+                      //         child: Column(
+                      //           crossAxisAlignment: CrossAxisAlignment.start,
+                      //           children: [
+                      //             const Text(
+                      //               'Transacciones recientes',
+                      //               style: TextStyle(
+                      //                 fontWeight: FontWeight.bold,
+                      //               ),
+                      //             ),
+                      //             const SizedBox(height: 10),
+                      //             ...transactionSnapshot.data!
+                      //                 .map((transaction) {
+                      //               return Padding(
+                      //                 padding: const EdgeInsets.symmetric(
+                      //                     vertical: 4.0),
+                      //                 child: Text(
+                      //                   'Donaste ${transaction['amount']} al proyecto ${transaction['project_name']}',
+                      //                 ),
+                      //               );
+                      //             }).toList(),
+                      //           ],
+                      //         ),
+                      //       );
+                      //     }
+                      //   },
+                      // ),
+                    
+                    ],
+                  ),
+
+                  const SizedBox(height: 8),
+                  Row(                    
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
                       // Contenedor para las transacciones recientes
                       FutureBuilder<List<Map<String, dynamic>>>(
                         future: _walletMethods.getRecentTransactions(),
@@ -203,8 +260,9 @@ class _WalletScreenState extends State<WalletScreen> {
                       ),
                     ],
                   ),
+                  
 
-                  // Espaciado
+
                   const SizedBox(height: 40),
 
                   // Botones de acción
@@ -252,6 +310,7 @@ class _WalletScreenState extends State<WalletScreen> {
             ),
           ),
 
+
           Positioned(
             top: 30,
             left: 20,
@@ -269,6 +328,7 @@ class _WalletScreenState extends State<WalletScreen> {
               ),
             ),
           ),
+        
         ],
       ),
     );

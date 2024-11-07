@@ -30,7 +30,7 @@ class AuthModel {
       // Crear el perfil de usuario en Firestore usando el UID
       await _firestore.collection('Users').doc(uid).set({
         'email': email,
-        'username': null,
+        'username': name,
         'name': name,
         'phone_num': num.parse(phone),
         'profile_pic': null,

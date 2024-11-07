@@ -201,11 +201,13 @@ class _EditUserScreenState extends State<EditUserScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      
       onTap: () {
         // Cierra el teclado al hacer clic fuera de los campos
         FocusScope.of(context).unfocus();
         _onPasswordFieldFocusLost(); // Verifica si se debe volver a los bullet points
       },
+      
       child: Scaffold(
         appBar: AppBar(title: const Text('Editar Perfil')),
         body: _isLoading
@@ -215,8 +217,8 @@ class _EditUserScreenState extends State<EditUserScreen> {
                 // cuadro del frente
                 Center(
                   child: Container(
-                    width: 800,
-                    height: 600,
+                    width: 600,
+                    height: 700,
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       color: const Color.fromARGB(255, 212, 209, 184), //fromRGBO(212, 209, 184, 50),
@@ -259,64 +261,81 @@ class _EditUserScreenState extends State<EditUserScreen> {
                           ],
                         ),
                         const SizedBox(height: 20),
-                        TextField(
-                          controller: _emailController,
-                          decoration: const InputDecoration(
-                            labelText: 'Correo electrónico',
-                            hintText: 'Ejemplo: usuario@estudiantec.cr',
-                          ),
-                        ),
-                        TextField(
-                          controller: _usernameController,
-                          decoration: const InputDecoration(labelText: 'Nombre de Usuario'),
-                        ),
-                        TextField(
-                          controller: _nameController,
-                          decoration: const InputDecoration(labelText: 'Nombre Completo'),
-                        ),
-                        TextField(
-                          controller: _phoneNumController,
-                          decoration: const InputDecoration(
-                            labelText: 'Número de Teléfono',
-                            hintText: 'Ejemplo: 11111111',
-                          ),
-                          keyboardType: TextInputType.phone,
-                        ),
-                        const SizedBox(height: 20),
-                        TextField(
-                          controller: _passwordController,
-                          decoration: const InputDecoration(
-                            labelText: 'Contraseña',
-                            hintText: 'La contraseña debe tener un mínimo de 6 caracteres',
-                          ),
-                          obscureText: !_isPasswordVisible,
-                          onTap: _onPasswordFieldTap,
-                          onEditingComplete: _onPasswordFieldFocusLost,
-                        ),
-                        Visibility(
-                          visible: _passwordController.text.isNotEmpty && _passwordController.text != defaultPasswordPlaceholder,
-                          child: Row(
-                            children: [
-                              Checkbox(
-                                value: _isPasswordVisible,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _isPasswordVisible = value!;
-                                  });
-                                },
+
+                        Column(
+                          children: [
+
+                            TextField(
+                              controller: _emailController,
+                              decoration: const InputDecoration(
+                                labelText: 'Correo electrónico',
+                                hintText: 'Ejemplo: usuario@estudiantec.cr',
                               ),
-                              const Text("Mostrar Contraseña"),
-                            ],
-                          ),
+                            ),
+                            TextField(
+                              controller: _usernameController,
+                              decoration: const InputDecoration(labelText: 'Nombre de Usuario'),
+                            ),
+                            TextField(
+                              controller: _nameController,
+                              decoration: const InputDecoration(labelText: 'Nombre Completo'),
+                            ),
+                            TextField(
+                              controller: _phoneNumController,
+                              decoration: const InputDecoration(
+                                labelText: 'Número de Teléfono',
+                                hintText: 'Ejemplo: 11111111',
+                              ),
+                              keyboardType: TextInputType.phone,
+                            ),
+                         
+                            const SizedBox(height: 20),
+                            TextField(
+                              controller: _passwordController,
+                              decoration: const InputDecoration(
+                                labelText: 'Contraseña',
+                                hintText: 'La contraseña debe tener un mínimo de 6 caracteres',
+                              ),
+                              obscureText: !_isPasswordVisible,
+                              onTap: _onPasswordFieldTap,
+                              onEditingComplete: _onPasswordFieldFocusLost,
+                            ),
+                            Visibility(
+                              visible: _passwordController.text.isNotEmpty && _passwordController.text != defaultPasswordPlaceholder,
+                              child: Row(
+                                children: [
+                                  Checkbox(
+                                    value: _isPasswordVisible,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _isPasswordVisible = value!;
+                                      });
+                                    },
+                                  ),
+                                  const Text("Mostrar Contraseña"),
+                                ],
+                              ),
+                            ),
+                            
+                          ]
                         ),
                         const SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: _saveProfile,
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(double.infinity, 50), // Botón centrado
-                          ),
-                          child: const Text('Guardar Cambios'),
-                        ),
+
+                        Column(
+                          children: [
+                            ElevatedButton(
+                              onPressed: _saveProfile,
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: const Size(double.infinity, 50), // Botón centrado
+                              ),
+                              child: const Text('Guardar Cambios'),
+                            ),
+                          
+
+                          ],
+                        )
+
+
                       ],
                     ),
                   ),
@@ -327,4 +346,5 @@ class _EditUserScreenState extends State<EditUserScreen> {
       ),
     );
   }
+
 }
