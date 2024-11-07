@@ -75,10 +75,16 @@ class Controller {
 
   Future<bool> isAdmin(String email) async {
     List users = await _authModel.getUsers();
+    List admins = await _authModel.getAdmins(); 
     bool result = false;
 
     for (var user in users) {
       if (user['email'] == email && user['rol'] == "Administrador") {
+        result = true;
+      }
+    }
+    for (int i = 0; i < admins.length; i++) {
+      if (admins[i]['email'] == email) {
         result = true;
       }
     }

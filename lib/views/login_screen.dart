@@ -66,11 +66,12 @@ class _LoginScreen extends State<LoginScreen> {
             SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
           );
         }
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      } 
+      // finally {
+      //   setState(() {
+      //     _isLoading = false;
+      //   });
+      // }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
