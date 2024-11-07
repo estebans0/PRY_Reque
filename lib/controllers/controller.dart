@@ -15,8 +15,8 @@ class Controller {
     await _authModel.login(email, password);
   }
 
-  Future<void> signUp(String email, String password) async {
-    await _authModel.signUp(email, password);
+  Future<void> signUp(String name, String phone, String email, String password) async {
+    await _authModel.signUp(name, phone, email, password);
   }
 
   Future<void> logout() async {

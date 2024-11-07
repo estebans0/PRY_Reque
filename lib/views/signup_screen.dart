@@ -15,6 +15,8 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState2 extends State<SignupScreen> { 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   final Controller _controller = Controller();
   final NotificationsModel _notificationModel = NotificationsModel();
 
@@ -25,6 +27,8 @@ class _SignupScreenState2 extends State<SignupScreen> {
       _isLoading = true;
     });
 
+    final name = _nameController.text;
+    final phone = _phoneController.text;
     final email = _emailController.text;
     final password = _passwordController.text;
 
@@ -57,7 +61,7 @@ class _SignupScreenState2 extends State<SignupScreen> {
     }
 
     try {
-      await _controller.signUp(email, password);
+      await _controller.signUp(name, phone, email, password);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Registro exitoso'), backgroundColor: Colors.green),
       );
@@ -108,7 +112,7 @@ class _SignupScreenState2 extends State<SignupScreen> {
           Center(
             child: Container(
               width: 300,
-              height: 250,
+              height: 350,
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 212, 209, 184), //fromRGBO(212, 209, 184, 50),
@@ -125,6 +129,14 @@ class _SignupScreenState2 extends State<SignupScreen> {
                 // mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  TextField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(labelText: 'Nombre'),
+                  ),
+                  TextField(
+                    controller: _phoneController,
+                    decoration: const InputDecoration(labelText: 'Numero de telefono'),
+                  ),
                   TextField(
                     controller: _emailController,
                     decoration: const InputDecoration(labelText: 'Email'),

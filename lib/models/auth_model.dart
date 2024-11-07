@@ -20,21 +20,19 @@ class AuthModel {
   // }
 
   // Registro de usuario con Firebase Authentication y Firestore
-  Future<void> signUp(String email, String password) async {
+  Future<void> signUp(String name, String phone, String email, String password) async {
     try {
       // Crear el usuario en Firebase Authentication
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       // Obtener el UID del usuario creado
-      String uid = userCredential.user!.uid;
-      //Esto se agrega para evitar error al consultar usuarios
-      String nameTemp = email.replaceAll('@estudiantec.cr', '').replaceAll('@itcr.ac.cr', '');
+      String uid = userCredential.user!.uid; 
 
       // Crear el perfil de usuario en Firestore usando el UID
       await _firestore.collection('Users').doc(uid).set({
         'email': email,
         'username': null,
-        'name': nameTemp,
-        'phone_num': null,
+        'name': name,
+        'phone_num': num.parse(phone),
         'profile_pic': null,
         'rol' : "Usuario",
         'total_donated': 0,
