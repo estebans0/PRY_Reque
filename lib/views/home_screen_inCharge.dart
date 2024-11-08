@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:app/controllers/controller.dart'; 
 import 'package:app/views/donations_screen.dart';
 import 'package:app/views/manage_projects_screen.dart';
@@ -27,7 +29,6 @@ class _HomeScreenInChargeState extends State<HomeScreenInCharge> with SingleTick
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     controller.dispose();
   }

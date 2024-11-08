@@ -12,7 +12,7 @@ import 'views/edit_user_screen.dart';
 import 'views/project_form_screen.dart';
 import 'views/wallet_screen.dart';
 import 'views/buy_digital_currency_screen.dart';
-import 'views/manage_roles.dart';             // admin
+// admin
 import 'views/manage_user_screen.dart';       // supervisor
 import 'views/statistics_screen.dart';        // analista
 import 'views/home_screen_inCharge.dart';     //encargado

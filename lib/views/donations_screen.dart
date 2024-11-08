@@ -1,6 +1,7 @@
+// ignore_for_file: non_constant_identifier_names, override_on_non_overriding_member
+
 import 'package:app/models/user_model.dart';  
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
  
 class donationsPage extends StatefulWidget {
     const donationsPage({super.key});

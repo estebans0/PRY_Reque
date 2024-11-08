@@ -147,8 +147,7 @@ class _HomeScreen extends State<HomeScreen> {
 
             return (data['categories'] as List<dynamic>).any((elemento) =>
                     elemento.toString().toLowerCase() ==
-                    _selectedFilter.toLowerCase()) ??
-                false;
+                    _selectedFilter.toLowerCase());
           }
         }
         return false;
@@ -253,8 +252,7 @@ class _HomeScreen extends State<HomeScreen> {
                                   _filteredItems[index] as Map<String, dynamic>;
                               return ProjectTile(
                                 titulo: data['name'] ?? 'Sin título',
-                                category: data['categories'].toString() ??
-                                    'Sin categoria',
+                                category: data['categories'].toString(),
                                 meta: data['funding_goal'] ?? 0,
                                 recaudado: data['total_donated'] ?? 0,
                                 id: data['id'] ?? '',

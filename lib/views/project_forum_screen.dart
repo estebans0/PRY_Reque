@@ -14,7 +14,7 @@ class ProjectForumScreen extends StatefulWidget {
 class _ProjectForumScreenState extends State<ProjectForumScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
-  List<String> _imageUrls = [];
+  final List<String> _imageUrls = [];
   final Controller _controller = Controller();
 
   void _openCreatePostDialog(BuildContext context) {
@@ -152,7 +152,7 @@ class _ProjectForumScreenState extends State<ProjectForumScreen> {
       return;
     }
 
-    final userId = await _controller.getCurrentUserId();
+    final userId = _controller.getCurrentUserId();
     final username = await _getUsername(userId);
     String role = 'Colaborador';
 

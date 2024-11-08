@@ -240,7 +240,7 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
                                     const Color.fromARGB(255, 63, 119, 133),
                                 onPressed: () async {
                                   final userId =
-                                      await _controller.getCurrentUserId();
+                                      _controller.getCurrentUserId();
                                   if (await _hasAccessToForum(userId)) {
                                     Navigator.push(
                                       context,

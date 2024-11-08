@@ -65,7 +65,7 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
             return data['name']?.toLowerCase().contains(query) ?? false;
           } else { 
 
-            return (data['categories'] as List<dynamic>).any((elemento) => elemento.toString().toLowerCase() == _selectedFilter.toLowerCase()) ?? false; 
+            return (data['categories'] as List<dynamic>).any((elemento) => elemento.toString().toLowerCase() == _selectedFilter.toLowerCase()); 
           }
         }
         return false;
@@ -163,7 +163,7 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                           var data = _filteredItems[index] as Map<String, dynamic>;
                           String idProject =   data['id'] ?? '';
                           String titulo =      data['name'] ?? 'Sin título';
-                          String category =    data['categories'].toString() ?? 'Sin categoria';
+                          String category =    data['categories'].toString();
                           int meta =           data['funding_goal'] ?? 0;
                           int recaudado =      data['total_donated'] ?? 0;
                           return auxBuild(context, idProject, titulo, category, meta, recaudado);  

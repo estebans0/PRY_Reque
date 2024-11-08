@@ -1,6 +1,5 @@
 import 'package:app/views/landing_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import '../models/user_model.dart';
 
 class ManageRolesScreen extends StatefulWidget {
