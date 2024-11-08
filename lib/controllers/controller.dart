@@ -90,19 +90,25 @@ class Controller {
           .collection('admin')
           .where('email', isEqualTo: email)
           .get();
+      
+      // final userSnapshot = await FirebaseFirestore.instance
+      //     .collection('users')
+      //     .where('email', isEqualTo: email)
+      //     .get();
 
       if (adminSnapshot.docs.isNotEmpty) {
         return true; // Es un administrador
       }
-
+      
       // Si no está en 'admin', busca en 'Users'
       final userSnapshot = await FirebaseFirestore.instance
           .collection('Users')
           .where('email', isEqualTo: email)
+          .where('rol', isEqualTo: 'Administrador')
           .get();
 
       if (userSnapshot.docs.isNotEmpty) {
-        return false; // Es un usuario normal
+        return true; // Es un usuario normal
       }
 
       return false;
@@ -112,7 +118,7 @@ class Controller {
     }
   }
 
-  // Future<bool> isAdmin(String email) async {
+  // Future<bool> isAdmin_AUX(String email) async {
   //   List users = await _authModel.getUsers();
   //   List admins = await _authModel.getAdmins(); 
   //   bool result = false;
