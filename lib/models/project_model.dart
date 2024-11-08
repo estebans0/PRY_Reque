@@ -170,7 +170,7 @@ class ProjectMethods {
     List<Map<String, dynamic>> ratingsWithUsernames = [];
 
     for (var doc in snapshot.docs) {
-      Map<String, dynamic> ratingData = doc.data() as Map<String, dynamic>;
+      Map<String, dynamic> ratingData = doc.data();
       String userId = ratingData['userId'];
 
       // Obtén el nombre de usuario de la colección Users
@@ -205,13 +205,11 @@ class ProjectMethods {
 
     QuerySnapshot queryProject =
         await collectionReferenceProjects.where('name', isEqualTo: name).get();
-    if (queryProject != null) {
-      List admins = await _authModel.getAdmins();
-      for (int i = 0; i < admins.length; i++) {
-        _notificationModel.sendSusEmail(admins[i]['email']);
-      }
+    List admins = await _authModel.getAdmins();
+    for (int i = 0; i < admins.length; i++) {
+      _notificationModel.sendSusEmail(admins[i]['email']);
     }
-  }
+    }
 
   // Retorna la cantidad de proyectos activos
   Future<int> getNumberProjects() async {

@@ -44,7 +44,7 @@ class _ManageRolesScreen extends State<ManageRolesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
+        title: const Center(
           child: Text( 
             'Gestion de Roles', 
             style: TextStyle(color: Color.fromARGB(255, 63, 119, 133), fontSize: 30, fontWeight: FontWeight.bold,), 
@@ -62,12 +62,12 @@ class _ManageRolesScreen extends State<ManageRolesScreen> {
               
               children: [          
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 
                 Expanded(
                 
                   child: lstUsers.isEmpty
-                    ? Center(child: CircularProgressIndicator()) // Mostrar spinner mientras se cargan los datos
+                    ? const Center(child: CircularProgressIndicator()) // Mostrar spinner mientras se cargan los datos
                     : ListView.builder(
                         itemCount: lstUsers.length,
                         itemBuilder: (context, index) {
@@ -86,7 +86,7 @@ class _ManageRolesScreen extends State<ManageRolesScreen> {
                               (newRol) {updateUserRole(id, newRol, index);}
                             );  
                           } else {
-                            return ListTile(
+                            return const ListTile(
                               title: Text('No se han podido cargar los usuarios'),
                             );
                           }
@@ -113,8 +113,8 @@ class _ManageRolesScreen extends State<ManageRolesScreen> {
                     MaterialPageRoute(builder: (context) => const LandingPage()),
                   );
                 }, 
-                backgroundColor: Color.fromARGB(255, 63, 119, 133),
-                child: Icon(Icons.arrow_back, color: Color.fromARGB(255, 212, 209, 184)),
+                backgroundColor: const Color.fromARGB(255, 63, 119, 133),
+                child: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
           ),
@@ -143,28 +143,28 @@ class _ManageRolesScreen extends State<ManageRolesScreen> {
                   const SizedBox(height: 8),
                   Text(
                     'Nombre: $name',
-                    style: TextStyle(color: Color.fromARGB(255, 63, 119, 133), fontSize: 14, fontWeight: FontWeight.bold),
+                    style: const TextStyle(color: Color.fromARGB(255, 63, 119, 133), fontSize: 14, fontWeight: FontWeight.bold),
                   ), 
                   const SizedBox(height: 8),
                   // DropdownButton para seleccionar el rol
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         'Rol: ',
                         style: TextStyle(color: Color.fromARGB(255, 63, 119, 133), fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       DropdownButton <String>( 
                         value: currentRol,  
                         // style: TextStyle(color: Colors.blue, fontSize: 14, fontWeight: FontWeight.bold),
-                        dropdownColor: Color.fromARGB(255, 224, 224, 214), 
+                        dropdownColor: const Color.fromARGB(255, 224, 224, 214), 
 
                         items: roles.map((role) {
                           return DropdownMenuItem(
                             value: role,
                             child: Text(
                               role,
-                              style: TextStyle(color: Color.fromARGB(255, 63, 119, 133), fontSize: 14, fontWeight: FontWeight.bold),
+                              style: const TextStyle(color: Color.fromARGB(255, 63, 119, 133), fontSize: 14, fontWeight: FontWeight.bold),
                             ), 
                           );
                         }).toList(),
@@ -187,12 +187,12 @@ class _ManageRolesScreen extends State<ManageRolesScreen> {
               children: [ 
                   Text(
                     'Nombre: $name',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Identificacion: $docId',  // Meta y recaudado
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
               ],

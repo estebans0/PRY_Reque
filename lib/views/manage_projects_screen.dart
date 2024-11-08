@@ -19,11 +19,11 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
   
   List _items = []; 
   List _filteredItems = [];
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
 
   // Lista de opciones para el dropdown (filtrar por nombre o categoría)
-  List<String> _filterOptions = ['nombre'];
+  final List<String> _filterOptions = ['nombre'];
   String _selectedFilter = 'nombre';
 
   @override
@@ -43,7 +43,7 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
       setState(() {
         _items = tempList;
         _filteredItems = _items; 
-        temp.forEach((element) { _filterOptions.add(element.toString()); },);
+        for (var element in temp) { _filterOptions.add(element.toString()); }
 
       });
     } catch (e) {
@@ -59,13 +59,13 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
     setState(() {
       _filteredItems = _items.where((item) {
         if (item is Map<String, dynamic>) { 
-          var data = item as Map<String, dynamic>; 
+          var data = item; 
           if (_selectedFilter == 'nombre') { 
 
             return data['name']?.toLowerCase().contains(query) ?? false;
           } else { 
 
-            return (data['categories'] as List<dynamic>)?.any((elemento) => elemento.toString().toLowerCase() == _selectedFilter.toLowerCase()) ?? false; 
+            return (data['categories'] as List<dynamic>).any((elemento) => elemento.toString().toLowerCase() == _selectedFilter.toLowerCase()) ?? false; 
           }
         }
         return false;
@@ -97,7 +97,7 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold,),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             // Fila de buscar y filtro
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -106,7 +106,7 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                   Expanded(
                     child: TextField(
                       controller: _searchController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Buscar',
                         hintText: 'Buscar...',
                         focusColor: Color(0xFFE0E0D6),
@@ -115,7 +115,7 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 10), 
+                  const SizedBox(width: 10), 
                   
                    // DropdownButton para seleccionar el tipo de filtro
                   IntrinsicWidth(  
@@ -126,7 +126,7 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
                         ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                       ),
                       items: _filterOptions.map((String option) {
                         return DropdownMenuItem<String>(
@@ -148,13 +148,13 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
               ), 
             ),
  
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
               
             // Expanded para permitir que el ListView ocupe el espacio disponible
             Expanded(
               
               child: _filteredItems.isEmpty
-                  ? Center(child: CircularProgressIndicator()) // Mostrar spinner mientras se cargan los datos
+                  ? const Center(child: CircularProgressIndicator()) // Mostrar spinner mientras se cargan los datos
                   : ListView.builder(
                       itemCount: _filteredItems.length,
                       itemBuilder: (context, index) {
@@ -168,7 +168,7 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                           int recaudado =      data['total_donated'] ?? 0;
                           return auxBuild(context, idProject, titulo, category, meta, recaudado);  
                         } else {
-                          return ListTile(
+                          return const ListTile(
                             title: Text('Elemento no reconocido'),
                           );
                         }
@@ -201,13 +201,13 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${titulo}',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      titulo,
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       'Categorias: ${category.replaceAll('[', '').replaceAll(']', '')}',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -233,9 +233,9 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                           ); 
                         }, 
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                          backgroundColor: const Color.fromARGB(255, 63, 119, 133),
                         ),
-                        child: Text('Editar', style: TextStyle(color: Color.fromARGB(255, 212, 209, 184)),),
+                        child: const Text('Editar', style: TextStyle(color: Color.fromARGB(255, 212, 209, 184)),),
                       ),
                     ), 
                     ElevatedButton(
@@ -248,9 +248,9 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                        backgroundColor: const Color.fromARGB(255, 63, 119, 133),
                       ),
-                      child: Text('Comentarios', style: TextStyle(color: Color.fromARGB(255, 212, 209, 184)),),
+                      child: const Text('Comentarios', style: TextStyle(color: Color.fromARGB(255, 212, 209, 184)),),
 
                     ),
                     
@@ -266,13 +266,13 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${titulo}',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      titulo,
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       'Categorias: ${category.replaceAll('[', '').replaceAll(']', '')}',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -299,9 +299,9 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
                     // style: ElevatedButton.styleFrom(backgroundColor: Color(0xFFE0E0D6)),
                     // child: Text('Editar'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                      backgroundColor: const Color.fromARGB(255, 63, 119, 133),
                     ),
-                    child: Text('Editar', style: TextStyle(color: Color.fromARGB(255, 212, 209, 184)),),
+                    child: const Text('Editar', style: TextStyle(color: Color.fromARGB(255, 212, 209, 184)),),
                   ),
                 ) 
               ],
@@ -319,7 +319,7 @@ class _ProjectManagementPage extends State<ProjectManagementPage> {
 
 extension StringExtension on String {
   String capitalize() {
-    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
+    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
   }
 }
  

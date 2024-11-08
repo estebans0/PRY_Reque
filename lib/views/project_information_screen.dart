@@ -101,11 +101,11 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
                   child: Container(
                     width: 800,
                     height: 600,
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 212, 209, 184),
+                      color: const Color.fromARGB(255, 212, 209, 184),
                       borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                           color: Colors.black26,
                           blurRadius: 8,
@@ -130,10 +130,10 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
                               const SizedBox(width: 10),
                               Text(
                                 '⭐ ${averageRating.toStringAsFixed(1)}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
-                                  color: const Color.fromARGB(255, 0, 0, 0),
+                                  color: Color.fromARGB(255, 0, 0, 0),
                                 ),
                               ),
                             ],

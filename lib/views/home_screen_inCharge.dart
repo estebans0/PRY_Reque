@@ -39,12 +39,12 @@ class _HomeScreenInChargeState extends State<HomeScreenInCharge> with SingleTick
       
       appBar: AppBar(
         centerTitle: true, 
-        title: Text("Encargado", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 42, 69, 105))),
+        title: const Text("Encargado", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 42, 69, 105))),
         automaticallyImplyLeading: false,
         
         bottom: TabBar(
           controller: controller,
-          tabs: [
+          tabs: const [
             Text("Proyectos"), 
             Text("Donaciones"), 
           ]
@@ -54,7 +54,7 @@ class _HomeScreenInChargeState extends State<HomeScreenInCharge> with SingleTick
         children: [
           TabBarView(
             controller: controller,
-            children: [ 
+            children: const [ 
               ProjectManagementPage(),
               donationsPage(),
             ]
@@ -74,8 +74,8 @@ class _HomeScreenInChargeState extends State<HomeScreenInCharge> with SingleTick
                     MaterialPageRoute(builder: (context) => const LandingPage()),
                   );
                 }, 
-                backgroundColor: Color.fromARGB(255, 63, 119, 133),
-                child: Icon(Icons.arrow_back, color: Color.fromARGB(255, 212, 209, 184)),
+                backgroundColor: const Color.fromARGB(255, 63, 119, 133),
+                child: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
           ), 

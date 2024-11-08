@@ -42,16 +42,16 @@ class MyApp extends StatelessWidget {
         '/': (context) => const LandingPage(), 
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignupScreen(),
-        '/home': (context) => HomeScreen(),
+        '/home': (context) => const HomeScreen(),
         '/create-project': (context) => const ProjectFormScreen(),
         '/edit-profile': (context) => const EditUserScreen(),
         '/home-admin': (context) => const ManageRolesScreen(),
         '/wallet': (context) => const WalletScreen(),
         '/buy-digital-currency': (context) => const BuyDigitalCurrencyScreen(),
         '/general-forum': (context) => GeneralForumScreen(),
-        '/home-analyst': (context) => StatisticsScreen(),
-        '/home-supervisor': (context) => ManageUsersScreen(),
-        '/home-inCharge': (context) => HomeScreenInCharge()
+        '/home-analyst': (context) => const StatisticsScreen(),
+        '/home-supervisor': (context) => const ManageUsersScreen(),
+        '/home-inCharge': (context) => const HomeScreenInCharge()
       },
     );
   }

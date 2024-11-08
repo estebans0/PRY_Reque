@@ -30,7 +30,7 @@ class Controller {
 
   // Obter el username del usuario autenticado
   Future<String> getCurrentUsername() async {
-    return await _userModel.getCurrentUsername();
+    return _userModel.getCurrentUsername();
   }
 
   // Obtener proyectos del usuario actual

@@ -67,7 +67,7 @@ class DonationButton extends StatelessWidget {
                       print("Balance actualizado."); // Debug
 
                       // Mnada la notificacion de agradecimiento al donante
-                      var userId = await _controller.getCurrentUserId();
+                      var userId = _controller.getCurrentUserId();
                       String userEmail = await _userModel.getEmailbyID(userId);
                       _notificationModel.sendThankEmail(userEmail);
                       print(

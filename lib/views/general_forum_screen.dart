@@ -197,12 +197,16 @@ class GeneralForumScreen extends StatelessWidget {
                     itemCount: posts.length,
                     itemBuilder: (context, index) {
                       var post = posts[index];
+                      // Verificar si el timestamp es null y asignar un valor por defecto si es necesario
+                      var timestamp = post['timestamp'] as Timestamp?;
+                      var date = timestamp != null ? timestamp.toDate().toLocal() : DateTime.now();
+
                       return ForumPostTile(
                         author: post['author'],
                         title: post['title'],
                         contentPreview: post['content'],
-                        date: (post['timestamp'] as Timestamp).toDate().toLocal().toString().substring(0, 10),
-                        time: (post['timestamp'] as Timestamp).toDate().toLocal().toString().substring(11, 16),
+                        date: date.toString().substring(0, 10),
+                        time: date.toString().substring(11, 16),
                         onPressed: () {
                           Navigator.push(
                             context,

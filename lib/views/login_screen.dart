@@ -88,13 +88,13 @@ class _LoginScreen extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: const Text(''),
         automaticallyImplyLeading: false,
       ),
       body: Stack(
         children: [
           // Posiciona y centra el título
-          Positioned(
+          const Positioned(
             top: 50, // Cambia este valor para ajustar la posición vertical
             left: 0,
             right: 0, // Para centrar el texto horizontalmente
@@ -115,12 +115,12 @@ class _LoginScreen extends State<LoginScreen> {
             child: Container(
               width: 300,
               height: 250,
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Color.fromARGB(
+                color: const Color.fromARGB(
                     255, 212, 209, 184), //fromRGBO(212, 209, 184, 50),
                 borderRadius: BorderRadius.circular(15),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black26,
                     blurRadius: 8,
@@ -147,7 +147,7 @@ class _LoginScreen extends State<LoginScreen> {
                       : ElevatedButton(
                           onPressed: _login,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                            backgroundColor: const Color.fromARGB(255, 63, 119, 133),
                           ),
                           child: const Text(
                             'Login',
@@ -176,8 +176,8 @@ class _LoginScreen extends State<LoginScreen> {
                         builder: (context) => const LandingPage()),
                   );
                 },
-                backgroundColor: Color.fromARGB(255, 63, 119, 133),
-                child: Icon(Icons.arrow_back,
+                backgroundColor: const Color.fromARGB(255, 63, 119, 133),
+                child: const Icon(Icons.arrow_back,
                     color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),

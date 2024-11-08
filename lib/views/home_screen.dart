@@ -21,10 +21,10 @@ class _HomeScreen extends State<HomeScreen> {
 
   List _items = [];
   List _filteredItems = [];
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   // Lista de opciones para el dropdown (filtrar por nombre o categoría)
-  List<String> _filterOptions = ['nombre'];
+  final List<String> _filterOptions = ['nombre'];
   String _selectedFilter = 'nombre';
 
   @override
@@ -117,11 +117,9 @@ class _HomeScreen extends State<HomeScreen> {
       setState(() {
         _items = tempList;
         _filteredItems = _items;
-        temp.forEach(
-          (element) {
+        for (var element in temp) {
             _filterOptions.add(element.toString());
-          },
-        );
+          }
       });
     } catch (e) {
       print('Error al obtener los datos: $e');
@@ -137,7 +135,7 @@ class _HomeScreen extends State<HomeScreen> {
     setState(() {
       _filteredItems = _items.where((item) {
         if (item is Map<String, dynamic>) {
-          var data = item as Map<String, dynamic>;
+          var data = item;
           if (_selectedFilter == 'nombre') {
             //print('Busqueda con nombre');
             return data['name']?.toLowerCase().contains(query) ?? false;
@@ -147,7 +145,7 @@ class _HomeScreen extends State<HomeScreen> {
             // print('TIPO -> ${data['categories'].runtimeType}');
             // print('SelectedFilte: ${_selectedFilter}');
 
-            return (data['categories'] as List<dynamic>)?.any((elemento) =>
+            return (data['categories'] as List<dynamic>).any((elemento) =>
                     elemento.toString().toLowerCase() ==
                     _selectedFilter.toLowerCase()) ??
                 false;
@@ -185,7 +183,7 @@ class _HomeScreen extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Fila de buscar y filtro
                 Padding(
@@ -195,7 +193,7 @@ class _HomeScreen extends State<HomeScreen> {
                       Expanded(
                         child: TextField(
                           controller: _searchController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Buscar',
                             hintText: 'Buscar...',
                             focusColor: Color(0xFFE0E0D6),
@@ -204,7 +202,7 @@ class _HomeScreen extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
 
                       // DropdownButton para seleccionar el tipo de filtro
                       IntrinsicWidth(
@@ -217,7 +215,7 @@ class _HomeScreen extends State<HomeScreen> {
                               borderRadius: BorderRadius.circular(14),
                             ),
                             contentPadding:
-                                EdgeInsets.symmetric(horizontal: 10),
+                                const EdgeInsets.symmetric(horizontal: 10),
                           ),
                           items: _filterOptions.map((String option) {
                             return DropdownMenuItem<String>(
@@ -239,11 +237,11 @@ class _HomeScreen extends State<HomeScreen> {
                   ),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 // Expanded para permitir que el ListView ocupe el espacio disponible
                 Expanded(
                   child: _filteredItems.isEmpty
-                      ? Center(
+                      ? const Center(
                           child:
                               CircularProgressIndicator()) // Mostrar spinner mientras se cargan los datos
                       : ListView.builder(
@@ -262,7 +260,7 @@ class _HomeScreen extends State<HomeScreen> {
                                 id: data['id'] ?? '',
                               );
                             } else {
-                              return ListTile(
+                              return const ListTile(
                                 title: Text('Elemento no reconocido'),
                               );
                             }
@@ -283,8 +281,8 @@ class _HomeScreen extends State<HomeScreen> {
               child: FloatingActionButton(
                 heroTag: 'home_logout_button',
                 onPressed: () => _logout(context),
-                backgroundColor: Color.fromARGB(255, 63, 119, 133),
-                child: Icon(Icons.arrow_back,
+                backgroundColor: const Color.fromARGB(255, 63, 119, 133),
+                child: const Icon(Icons.arrow_back,
                     color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
@@ -300,8 +298,8 @@ class _HomeScreen extends State<HomeScreen> {
                 heroTag: 'home_edit_profile_button',
                 onPressed: () => Navigator.pushNamed(context, '/edit-profile'),
                 // child: Icon(Icons.person),
-                backgroundColor: Color.fromARGB(255, 63, 119, 133),
-                child: Icon(Icons.person,
+                backgroundColor: const Color.fromARGB(255, 63, 119, 133),
+                child: const Icon(Icons.person,
                     color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
@@ -317,8 +315,8 @@ class _HomeScreen extends State<HomeScreen> {
                 heroTag: 'home_wallet_button',
                 onPressed: () => Navigator.pushNamed(context, '/wallet'),
                 // child: Icon(Icons.wallet),
-                backgroundColor: Color.fromARGB(255, 63, 119, 133),
-                child: Icon(Icons.wallet,
+                backgroundColor: const Color.fromARGB(255, 63, 119, 133),
+                child: const Icon(Icons.wallet,
                     color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
@@ -335,8 +333,8 @@ class _HomeScreen extends State<HomeScreen> {
                 onPressed: () =>
                     Navigator.pushNamed(context, '/create-project'),
                 // child: Icon(Icons.create_new_folder),
-                backgroundColor: Color.fromARGB(255, 63, 119, 133),
-                child: Icon(Icons.create_new_folder,
+                backgroundColor: const Color.fromARGB(255, 63, 119, 133),
+                child: const Icon(Icons.create_new_folder,
                     color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
@@ -352,8 +350,8 @@ class _HomeScreen extends State<HomeScreen> {
                 heroTag: 'home_edit_project_button',
                 onPressed: () => _showEditProjectDialog(context),
                 // child: Icon(Icons.edit_document),
-                backgroundColor: Color.fromARGB(255, 63, 119, 133),
-                child: Icon(Icons.edit_document,
+                backgroundColor: const Color.fromARGB(255, 63, 119, 133),
+                child: const Icon(Icons.edit_document,
                     color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
@@ -382,7 +380,7 @@ class _HomeScreen extends State<HomeScreen> {
 
 extension StringExtension on String {
   String capitalize() {
-    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
+    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
   }
 }
 
@@ -394,7 +392,7 @@ class ProjectTile extends StatelessWidget {
   final String id;
 
   // Constructor que recibe los datos
-  ProjectTile({
+  const ProjectTile({super.key, 
     required this.titulo,
     required this.category,
     required this.meta,

@@ -22,7 +22,7 @@ class _StatisticsScreen extends State<StatisticsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
+        title: const Center(
           child: Text( 
             'Estadísticas', 
             style: TextStyle(color: Color.fromARGB(255, 63, 119, 133), fontSize: 30, fontWeight: FontWeight.bold,), 
@@ -48,8 +48,8 @@ class _StatisticsScreen extends State<StatisticsScreen> {
                     MaterialPageRoute(builder: (context) => const LandingPage()),
                   );
                 }, 
-                backgroundColor: Color.fromARGB(255, 63, 119, 133),
-                child: Icon(Icons.arrow_back, color: Color.fromARGB(255, 212, 209, 184)),
+                backgroundColor: const Color.fromARGB(255, 63, 119, 133),
+                child: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 212, 209, 184)),
               ),
             ),
           ),
@@ -59,10 +59,10 @@ class _StatisticsScreen extends State<StatisticsScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [                 
                 
-                SizedBox(height: 20),  // Espacio entre el título y el contenedor
+                const SizedBox(height: 20),  // Espacio entre el título y el contenedor
                 // Cuadro con estadísticas
                 Container(
-                  constraints: BoxConstraints(
+                  constraints: const BoxConstraints(
                     minHeight: 200,
                     maxHeight: 500,
                     minWidth: 300,
@@ -71,11 +71,11 @@ class _StatisticsScreen extends State<StatisticsScreen> {
                   decoration: BoxDecoration(
                     //border: Border.all(color: Color(0xFFE0E0D6), width: 2), // Borde gris
                     borderRadius: BorderRadius.circular(20), // Bordes redondeados
-                    color:  Color(0xFFE0E0D6),
+                    color:  const Color(0xFFE0E0D6),
                     
                     
                   ),
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center, // Centrar verticalmente
@@ -83,85 +83,85 @@ class _StatisticsScreen extends State<StatisticsScreen> {
                     children: [
                       Row(
                         children: [
-                          Text(
+                          const Text(
                             'Numero de usuarios:',
                             style: TextStyle(fontSize: 20),
                           ),
-                          Spacer(),
+                          const Spacer(),
                           FutureBuilder(
                             future: user_model.getNumbertUsers(),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState == ConnectionState.waiting) {
-                                return CircularProgressIndicator();
+                                return const CircularProgressIndicator();
 
                               } else if (snapshot.hasError) {
-                                return Text('Error', style: TextStyle(color: Colors.red));
+                                return const Text('Error', style: TextStyle(color: Colors.red));
 
                               } else if (snapshot.hasData) {
                                 return Text( 
                                   snapshot.data.toString(), 
-                                  style: TextStyle(fontSize: 20),
+                                  style: const TextStyle(fontSize: 20),
                                 );
                               }
-                              return Text('N/A');
+                              return const Text('N/A');
                             },
                           ),
                         ]
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Row(
                         children: [
-                          Text(
+                          const Text(
                             'Numero de donaciones:',
                             // style: TextStyle(color: Colors.white, fontSize: 18),
                             style: TextStyle(fontSize: 20),
                           ),
-                          Spacer(),
+                          const Spacer(),
                           FutureBuilder(
                             future: user_model.getNumbertDonations(),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState == ConnectionState.waiting) {
-                                return CircularProgressIndicator();
+                                return const CircularProgressIndicator();
 
                               } else if (snapshot.hasError) {
-                                return Text('Error', style: TextStyle(color: Colors.red));
+                                return const Text('Error', style: TextStyle(color: Colors.red));
 
                               } else if (snapshot.hasData) {
                                 return Text( 
                                   snapshot.data.toString(), 
-                                  style: TextStyle(fontSize: 20),
+                                  style: const TextStyle(fontSize: 20),
                                 );
                               }
-                              return Text('N/A');
+                              return const Text('N/A');
                             },
                           ),
                         ]
                       ), 
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Row(
                         children: [
-                          Text(
+                          const Text(
                             'Cantidad de proyectos:',
                             // style: TextStyle(color: Colors.white, fontSize: 18),
                             style: TextStyle(fontSize: 20),
                           ),
-                          Spacer(),
+                          const Spacer(),
                           FutureBuilder(
                             future: project_model.getNumberProjects(),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState == ConnectionState.waiting) {
-                                return CircularProgressIndicator();
+                                return const CircularProgressIndicator();
 
                               } else if (snapshot.hasError) {
-                                return Text('Error', style: TextStyle(color: Colors.red));
+                                return const Text('Error', style: TextStyle(color: Colors.red));
 
                               } else if (snapshot.hasData) {
                                 return Text( 
                                   snapshot.data.toString(), 
-                                  style: TextStyle(fontSize: 20),
+                                  style: const TextStyle(fontSize: 20),
                                 );
                               }
-                              return Text('N/A');
+                              return const Text('N/A');
                             },
                           ),
                           

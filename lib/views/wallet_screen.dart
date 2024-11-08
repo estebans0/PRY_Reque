@@ -251,7 +251,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                         'Donaste ${transaction['amount']} al proyecto ${transaction['project_name']}',
                                       ),
                                     );
-                                  }).toList(),
+                                  }),
                                 ],
                               ),
                             );
@@ -322,7 +322,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 onPressed: () {
                   Navigator.pop(context); // Vuelve a la pantalla anterior
                 },
-                backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                backgroundColor: const Color.fromARGB(255, 63, 119, 133),
                 child: const Icon(Icons.arrow_back,
                     color: Color.fromARGB(255, 212, 209, 184)),
               ),

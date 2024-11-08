@@ -11,13 +11,13 @@ class LandingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: const Text(''),
         automaticallyImplyLeading: false,
       ),
       body: Stack(
         children: [
           // Posiciona y centra el título
-          Positioned(
+          const Positioned(
             top: 50, // Cambia este valor para ajustar la posición vertical
             left: 0,
             right: 0, // Para centrar el texto horizontalmente
@@ -38,11 +38,11 @@ class LandingPage extends StatelessWidget {
             child: Container(
               width: 300,
               height: 200,
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 212, 209, 184), //fromRGBO(212, 209, 184, 50),
+                color: const Color.fromARGB(255, 212, 209, 184), //fromRGBO(212, 209, 184, 50),
                 borderRadius: BorderRadius.circular(15),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black26,
                     blurRadius: 8,
@@ -63,11 +63,11 @@ class LandingPage extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 63, 119, 133), 
+                      backgroundColor: const Color.fromARGB(255, 63, 119, 133), 
                     ),
-                    child: Text('Log In', style: TextStyle(color: Color.fromARGB(255, 212, 209, 184)),),
+                    child: const Text('Log In', style: TextStyle(color: Color.fromARGB(255, 212, 209, 184)),),
                   ),
-                  SizedBox(height: 20), // Espacio entre los botones
+                  const SizedBox(height: 20), // Espacio entre los botones
                   ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -77,9 +77,9 @@ class LandingPage extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 63, 119, 133),
+                      backgroundColor: const Color.fromARGB(255, 63, 119, 133),
                     ),
-                    child: Text('Sign Up', style: TextStyle(color: Color.fromARGB(255, 212, 209, 184)),),
+                    child: const Text('Sign Up', style: TextStyle(color: Color.fromARGB(255, 212, 209, 184)),),
                   ),
                 ],
               ),

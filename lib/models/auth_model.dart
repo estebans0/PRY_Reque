@@ -98,11 +98,11 @@ class AuthModel {
     // print('Hola');
     
     QuerySnapshot queryCategories = await collectionRefCategories.get();
-    queryCategories.docs.forEach ((category){
+    for (var category in queryCategories.docs) {
       // categories.add(admin.data());
       categories.add(category.get('name').toString());
       // print(category.get('name')); 
-    });
+    }
     // print('Lista: ${categories}');
     // if (categories[0] == 'Videojuego'){
     //   print('Si son strings');

@@ -25,12 +25,12 @@ class _donationsPage extends State<donationsPage> {
           children: [
             Title(
               color: Colors.black, 
-              child: Text(
+              child: const Text(
                 'Donaciones',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold,),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             // Fila de buscar y filtro
             // Row(
             //   children: [
@@ -80,7 +80,7 @@ class _donationsPage extends State<donationsPage> {
                     return const Center(child: CircularProgressIndicator());
 
                   } else if (snapshot.hasError) { 
-                    return Center( child: Text('Error al cargar donaciones'));
+                    return const Center( child: Text('Error al cargar donaciones'));
 
                   } else if (snapshot.hasData && snapshot.data!.isNotEmpty) { 
                     return ListView.builder(
@@ -100,7 +100,7 @@ class _donationsPage extends State<donationsPage> {
                       },
                     );
                   } else { 
-                    return Center(
+                    return const Center(
                       child: Text('No hay donaciones disponibles'),
                     );
                   }
@@ -116,7 +116,7 @@ class _donationsPage extends State<donationsPage> {
   @override
   Widget auxBuild(String idDonation, String idProject, String idUser, bool is_deleted, String projectName,  String userName, String date, int amount) {
     return Container(
-      margin: EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 16),
       height: 140,
       // padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -135,14 +135,14 @@ class _donationsPage extends State<donationsPage> {
                   children: [ 
                     Text(
                       'Benefactor: $userName',    
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       'Proyecto: $projectName',    
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       'Monto: $amount       Fecha: $date',   
                     ),
@@ -174,9 +174,9 @@ class _donationsPage extends State<donationsPage> {
                   children: [
                     Text(
                       'Benefactor: $userName    -    Proyecto: $projectName',    
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       'Monto: $amount       Fecha: $date',   
                     ),
