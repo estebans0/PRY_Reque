@@ -28,6 +28,11 @@ class Controller {
     return _authModel.getCurrentUserId();
   }
 
+  // Obter el username del usuario autenticado
+  Future<String> getCurrentUsername() async {
+    return await _userModel.getCurrentUsername();
+  }
+
   // Obtener proyectos del usuario actual
   Future<List<Map<String, dynamic>>> getUserProjects() async {
     return await _projectModel.getProjectsByUserId(getCurrentUserId());

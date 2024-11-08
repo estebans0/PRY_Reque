@@ -24,6 +24,11 @@ class UserMethods {
     return _auth.currentUser!.uid;
   }
 
+  // Obtener nombre de usuario actual. Almacenado como 'username' en Firestore
+  String getCurrentUsername() {
+    return _auth.currentUser!.displayName!;
+  }
+
   Future<num> getTotalDonated() async {
     var userData = getUserData();
     return userData.then((value) => value['total_donated']);
