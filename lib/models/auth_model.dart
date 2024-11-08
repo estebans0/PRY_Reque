@@ -68,6 +68,11 @@ class AuthModel {
     return _auth.currentUser!.uid;
   }
 
+  // Obtener email del usuario autenticado
+  String getCurrentUserEmail() {
+    return _auth.currentUser!.email!;
+  }
+
   // Retorna una lista con todos los usuarios
   Future<List> getUsers() async {
     List users = [];

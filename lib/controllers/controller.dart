@@ -33,6 +33,10 @@ class Controller {
     return _userModel.getCurrentUsername();
   }
 
+  String getCurrentUserEmail() {
+    return _authModel.getCurrentUserEmail();
+  }
+
   // Obtener proyectos del usuario actual
   Future<List<Map<String, dynamic>>> getUserProjects() async {
     return await _projectModel.getProjectsByUserId(getCurrentUserId());

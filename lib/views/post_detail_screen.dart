@@ -4,7 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PostDetailScreen extends StatefulWidget {
   final String postId;
-  const PostDetailScreen({super.key, required this.postId});
+  final String? projectId; // Opcional para distinguir si es foro general o interno
+  const PostDetailScreen({super.key, required this.postId, this.projectId});
 
   @override
   _PostDetailScreenState createState() => _PostDetailScreenState();
@@ -49,7 +50,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     final username = await _getUsername(userId);
 
     await FirebaseFirestore.instance
-        .collection('Forum')
+        .collection(widget.projectId != null ? 'Projects/${widget.projectId}/Forum' : 'Forum')
         .doc(widget.postId)
         .collection('comments')
         .add({
@@ -179,7 +180,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Detalles del Post"),
+        title: Text(widget.projectId != null ? "Detalles del Post (Foro Interno)" : "Detalles del Post"),
       ),
       body: Stack(
         children: [
@@ -188,21 +189,24 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
             child: Column(
               children: [
                 FutureBuilder<DocumentSnapshot>(
-                  future: FirebaseFirestore.instance.collection('Forum').doc(widget.postId).get(),
+                  future: FirebaseFirestore.instance
+                      .collection(widget.projectId != null ? 'Projects/${widget.projectId}/Forum' : 'Forum')
+                      .doc(widget.postId)
+                      .get(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) return const CircularProgressIndicator();
 
-                    var post = snapshot.data!.data() as Map<String, dynamic>;
+                    var post = snapshot.data!.data() as Map<String, dynamic>? ?? {};
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: Text(post['title'], style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                          child: Text(post['title'] ?? '', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Text(post['content']),
+                          child: Text(post['content'] ?? ''),
                         ),
                         Wrap(
                           spacing: 8,
@@ -228,7 +232,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                 ),
                 StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
-                      .collection('Forum')
+                      .collection(widget.projectId != null ? 'Projects/${widget.projectId}/Forum' : 'Forum')
                       .doc(widget.postId)
                       .collection('comments')
                       .orderBy('timestamp', descending: true)

@@ -1,16 +1,18 @@
 // project_information_screen.dart
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../controllers/controller.dart';
-import '../models/user_model.dart';
-import '../models/notifications_model.dart';
 import 'donation_button.dart';
 import '../models/project_model.dart';
-import 'project_forum_screen.dart'; // Asegúrate de tener la ruta correcta
+import 'project_forum_screen.dart';
+import '../models/wallet_model.dart';
 
 class ProjectInformationScreen extends StatefulWidget {
   final String? projectId;
   const ProjectInformationScreen({this.projectId, super.key});
+
   @override
   _ProjectInformationScreenState createState() =>
       _ProjectInformationScreenState();
@@ -24,9 +26,8 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
   final TextEditingController _deadlineController = TextEditingController();
   final List<String> _imagesController = [];
   final List<String> _selectedCategories = [];
-  final UserMethods _userModel = UserMethods();
-  final NotificationsModel _notificationModel = NotificationsModel();
   final ProjectMethods _projectMethods = ProjectMethods();
+  final WalletMethods _walletMethods = WalletMethods();
 
   bool _isLoading = false;
   double averageRating = 0.0;
@@ -85,6 +86,35 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
         averageRating = rating;
       });
     }
+  }
+
+  Future<bool> _hasAccessToForum(String userId) async {
+    // Verificar si el usuario es el creador del proyecto
+    final projectDoc = await FirebaseFirestore.instance
+        .collection('Projects')
+        .doc(widget.projectId)
+        .get();
+
+    if (projectDoc.exists && projectDoc.data()?['user_id'] == userId) {
+      return true;
+    }
+
+    // Verificar si el usuario ha donado al proyecto
+    try {
+      // Obtiene todas las donaciones del usuario
+      List<Map<String, dynamic>> donations = await _walletMethods.getAllUserDonations();
+      // Compara la referencia del proyecto en cada donación con la referencia actual del proyecto
+      for (var donation in donations) {
+        DocumentReference projectRef = donation['project_id'];
+        // Compara la referencia del proyecto actual con el ID del proyecto que esperas
+        if (projectRef.path == 'Projects/${widget.projectId}') {
+          return true;
+        }
+      }
+    } catch (e) {
+      print('Error al verificar si el usuario ha donado al proyecto: $e');
+    }
+    return false;
   }
 
   @override
@@ -177,9 +207,10 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
                           ),
                           const SizedBox(height: 20),
                           Wrap(
-                            children:
-                                _imagesController.asMap().entries.map((entry) {
-                              int index = entry.key;
+                            children: _imagesController
+                                .asMap()
+                                .entries
+                                .map((entry) {
                               String url = entry.value;
                               return Stack(
                                 children: [
@@ -207,14 +238,28 @@ class _ProjectInformationScreenState extends State<ProjectInformationScreen> {
                                 heroTag: 'project_forum_button',
                                 backgroundColor:
                                     const Color.fromARGB(255, 63, 119, 133),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProjectForumScreen(
-                                          projectId: widget.projectId!),
-                                    ),
-                                  );
+                                onPressed: () async {
+                                  final userId =
+                                      await _controller.getCurrentUserId();
+                                  if (await _hasAccessToForum(userId)) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ProjectForumScreen(
+                                                projectId: widget.projectId!),
+                                      ),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'Acceso denegado. Solo los colaboradores autorizados pueden acceder al foro interno.',
+                                        ),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                  }
                                 },
                                 tooltip: 'Foro Interno',
                                 child: const Icon(
