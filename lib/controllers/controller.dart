@@ -78,23 +78,53 @@ class Controller {
     return await _projectModel.getCategories();
   }
 
+  // Este método revisa en ambas colecciones 'Users' y 'admin'
   Future<bool> isAdmin(String email) async {
-    List users = await _authModel.getUsers();
-    List admins = await _authModel.getAdmins(); 
-    bool result = false;
+    try {
+      // Busca en la colección 'admin'
+      final adminSnapshot = await FirebaseFirestore.instance
+          .collection('admin')
+          .where('email', isEqualTo: email)
+          .get();
 
-    for (var user in users) {
-      if (user['email'] == email && user['rol'] == "Administrador") {
-        result = true;
+      if (adminSnapshot.docs.isNotEmpty) {
+        return true; // Es un administrador
       }
-    }
-    for (int i = 0; i < admins.length; i++) {
-      if (admins[i]['email'] == email) {
-        result = true;
+
+      // Si no está en 'admin', busca en 'Users'
+      final userSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email', isEqualTo: email)
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        return false; // Es un usuario normal
       }
+
+      return false;
+    } catch (e) {
+      print("Error al verificar el rol de administrador: $e");
+      return false;
     }
-    return result;
   }
+
+  // Future<bool> isAdmin(String email) async {
+  //   List users = await _authModel.getUsers();
+  //   List admins = await _authModel.getAdmins(); 
+  //   bool result = false;
+
+  //   for (var user in users) {
+  //     if (user['email'] == email && user['rol'] == "Administrador") {
+  //       result = true;
+  //     }
+  //   }
+  //   for (int i = 0; i < admins.length; i++) {
+  //     if (admins[i]['email'] == email) {
+  //       result = true;
+  //     }
+  //   }
+  //   return result;
+  // }
 
   Future<bool> isAnalyst(String email) async {
     List users = await _authModel.getUsers();
